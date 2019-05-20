@@ -1,41 +1,72 @@
 import logging
 import os
-
+import json
+from TextSearchEngine.searchFunctions import *
 from ArticlesDataDownloader.ArticlesDataDownloader import ArticlesDataDownloader
+from doiList import doiList
+from getDoiFilename import getDoiFilename
+from SearchResultHtmlDisplay.findingsToHtml import findingsToHtml
 
-def main():
+def configureLogger():
     logsFilename = 'AutomatedSearchHelper.log'
     with open(logsFilename, 'w'):
         pass
     logging.basicConfig(filename=logsFilename, format='%(asctime)s %(levelname)s/%(message)s', level=logging.INFO)
     logging.info("Starting new run")
 
-    outputFolder = 'outputArticles'
 
-    if not os.path.exists(outputFolder):
-        logging.info("Creating folder for output articles " + outputFolder)
-        os.makedirs(outputFolder)
+def logSearchResults(articleText, searchResult):
+  for resultSection in searchResult:
+      logging.info("Something found in section "+ articleText["text"][resultSection["sectionIndex"]]["title"] )
+      for paragraph in resultSection["paragraphs"]:
+          parIndex = paragraph["paragraphIndex"]
+          for sentence in paragraph["sentences"]:
+            sentIndex = sentence["sentenceIndex"]
+            fullSentence = articleText["text"][resultSection["sectionIndex"]]["paragraphs"][parIndex]["sentences"][sentIndex]
 
-    downloader = ArticlesDataDownloader(outputFolder+"/")
-    downloader.getDownloadArticles(
-        [
-          # "10.1109/icstw.2018.00026",
-          # "10.1002/stvr.1675",
-          # "10.1109/icstw.2018.00021",
-          "10.1016/j.cosrev.2017.06.001",
-          # "10.1145/3183519.3183521", #ACM
-          # "10.1007/978-3-319-99927-2_9",
-          # "10.1016/j.infsof.2016.07.002",
-          # "10.1002/stvr.1630",
-          # "10.1109/icstw.2018.00024",
-          # "10.1109/icstw.2018.00025",
-          # "10.1109/icstw.2018.00027",
-          # "10.1109/icst.2018.00032",
-          # "10.1145/3180155.3180183",
-          # "10.1109/tse.2017.2684805",
-          # "10.1109/C-M.1978.218136",
-          # "10.1109/tse.2013.44",
-        ])
+            for finding in reversed(sentence["findings"]):
+              fullSentence = fullSentence[:finding[0]] + "!!!<" + fullSentence[finding[0]:finding[1]] + ">!!!"+ fullSentence[finding[1]:]
+            logging.info(fullSentence)
+
+def createDirectoryIfNotExists(folderName):
+  if not os.path.exists(folderName):
+      logging.info("Creating directory " + folderName)
+      os.makedirs(folderName)
+
+def main():
+    configureLogger()
+    directoryForAritclesTexts = 'outputArticles'
+    createDirectoryIfNotExists(directoryForAritclesTexts)
+
+    downloader = ArticlesDataDownloader(directoryForAritclesTexts)
+
+    directoryForFindResults = 'outputFinder'
+    createDirectoryIfNotExists(directoryForFindResults)
+
+    outputHtmlFolder = 'outputHtmls'
+    createDirectoryIfNotExists(outputHtmlFolder)
+
+    resultFiles = downloader.getDownloadArticles(doiList())
+
+    finder = EXACT_WORD("C", caseSensitive = True)
+
+    for doiAndFilename in resultFiles:
+      searchResult = None
+      logging.info("Running finder for "+ doiAndFilename["doi"])
+      with open(doiAndFilename["filename"], 'r') as f:
+          articleText = json.load(f)
+          searchResult = finder(articleText)
+
+      if searchResult is not None:
+        logging.info("Found something for doi "+ doiAndFilename["doi"] + ": " + str(searchResult))
+        with open(getDoiFilename(directoryForFindResults, doiAndFilename["doi"]), 'w', encoding='utf-8') as f:
+          f.write(json.dumps(searchResult))
+
+        with open(getDoiFilename(outputHtmlFolder, doiAndFilename["doi"], "html"), 'w', encoding='utf-8') as f:
+          f.write(findingsToHtml(articleText, searchResult))
+
+        #logSearchResults(articleText, searchResult)
+
 
 if __name__ == '__main__':
     main()

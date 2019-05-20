@@ -1,3 +1,8 @@
 .tox/
 *.pyc
 *.egg-info
+outputHtmls
+outputFinder
+outputArticles
+proxy_auth_plugin.zip
+*.log

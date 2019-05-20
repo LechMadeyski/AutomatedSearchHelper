@@ -29,7 +29,7 @@ def ieeeHtmlToJson(textHTML):
     for sec in soup.findAll('div', {"class": "section"}):
         title = str(sec.findAll('h2')[0].text)
 
-        paragraphs = []
+        paragraphs = [{"sentences": [title]}]
         for par in sec.findAll('p'):
             paragraphs.append({"sentences" :formatTextAndSplitIntoSentences(par.text)})
 

@@ -1,59 +1,61 @@
+from TextSearchEngine.mergeResults import mergeResults
+from TextSearchEngine.findInTextJson import findInTextJson
 
+import re
 
+def EXACT_WORD(word, caseSensitive = False):
+    def matcherFunction(text):
+        flags = 0
+        if not caseSensitive:
+            flags = re.IGNORECASE
+        result = re.search(r'\b'+ word + r'\b', text, flags)
+        if result is not None:
+            return (result.start(), result.end())
+        else:
+            return None
+    def returnFunction(data, finderFunction = findInTextJson):
+        return finderFunction(data, matcherFunction)
+    return returnFunction
 
+def PARTIAL_WORD(word, caseSensitive = False):
+    def matcherFunction(text):
+        flags = 0
+        if not caseSensitive:
+            flags = re.IGNORECASE
+        result = re.search(word, text, flags)
+        if result is not None:
+            return (result.start(), result.end())
+        else:
+            return None
+    def returnFunction(data, finderFunction = findInTextJson):
+        return finderFunction(data, matcherFunction)
+    return returnFunction
 
-
-def exactWord(word, caseSensitive = False):
-    
 
 def AND(*textMatchers):
-    def returnFunction(textJson):
+    def returnFunction(data, finderFunction = findInTextJson, mergeFunction = mergeResults):
         result = [];
         for matcher in textMatchers:
-            matchResult = matcher(textJson)
+            matchResult = matcher(data, finderFunction)
             if matchResult is None:
                 return None
-            else
-                result += matchResult
+            else:
+                result.append(matchResult)
+        return mergeFunction(result)
 
     return returnFunction
 
 
 def OR(*textMatchers):
-    def returnFunction(textJson):
+    def returnFunction(data, finderFunction = findInTextJson, mergeFunction = mergeResults):
         result = [];
         for matcher in textMatchers:
-            matchResult = matcher(textJson)
+            matchResult = matcher(data, finderFunction)
             if matchResult is not None:
-                result += matchResult
+                result.append(matchResult)
         if len(result) > 0:
-            return result
-        else
+            return mergeFunction(result)
+        else:
             return None
 
     return returnFunction
-
-
-
-
-
-
-
-
-
-finder = AND(
-    OR(
-        exactWord("C", caseSensitive = True),
-        exactWord("D"),
-        partialWord("C")
-        ),
-    AND(
-        exactWord("Mutation testing"),
-        partialWord("")
-        )
-    )
-
-
-finder(jsonText)
-
-

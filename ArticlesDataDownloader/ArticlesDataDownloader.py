@@ -10,13 +10,15 @@ from ArticlesDataDownloader.Springer.SpringerArticlesHandler import SpringerArti
 
 from ArticlesDataDownloader.getLinkFromDoi import getLinkFromDoi
 from ArticlesDataDownloader.getDriver import getDriver
+from getDoiFilename import getDoiFilename
 
 class ArticlesDataDownloader:
     def __init__(self, outputFolder):
         self.outputFolder = outputFolder
+        self.__handlers = None
 
     def getDoiFilename(self, doi):
-        return self.outputFolder + doi.replace("/", "_")+".json"
+        return getDoiFilename(self.outputFolder, doi)
 
     def writeArticleToFile(self, article, doi):
         filename = self.getDoiFilename(doi)
@@ -28,21 +30,28 @@ class ArticlesDataDownloader:
         filename = self.getDoiFilename(doi)
         return os.path.isfile(filename)
 
+    def getHandlers(self):
+        if self.__handlers is None:
+            driver = getDriver(use_proxy = True)
+            self.__handlers = [
+                IEEEArticlesHandler(driver),
+                WilleyArticlesHandler(driver),
+                ScienceDirectArticlesHandler(driver),
+                ACMArticlesHandler(driver),
+                SpringerArticlesHandler(driver),
+            ]
+        return self.__handlers
+
     def getDownloadArticles(self, doiList):
         logging.info("Start downloading articles")
 
-        driver = getDriver(use_proxy = True)
-        handlers = [
-            IEEEArticlesHandler(driver),
-            WilleyArticlesHandler(driver),
-            ScienceDirectArticlesHandler(driver),
-            ACMArticlesHandler(driver),
-            SpringerArticlesHandler(driver),
-        ]
+
+        resultDoiAndFilename = []
 
         for doi in doiList:
             if self.doiHasResultAlready(doi):
                 logging.info("Doi " + doi + " already parsed")
+                resultDoiAndFilename.append({"doi":doi, "filename":self.getDoiFilename(doi)})
                 continue
 
             logging.info("Reading doi : " + doi)
@@ -52,7 +61,7 @@ class ArticlesDataDownloader:
                 continue;
             logging.info ("Real link is " + realLink)
 
-            for handler in handlers:
+            for handler in self.getHandlers():
                 logging.debug("Checking " + handler.name() + " with link part "+ handler.linkPart() )
                 if handler.linkPart() in realLink:
                     logging.info("Link will be handled by " + handler.name())
@@ -61,13 +70,15 @@ class ArticlesDataDownloader:
                     if article is None:
                         logging.error("Could not read article")
                     else:
-                        self.writeArticleToFile(article, doi)
+                        resultFilename = self.writeArticleToFile(article, doi)
+                        resultDoiAndFilename.append({"doi":doi, "filename":resultFilename})
                     break
             else:
                 logging.error("Could not find handler for "+ realLink)
             logging.info("Doi reading finished")
 
         logging.info("Finished analysing articles")
+        return resultDoiAndFilename
 
 
 
