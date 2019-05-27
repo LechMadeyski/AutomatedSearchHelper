@@ -1,7 +1,7 @@
 .tox/
 *.pyc
 *.egg-info
-outputHtmls
+outputHtml
 outputFinder
 outputArticles
 proxy_auth_plugin.zip

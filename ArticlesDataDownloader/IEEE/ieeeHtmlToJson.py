@@ -5,8 +5,7 @@ import logging
 from nltk import tokenize
 
 def formatTextAndSplitIntoSentences(text):
-    return tokenize.sent_tokenize(text.replace("\n", "").replace("\r", ""))
-
+    return [s for s in tokenize.sent_tokenize(text.replace("\n", "").replace("\r", "")) if len(s)>0]
 
 def ieeeHtmlToJson(textHTML):
     logging.info("Start readig IEEE file")
@@ -31,7 +30,9 @@ def ieeeHtmlToJson(textHTML):
 
         paragraphs = [{"sentences": [title]}]
         for par in sec.findAll('p'):
-            paragraphs.append({"sentences" :formatTextAndSplitIntoSentences(par.text)})
+            sentences = formatTextAndSplitIntoSentences(par.text)
+            if len(sentences) > 0:
+                paragraphs.append({"sentences" : sentences})
 
         logging.info("Reading section : "+ title )
         secData = {

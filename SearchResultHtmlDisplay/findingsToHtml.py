@@ -56,11 +56,11 @@ def paragraphToHtml(paragraphText, foundParagraph):
     hiddenButton = 'hidden'
     if foundParagraph is None:
         hiddenParagraph = 'hidden'
-        hiddenButton = ''
+        hiddenButton = str()
 
-    paragraphResult = ''
+    paragraphResult = str()
 
-    sentencesToBeExpanded = ''
+    sentencesToBeExpanded = str()
 
     for sentenceIndex in range(len(paragraphText["sentences"])):
         matchingSentence = findMatchingSentence(sentenceIndex, foundParagraph)
@@ -70,16 +70,16 @@ def paragraphToHtml(paragraphText, foundParagraph):
         if matchingSentence is None and foundParagraph is not None:
             sentencesToBeExpanded += sentenceResult
         else:
-            if sentencesToBeExpanded != '':
+            if sentencesToBeExpanded != str():
                 nextId = IdAssigner.getNextId()
                 paragraphResult += expandableSentences%(nextId, sentencesToBeExpanded, nextId)
-                sentencesToBeExpanded = ''
+                sentencesToBeExpanded = str()
             paragraphResult += sentenceResult
 
-    if sentencesToBeExpanded != '':
+    if sentencesToBeExpanded != str():
         nextId = IdAssigner.getNextId()
         paragraphResult += expandableSentences%(nextId, sentencesToBeExpanded, nextId)
-        sentencesToBeExpanded = ''
+        sentencesToBeExpanded = str()
 
     return paragraphHtml%paragraphResult
 
@@ -116,11 +116,11 @@ expandableParagraph = '''
 def sectionToHtml(sectionText, foundSection):
     hiddenSection = 'class="active"'
     if foundSection is None:
-        hiddenSection = ''
+        hiddenSection = str()
 
-    sectionResult = ''
+    sectionResult = str()
 
-    paragraphsToBeExpanded = ''
+    paragraphsToBeExpanded = str()
 
 
     for paragraphIndex in range(len(sectionText["paragraphs"])):
@@ -132,16 +132,16 @@ def sectionToHtml(sectionText, foundSection):
         if matchingParagraph is None and foundSection is not None:
             paragraphsToBeExpanded += paragraphResult
         else:
-            if paragraphsToBeExpanded != '':
+            if paragraphsToBeExpanded != str():
                 nextId = IdAssigner.getNextId()
                 sectionResult+= expandableParagraph%(nextId, paragraphsToBeExpanded, nextId)
-                paragraphsToBeExpanded = ''
+                paragraphsToBeExpanded = str()
             sectionResult+=paragraphResult
 
-    if paragraphsToBeExpanded != '':
+    if paragraphsToBeExpanded != str():
         nextId = IdAssigner.getNextId()
         sectionResult+= expandableParagraph%(nextId, paragraphsToBeExpanded, nextId)
-
+        paragraphsToBeExpanded = str()
 
 
     return sectionHtml%(hiddenSection, sectionText["title"], sectionResult)

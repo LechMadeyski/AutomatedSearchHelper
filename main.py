@@ -1,19 +1,16 @@
 import logging
 import os
 import json
+import argparse
+import configuration
+
 from TextSearchEngine.searchFunctions import *
 from ArticlesDataDownloader.ArticlesDataDownloader import ArticlesDataDownloader
 from doiList import doiList
 from getDoiFilename import getDoiFilename
 from SearchResultHtmlDisplay.findingsToHtml import findingsToHtml
 
-def configureLogger():
-    logsFilename = 'AutomatedSearchHelper.log'
-    with open(logsFilename, 'w'):
-        pass
-    logging.basicConfig(filename=logsFilename, format='%(asctime)s %(levelname)s/%(message)s', level=logging.INFO)
-    logging.info("Starting new run")
-
+from utilities import createDirectoryIfNotExists
 
 def logSearchResults(articleText, searchResult):
   for resultSection in searchResult:
@@ -28,13 +25,9 @@ def logSearchResults(articleText, searchResult):
               fullSentence = fullSentence[:finding[0]] + "!!!<" + fullSentence[finding[0]:finding[1]] + ">!!!"+ fullSentence[finding[1]:]
             logging.info(fullSentence)
 
-def createDirectoryIfNotExists(folderName):
-  if not os.path.exists(folderName):
-      logging.info("Creating directory " + folderName)
-      os.makedirs(folderName)
 
 def main():
-    configureLogger()
+    configuration.configureLogger()
     directoryForAritclesTexts = 'outputArticles'
     createDirectoryIfNotExists(directoryForAritclesTexts)
 
@@ -50,19 +43,19 @@ def main():
 
     finder = EXACT_WORD("C", caseSensitive = True)
 
-    for doiAndFilename in resultFiles:
+    for filename in resultFiles:
       searchResult = None
-      logging.info("Running finder for "+ doiAndFilename["doi"])
-      with open(doiAndFilename["filename"], 'r') as f:
+      logging.info("Running finder for "+ filename)
+      with open(filename, 'r') as f:
           articleText = json.load(f)
           searchResult = finder(articleText)
 
       if searchResult is not None:
-        logging.info("Found something for doi "+ doiAndFilename["doi"] + ": " + str(searchResult))
-        with open(getDoiFilename(directoryForFindResults, doiAndFilename["doi"]), 'w', encoding='utf-8') as f:
+        logging.info("Found something for doi "+ articleText["doi"] + ": " + str(searchResult))
+        with open(getDoiFilename(directoryForFindResults, articleText["doi"]), 'w', encoding='utf-8') as f:
           f.write(json.dumps(searchResult))
 
-        with open(getDoiFilename(outputHtmlFolder, doiAndFilename["doi"], "html"), 'w', encoding='utf-8') as f:
+        with open(getDoiFilename(outputHtmlFolder, articleText["doi"], "html"), 'w', encoding='utf-8') as f:
           f.write(findingsToHtml(articleText, searchResult))
 
         #logSearchResults(articleText, searchResult)

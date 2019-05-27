@@ -12,19 +12,23 @@ from ArticlesDataDownloader.getLinkFromDoi import getLinkFromDoi
 from ArticlesDataDownloader.getDriver import getDriver
 from getDoiFilename import getDoiFilename
 
+
 class ArticlesDataDownloader:
-    def __init__(self, outputFolder):
-        self.outputFolder = outputFolder
+    def __init__(self, outputFolder, proxyFile = None):
+        self.__outputFolder = outputFolder
         self.__handlers = None
+        self.__logger = logging.getLogger("ArticlesDataDownloader")
+        self.__proxyFile = proxyFile
 
     def getDoiFilename(self, doi):
-        return getDoiFilename(self.outputFolder, doi)
+        return getDoiFilename(self.__outputFolder, doi)
 
     def writeArticleToFile(self, article, doi):
         filename = self.getDoiFilename(doi)
-        logging.info("Writing article to "+ filename)
+        self.__logger.info("Writing article to "+ filename)
         f = open(filename, "w")
-        f.write(json.dumps({"text":article}))
+        f.write(json.dumps({"doi": doi, "text":article}))
+        return filename
 
     def doiHasResultAlready(self, doi):
         filename = self.getDoiFilename(doi)
@@ -32,7 +36,7 @@ class ArticlesDataDownloader:
 
     def getHandlers(self):
         if self.__handlers is None:
-            driver = getDriver(use_proxy = True)
+            driver = getDriver(proxyFile = self.__proxyFile)
             self.__handlers = [
                 IEEEArticlesHandler(driver),
                 WilleyArticlesHandler(driver),
@@ -43,42 +47,41 @@ class ArticlesDataDownloader:
         return self.__handlers
 
     def getDownloadArticles(self, doiList):
-        logging.info("Start downloading articles")
+        self.__logger.info("Start downloading articles")
 
-
-        resultDoiAndFilename = []
+        resultFilenames = list()
 
         for doi in doiList:
             if self.doiHasResultAlready(doi):
-                logging.info("Doi " + doi + " already parsed")
-                resultDoiAndFilename.append({"doi":doi, "filename":self.getDoiFilename(doi)})
+                self.__logger.info("Doi " + doi + " already parsed")
+                resultFilenames.append(self.getDoiFilename(doi))
                 continue
 
-            logging.info("Reading doi : " + doi)
+            self.__logger.info("Reading doi : " + doi)
             realLink = getLinkFromDoi(doi)
             if doi is None:
-                logging.error("Could not find link from doi")
+                self.__logger.error("Could not find link from doi")
                 continue;
-            logging.info ("Real link is " + realLink)
+            self.__logger.info ("Real link is " + realLink)
 
             for handler in self.getHandlers():
-                logging.debug("Checking " + handler.name() + " with link part "+ handler.linkPart() )
+                self.__logger.debug("Checking " + handler.name() + " with link part "+ handler.linkPart() )
                 if handler.linkPart() in realLink:
-                    logging.info("Link will be handled by " + handler.name())
+                    self.__logger.info("Link will be handled by " + handler.name())
                     article = handler.getArticle(realLink)
 
                     if article is None:
-                        logging.error("Could not read article")
+                        self.__logger.error("Could not read article")
                     else:
                         resultFilename = self.writeArticleToFile(article, doi)
-                        resultDoiAndFilename.append({"doi":doi, "filename":resultFilename})
+                        resultFilenames.append(resultFilename)
                     break
             else:
-                logging.error("Could not find handler for "+ realLink)
-            logging.info("Doi reading finished")
+                self.__logger.error("Could not find handler for "+ realLink)
+            self.__logger.info("Doi reading finished")
 
-        logging.info("Finished analysing articles")
-        return resultDoiAndFilename
+        self.__logger.info("Finished analysing articles")
+        return resultFilenames
 
 
 
