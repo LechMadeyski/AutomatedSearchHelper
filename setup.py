@@ -8,5 +8,5 @@ setup(
     name = "AutomatedSearchHelper",
     version = "0.0.1",
     author = "Marek Sośnicki",
-    packages=["ArticlesDataDownloader", "TextSearchEngine", "SearchResultHtmlDisplay"]
+    packages=["ArticlesDataDownloader", "TextSearchEngine", "SearchResultHtmlDisplay", "ArticlesServer"]
 )

@@ -12,6 +12,8 @@ from ArticlesDataDownloader.getLinkFromDoi import getLinkFromDoi
 from ArticlesDataDownloader.getDriver import getDriver
 from getDoiFilename import getDoiFilename
 
+from crossref.restful import Works
+
 
 class ArticlesDataDownloader:
     def __init__(self, outputFolder, proxyFile = None):
@@ -19,6 +21,7 @@ class ArticlesDataDownloader:
         self.__handlers = None
         self.__logger = logging.getLogger("ArticlesDataDownloader")
         self.__proxyFile = proxyFile
+        self.__works = Works()
 
     def getDoiFilename(self, doi):
         return getDoiFilename(self.__outputFolder, doi)
@@ -26,8 +29,20 @@ class ArticlesDataDownloader:
     def writeArticleToFile(self, article, doi):
         filename = self.getDoiFilename(doi)
         self.__logger.info("Writing article to "+ filename)
-        f = open(filename, "w")
-        f.write(json.dumps({"doi": doi, "text":article}))
+
+        resultJson = dict()
+        resultJson["doi"] = doi
+        resultJson["text"] = article
+
+        doiData = self.__works.doi(doi)
+        self.__logger.info("Doi data " + str(doiData))
+        resultJson["publisher"] = doiData["publisher"]
+        resultJson["authors"] = doiData["author"]
+
+        resultJson["title"] = ' '.join(doiData["title"])
+
+        with open(filename, "w") as f:
+            f.write(json.dumps(resultJson))
         return filename
 
     def doiHasResultAlready(self, doi):
@@ -59,9 +74,10 @@ class ArticlesDataDownloader:
 
             self.__logger.info("Reading doi : " + doi)
             realLink = getLinkFromDoi(doi)
-            if doi is None:
+            if realLink is None:
                 self.__logger.error("Could not find link from doi")
-                continue;
+                continue
+
             self.__logger.info ("Real link is " + realLink)
 
             for handler in self.getHandlers():

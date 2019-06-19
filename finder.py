@@ -1,3 +1,7 @@
 from TextSearchEngine.searchFunctions import *
 
-finder = AND(EXACT_WORD("mutation testing"), EXACT_WORD("C", caseSensitive = True), AND(PARTIAL_WORD("e")))
+finder = AND(
+    PARTIAL_WORD("mutation testing"),
+    OR(
+        EXACT_WORD("C", caseSensitive = True),
+        EXACT_WORD("LLVM", caseSensitive = True)))

@@ -97,8 +97,6 @@ def getDriver(proxyFile=None):
         chrome_options.add_extension(pluginfile)
     driver = webdriver.Chrome(
         chrome_options=chrome_options)
-
-    driver.get('https://ieeexplore.ieee.org')
     driver.refresh()
 
     return driver

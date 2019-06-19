@@ -8,13 +8,14 @@ def formatTextAndSplitIntoSentences(text):
     return [s for s in tokenize.sent_tokenize(text.replace("\n", "").replace("\r", "")) if len(s)>0]
 
 def ieeeHtmlToJson(textHTML):
-    logging.info("Start readig IEEE file")
+    logger = logging.getLogger("ieeeHtmlToJson")
+    logger.info("Start readig IEEE file")
 
     soup = BeautifulSoup(textHTML, "html.parser")
 
     outputJson = []
 
-    logging.info("Reading section : Abstract" )
+    logger.info("Reading section : Abstract" )
     abstractText = soup.findAll('div', {'class': 'abstract-text row'})[0].text
 
 
@@ -23,10 +24,13 @@ def ieeeHtmlToJson(textHTML):
         'paragraphs' : [{"sentences":formatTextAndSplitIntoSentences(abstractText)}]
     })
 
-    logging.debug("Abstract read correctly")
+    logger.debug("Abstract read correctly")
 
     for sec in soup.findAll('div', {"class": "section"}):
-        title = str(sec.findAll('h2')[0].text)
+        title = str()
+        titlesHtml = sec.findAll('h2')
+        if len(titlesHtml) > 0:
+            title = str(titlesHtml[0].text)
 
         paragraphs = [{"sentences": [title]}]
         for par in sec.findAll('p'):
@@ -34,7 +38,7 @@ def ieeeHtmlToJson(textHTML):
             if len(sentences) > 0:
                 paragraphs.append({"sentences" : sentences})
 
-        logging.info("Reading section : "+ title )
+        logger.info("Reading section : "+ title )
         secData = {
             'title': title,
             'paragraphs' : paragraphs
