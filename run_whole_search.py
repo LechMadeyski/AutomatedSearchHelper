@@ -36,7 +36,7 @@ def run_whole_search(doi_list, finder, output_articles, output_finder, output_ht
 def getArgumentsParser():
     parser = argparse.ArgumentParser(description=__doc__, add_help=True)
     parser.add_argument('--output_articles', default='outputArticles', type=str, help='Location for articles .json files')
-    parser.add_argument('--output_finder', default=None, type=str, help='Location for finder result .json files')
+    parser.add_argument('--output_finder', default='outputFinder', type=str, help='Location for finder result .json files')
     parser.add_argument('--output_html', default='outputHtml', type=str, help='Location for result .html files')
     parser.add_argument('--finder', default='finder.py', type=str, help='Python file containing global variable finder which is created using TextSearchEngine.searchFunctions')
     parser.add_argument('--doi_list', default='doiList.py', type=str, help='Python file containing function doiList() which returns a list of strings with DOIs of articles')

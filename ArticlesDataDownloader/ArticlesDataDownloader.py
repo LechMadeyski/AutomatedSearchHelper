@@ -56,7 +56,7 @@ class ArticlesDataDownloader:
                 IEEEArticlesHandler(driver),
                 WilleyArticlesHandler(driver),
                 ScienceDirectArticlesHandler(driver),
-                ACMArticlesHandler(driver),
+                #ACMArticlesHandler(driver),
                 SpringerArticlesHandler(driver),
             ]
         return self.__handlers
@@ -65,7 +65,8 @@ class ArticlesDataDownloader:
         self.__logger.info("Start downloading articles")
 
         resultFilenames = list()
-
+        handlerNotFoundCount = 0
+        errorOccuredCount = 0
         for doi in doiList:
             if self.doiHasResultAlready(doi):
                 self.__logger.info("Doi " + doi + " already parsed")
@@ -88,15 +89,22 @@ class ArticlesDataDownloader:
 
                     if article is None:
                         self.__logger.error("Could not read article")
+                        errorOccuredCount += 1
                     else:
                         resultFilename = self.writeArticleToFile(article, doi)
                         resultFilenames.append(resultFilename)
                     break
             else:
                 self.__logger.error("Could not find handler for "+ realLink)
+                handlerNotFoundCount += 1
             self.__logger.info("Doi reading finished")
 
-        self.__logger.info("Finished analysing articles")
+        self.__logger.info(
+            "Finished analysing articles total analyzed : " + str(len(doiList)) \
+            + " successful :" + str(len(resultFilenames)) \
+            + " handler not found : " + str(handlerNotFoundCount) \
+            + " error occured " + str(errorOccuredCount))
+
         return resultFilenames
 
 
