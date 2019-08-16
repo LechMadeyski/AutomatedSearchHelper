@@ -2,27 +2,28 @@ from ArticlesDataDownloader.Springer.springerHtmlToJson import springerHtmlToJso
 
 import selenium
 import logging
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.wait import WebDriverWait
+# from selenium import webdriver
+# from selenium.webdriver.chrome.options import Options
+# from selenium.webdriver.support.wait import WebDriverWait
 
 class SpringerArticlesHandler():
     def __init__(self, driver):
         self.driver = driver
+        self.__logger = logging.getLogger("SpringerArticlesHandler")
 
     def getArticle(self, url):
-        logging.debug("Springer::getArticle start " + url)
+        self.__logger.debug("Springer::getArticle start " + url)
         try:
             self.driver.get(url)
-            logging.debug("Called get for  " + url)
+            self.__logger.debug("Called get for  " + url)
 
             # element = WebDriverWait(self.driver, 10).until(
             #     lambda x: x.find_element_by_id("article"))
 
             return springerHtmlToJson(self.driver.page_source)
         except Exception as error:
-            logging.error(error)
-            logging.error("some error occured, moving on")
+            self.__logger.error(error)
+            self.__logger.error("some error occured, moving on")
             return None
 
     def linkPart(self):

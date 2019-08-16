@@ -36,10 +36,9 @@ def createDirectoryIfNotExists(directoryPath):
 
 
 def createDirectoryIfNotExistsOrClean(directoryPath):
-    if not os.path.exists(directoryPath):
-        os.makedirs(directoryPath)
-    else:
+    if os.path.exists(directoryPath):
         shutil.rmtree(directoryPath)
+    os.makedirs(directoryPath)
 
 def getDoiFilename(outputFolder, doi, extension = "json"):
     return outputFolder + "/" + doi.replace("/", "_")+"." + extension

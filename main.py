@@ -4,7 +4,7 @@ import json
 import argparse
 import configuration
 
-from TextSearchEngine.searchFunctions import *
+from TextSearchEngine.search_functions import *
 from ArticlesDataDownloader.ArticlesDataDownloader import ArticlesDataDownloader
 from doiList import doiList
 from getDoiFilename import getDoiFilename
@@ -41,7 +41,7 @@ def main():
 
     resultFiles = downloader.getDownloadArticles(doiList())
 
-    finder = EXACT_WORD("C", caseSensitive = True)
+    finder = EXACT_WORD("C", case_sensitive= True)
 
     for filename in resultFiles:
       searchResult = None

@@ -9,13 +9,14 @@ def formatTextAndSplitIntoSentences(text):
 
 
 def scienceDirectHtmlToJson(textHTML):
-    logging.info("Start readig ScienceDirect file")
+    logger = logging.getLogger("scienceDirectHtmlToJson")
+    logger.info("Start readig ScienceDirect file")
 
     soup = BeautifulSoup(textHTML, "html.parser")
 
     outputJson = []
 
-    logging.info("Reading section : Abstract" )
+    logger.info("Reading section : Abstract" )
     abstractText = soup.findAll('div', {'class': 'Abstracts u-font-serif'})[0].text
 
 
@@ -24,29 +25,29 @@ def scienceDirectHtmlToJson(textHTML):
         'paragraphs' : [{"sentences":formatTextAndSplitIntoSentences(abstractText)}]
     })
 
-    logging.debug("Abstract read correctly")
+    logger.debug("Abstract read correctly")
 
     generateSectionId = None
     if (soup.find(id="s0005")):
         def generateSecId(i):
             return "s"+str(10000 + i*5)[1:]
         generateSectionId = generateSecId
-        logging.debug("Chosen sxxxx format")
+        logger.debug("Chosen sxxxx format")
     if (soup.find(id="sec0001")):
         def generateSecId(i):
             return "sec"+str(10000 + i)[1:]
         generateSectionId = generateSecId
-        logging.debug("Chosen secxxxx format")
+        logger.debug("Chosen secxxxx format")
 
     if generateSectionId == None:
-        logging.error("Could not find section id generator")
+        logger.error("Could not find section id generator")
         return None
 
 
 
     for i in range(1,20):
         secId = generateSectionId(i)
-        logging.info("looking for section " + secId)
+        logger.info("looking for section " + secId)
         sec = soup.find(id = secId)
         if sec is None:
             break
@@ -57,17 +58,17 @@ def scienceDirectHtmlToJson(textHTML):
             title = titles[0].text
         else:
             title = "unknown title"
-            logging.warning("Found section with unknown title")
+            logger.warning("Found section with unknown title")
 
         paragraphs = []
         for par in sec.findAll('p'):
             paragraphs.append({"sentences" :formatTextAndSplitIntoSentences(par.text)})
 
-        logging.info("Reading section : "+ title )
-        secData = {
+        logger.info("Reading section : "+ title )
+        sec_data = {
             'title': title,
             'paragraphs' : paragraphs
         }
-        outputJson.append(secData)
+        outputJson.append(sec_data)
     return outputJson
 

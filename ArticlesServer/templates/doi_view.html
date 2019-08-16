@@ -1,0 +1,114 @@
+{% extends 'layout.html' %}
+
+{% block navbar %}
+    <li><a href="{{ url_for('main.prev_doi', doi_id=display_data['doi_id']) }}">Prev</a></li>
+    <li><a href="{{ url_for('main.next_doi', doi_id=display_data['doi_id']) }}">Next</a></li>
+{% endblock %}
+
+{% block body %}
+    <h3>{{ display_data["title"] }}</h3>
+    <h6> Authors: {{ display_data['authors'] }} </h6>
+    <h6> Publisher:  </h6>
+    <h6> Published in: </h6>
+    <h6> Date of conference: </h6>
+    <h6> Doi: <a href="http://doi.org/{{ display_data['doi'] }}"> {{ display_data['doi'] }} </a></h6>
+
+
+
+
+
+    {% set counter = {
+        'sentence_bundle': 1,
+        'paragraph_bundle': 1
+    } %}
+    {% macro increment(dct, key, inc=1) %}
+        {% if dct.update({key: dct[key] + inc}) %} {% endif %}
+    {% endmacro %}
+
+
+
+    <ul class="collapsible expandable">
+
+        {% for section in display_data['sections'] %}
+
+            <li {% if not section['hidden'] %} class="active" {% endif %}>
+                <div class="collapsible-header">
+                    {{ section['title'] }}
+                </div>
+                <div class="collapsible-body">
+                    {% for paragraph_bundle in section['paragraphs_bundles'] %}
+                        {% if paragraph_bundle['hidden'] %}
+                            <a class="waves-effect waves-light btn-small"
+                            aria-controls="paragraph-bundle{{ counter.paragraph_bundle }}">Expand paragraphs</a>
+                        {% endif %}
+                        <div class="paragraph-bundle"
+                             id="paragraph-bundle{{ counter.paragraph_bundle }}"
+                                {{ increment(counter, 'paragraph_bundle') }}
+                                {% if paragraph_bundle['hidden'] %}
+                                    hidden
+                                {% endif %}
+                        >
+                            {% for paragraph in paragraph_bundle['paragraphs'] %}
+                                <p class="paragraph">
+                                    {% for sentence_bundle in paragraph %}
+                                        {% if sentence_bundle['hidden'] %}
+                                            <a class="waves-effect waves-light btn-small"
+                                                    aria-controls="sentence-bundle{{ counter.sentence_bundle }}">...</a>
+                                        {% endif %}
+                                        <span class="sentence-bundle"
+                                             id="sentence-bundle{{ counter.sentence_bundle }}"
+                                                {{ increment(counter, 'sentence_bundle') }}
+                                                {% if sentence_bundle['hidden'] %}
+                                                     hidden
+                                                {% endif %}
+                                        >
+                                            {% for sentence in sentence_bundle['sentences'] %}
+                                                <span class="sentence">
+                                                  {% for sentence_part in sentence %}
+                                                      {% if sentence_part['marked'] %}
+                                                          <mark> {{ sentence_part['text'] }}</mark>
+                                                      {% else %}
+                                                          {{ sentence_part['text'] }}
+                                                      {% endif %}
+                                                  {% endfor %}
+                                                  </span>
+                                            {% endfor %}
+                                        </span>
+                                    {% endfor %}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+
+{% block scripts %}
+    <script>
+        var elem = document.querySelector('.collapsible.expandable');
+        var instance = M.Collapsible.init(elem, {
+            accordion: false
+        });
+    </script>
+
+    <script>
+        if ('querySelector' in document && 'addEventListener' in window) {
+            var toggleButtons = document.querySelectorAll('.waves-effect.waves-light.btn-small');
+            [].forEach.call(toggleButtons, function (toggleButton) {
+                toggleButton.addEventListener('click', function () {
+                    console.log("trying to find sentence bundle with id: " + this.getAttribute('aria-controls'));
+                    var fullTextWrapper = document.querySelector('#' + this.getAttribute('aria-controls'));
+                    console.log("found: " + fullTextWrapper + "with class: " + fullTextWrapper.className)
+                    fullTextWrapper.removeAttribute('hidden');
+                    this.style.display='none'
+                });
+            });
+        }
+    </script>
+
+{% endblock %}
+
+

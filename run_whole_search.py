@@ -15,6 +15,7 @@ from utilities import load_function, load_variable
 from run_articles_download import run_articles_download
 from run_articles_search import run_articles_search
 from run_results_html_generation import run_results_html_generation
+from extract_doi_from_csv import extract_doi_from_csv
 
 def run_whole_search(doi_list, finder, output_articles, output_finder, output_html, proxy_file):
 
@@ -29,7 +30,8 @@ def run_whole_search(doi_list, finder, output_articles, output_finder, output_ht
 
     logger.info("Html generation start")
 
-    run_results_html_generation(searchResult, output_html)
+    if output_html != None:
+        run_results_html_generation(searchResult, output_html)
 
 
 
@@ -39,7 +41,7 @@ def getArgumentsParser():
     parser.add_argument('--output_finder', default='outputFinder', type=str, help='Location for finder result .json files')
     parser.add_argument('--output_html', default='outputHtml', type=str, help='Location for result .html files')
     parser.add_argument('--finder', default='finder.py', type=str, help='Python file containing global variable finder which is created using TextSearchEngine.searchFunctions')
-    parser.add_argument('--doi_list', default='doiList.py', type=str, help='Python file containing function doiList() which returns a list of strings with DOIs of articles')
+    parser.add_argument('--doi_list', default='doiList.csv', type=str, help='CSV file containing DOI column with DOIs of articles')
     parser.add_argument('--proxy_file', default='proxy_auth_plugin.zip', type=str, help='Proxy configuration file')
     return parser
 
@@ -56,7 +58,8 @@ def main(args = None):
     logger.info("output_finder = " + str(a.output_finder))
     logger.info("output_html = " + a.output_html)
 
-    doi_list = load_function(a.doi_list, 'doiList')()
+    doi_list = extract_doi_from_csv(a.doi_list)
+
     finder = load_variable(a.finder, 'finder')
 
     logger.info("finder = " + str(a.finder))

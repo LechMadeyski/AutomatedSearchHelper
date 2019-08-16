@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Automated Search helper</title>
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!--Import materialize.css-->
+  <link rel="stylesheet" type="text/css" media="screen,projection" href="{{ url_for('static', filename='css/materialize.min.css') }}">
+
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+
+
+
+      <nav>
+        <div class="nav-wrapper">
+          <div class="brand-logo">Automated Search Helper</div>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li><a href="{{ url_for("main.upload_view") }}">Upload</a></li>
+              <li><a href="{{ url_for("main.index") }}">Index</a></li>
+          {% block navbar %}
+          {% endblock %}
+          </ul>
+        </div>
+      </nav>
+
+
+{% block body %}
+{% endblock %}
+
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+{% block scripts %}
+{% endblock %}
+
+</body>
+</html>

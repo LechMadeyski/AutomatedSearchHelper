@@ -8,9 +8,10 @@ from selenium.webdriver.support.wait import WebDriverWait
 class ACMArticlesHandler():
     def __init__(self, driver):
         self.driver = driver
+        self.__logger = logging.getLogger("IEEEArticlesHandler")
 
     def getArticle(self, url):
-        logging.error("ACM HANDLER IS NOT IMPLEMENTED YET " + url + " will not be handled")
+        self.__logger.error("ACM HANDLER IS NOT IMPLEMENTED YET " + url + " will not be handled")
         return None
 
     def linkPart(self):
