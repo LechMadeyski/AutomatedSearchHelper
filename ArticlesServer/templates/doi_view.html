@@ -6,31 +6,112 @@
 {% endblock %}
 
 {% block body %}
-    <h3>{{ display_data["title"] }}</h3>
-    <h6> Authors: {{ display_data['authors'] }} </h6>
-    <h6> Publisher:  </h6>
-    <h6> Published in: </h6>
-    <h6> Date of conference: </h6>
-    <h6> Doi: <a href="http://doi.org/{{ display_data['doi'] }}"> {{ display_data['doi'] }} </a></h6>
+    {% block article_header %}
+        <div>
+            <div class="row">
+                <div class="col s12">
+                    <h3>{{ display_data["title"] }}</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s6">
+                    <div class="row">
+                        {% if display_data['status'].value == 1 %}
+                            <a class="waves-light btn-small yellow darken-2">To be checked</a>
+                        {% elif display_data['status'].value == 2 %}
+                            <a class="waves-light btn-small green">Accepted</a>
+                        {% elif display_data['status'].value == 3 %}
+                            <a class="waves-light btn-small red">Rejected</a>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                          <h6> Authors:
+                            {% for author in display_data['authors'] %}
+                                 <div class="chip"> {{ author['given'] }} {{ author['family'] }} </div>
+                            {% endfor %}
+                          </h6>
+
+                    </div>
+                    <h6> Publisher:  </h6>
+                    <h6> Published in: </h6>
+                    <h6> Date of conference: </h6>
+                    <h6> Doi: <a href="http://doi.org/{{ display_data['doi'] }}"> {{ display_data['doi'] }} </a></h6>
+                </div>
+                <div class="col s6">
+                   {% if session['user'] %}
+                        <div class="row">
+                                <a class="waves-effect waves-light btn yellow darken-2"
+                                    href="{{url_for("main.change_status", doi_id = display_data['doi_id'], status = 1)}}">
+                                    Reset
+                                </a>
+
+                                <a class="waves-effect waves-light btn green"
+                                    href="{{url_for("main.change_status", doi_id = display_data['doi_id'], status = 2)}}">
+                                    Accept
+                                </a>
+
+                                <a class="waves-effect waves-light btn red"
+                                   href="{{url_for("main.change_status", doi_id = display_data['doi_id'], status = 3)}}">
+                                   Decline
+                                </a>
+                        </div>
+                   {% endif %}
+                    <ul class="collection">
+                        <li class="collection-header">
+                            Comments:
+                        </li>
+                        {% for comment in display_data['comments'] %}
+                            <li class="collection-item">
+                                    {{ comment['text'] }}
+                                    <div class="chip"> {{ comment['user_name'] }} </div>
+                                    {% if comment.can_delete %}
+                                    <a class="secondary-content"
+                                        href="{{url_for("main.remove_comment",
+                                            doi_id = display_data['doi_id'],
+                                            comment_id = comment['comment_id'])}}">
+                                            <i class="material-icons">delete</i>
+                                    </a>
+                                    {% endif %}
+                            </li>
+                        {% endfor %}
+                    {% if session['user'] %}
+                        <li>
+                            <form method="POST" class="col s12">
+                               <div class="row">
+                                    {{ comment_form.csrf_token }}
+                                    <div class="input-field col s9">
+                                        {{ comment_form.comment}}
+                                    </div>
+                                    <div class="input-field col s3">
+                                        <button class="btn waves-effect waves-light" type="submit" name="action"
+                                                href="{{ url_for('main.view_doi', doi_id = display_data['doi_id'])}}">
+                                          Add comment
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                    {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
 
 
-
-
-
-    {% set counter = {
-        'sentence_bundle': 1,
-        'paragraph_bundle': 1
-    } %}
+    {% block article_content %}
+     {% set counter = {
+            'sentence_bundle': 1,
+            'paragraph_bundle': 1
+        } %}
     {% macro increment(dct, key, inc=1) %}
         {% if dct.update({key: dct[key] + inc}) %} {% endif %}
     {% endmacro %}
 
 
-
     <ul class="collapsible expandable">
-
         {% for section in display_data['sections'] %}
-
             <li {% if not section['hidden'] %} class="active" {% endif %}>
                 <div class="collapsible-header">
                     {{ section['title'] }}
@@ -83,6 +164,7 @@
             </li>
         {% endfor %}
     </ul>
+    {% endblock %}
 {% endblock %}
 
 
@@ -107,6 +189,15 @@
                 });
             });
         }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.action-btn');
+            var instances = M.FloatingActionButton.init(elems, {
+              direction: 'right'
+            });
+        });
     </script>
 
 {% endblock %}

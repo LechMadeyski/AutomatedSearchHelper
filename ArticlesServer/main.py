@@ -1,16 +1,22 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, render_template_string
+    Blueprint, flash, redirect, render_template, url_for, request, session
 )
 import os
 import json
 import logging
 from werkzeug.utils import secure_filename
 
-from .generate_articles_database import generate_articles_database
 from extract_doi_from_csv import extract_doi_from_csv
 from utilities import load_variable
-from .DatabaseManager import DatabaseManager
+from ArticlesServer.database.DatabaseManager import DatabaseManager
 from .prepare_sections import prepare_sections
+from TextSearchEngine.parse_finder import parse_finder
+from .database.Status import Status
+from .database.UsersDatabase import get_user_database
+
+from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileRequired
+from wtforms import StringField, PasswordField, validators
 
 main = Blueprint('main', __name__)
 
@@ -28,11 +34,6 @@ def index():
                                                     db.get_all_invalid_articles()])
     else:
         return render_template('main_without_articles.html')
-
-
-@main.route('/upload', methods=["GET"])
-def upload_view():
-    return render_template('upload_view.html')
 
 
 def get_or_create_upload_path():
@@ -57,46 +58,79 @@ def read_file_from_request(files, name):
     return filePath
 
 
-def get_doi_list(files):
-    filename = read_file_from_request(files, 'doiList')
+def get_doi_list(doi_list_form):
+    filename = doi_list_form and doi_list_form.data and doi_list_form.data.filename
     if filename:
         return extract_doi_from_csv(filename)
     else:
         return None
 
 
-def get_finder(files):
-    filename = read_file_from_request(files, 'finder')
+def get_finder(finder_form):
+    filename = finder_form and finder_form.data and finder_form.data.filename
     if filename:
         return load_variable(filename, 'finder')
     else:
         return None
 
 
-@main.route('/upload', methods=["POST"])
-def upload_post():
-    logger = logging.getLogger('upload_post')
-    doiList = get_doi_list(request.files)
-    if doiList is None:
-        logger.error('Wrong doi list provided')
-        flash("Invalid doi list")
-        return redirect(url_for("main.upload_view"))
-    finder = get_finder(request.files)
-    if finder is None:
-        logger.error('Wrong finder provided')
-        flash("Invalid finder")
-        return redirect(url_for("main.upload_view"))
-    logger.info('Properly read doiList and finder, doi list size is ' + str(len(doiList)))
-
-    DatabaseManager.reload_database(doiList, finder)
-    return redirect(url_for('main.index'))
+class UploadForm(FlaskForm):
+    doi_list = FileField('doi_list', validators=[
+        FileRequired()
+    ])
+    finder = FileField('finder')
+    finder_text = StringField('finder_text')
 
 
+@main.route('/upload', methods=["GET", "POST"])
+def upload():
+    form = UploadForm()
+
+    if form.validate_on_submit():
+        logger = logging.getLogger('upload_post')
+        doiList = get_doi_list(form.doi_list)
+        if doiList is None:
+            logger.error('Wrong doi list provided')
+            flash("Invalid doi list")
+            return render_template('upload_view.html', form=form)
+        finder = get_finder(form.finder)
+        if finder is None:
+            try:
+                logger.info("Parsing finder from : " + str(form.finder_text.data))
+                finder = parse_finder(str(form.finder_text.data))
+            except ValueError as e:
+                flash("Invalid finder text " + str(e))
+        if finder is None:
+            logger.error('Wrong finder provided')
+            return render_template('upload_view.html', form=form)
+        logger.info('Properly read doiList and finder, doi list size is ' + str(len(doiList)))
+
+        DatabaseManager.reload_database(doiList, finder)
+        return redirect(url_for('main.index'))
+
+    return render_template('upload_view.html', form=form)
+
+def can_remove_comment(login):
+    user = session['user']
+    if user:
+        return user['login'] == login
+    else:
+        return False
+
+def prepare_comments(db, doi_id):
+    return [
+        dict(text=c['text'],
+             comment_id=c['comment_id'],
+             user_name=get_user_database().get_full_name(c['user']),
+             can_delete=can_remove_comment(c['user'])) for c in db.get_comments(doi_id)]
 
 
-def generate_data_doi_data(doi_id, article_with_findings):
+def generate_data_doi_data(db, doi_id):
+    article_with_findings = db.get_full_article(doi_id)
     return {
         'doi_id': doi_id,
+        'comments': prepare_comments(db, doi_id),
+        'status': db.get_status(doi_id),
         'title': article_with_findings['article']['title'],
         'doi': article_with_findings['article']['doi'],
         'publisher': article_with_findings['article']['doi'],
@@ -104,25 +138,45 @@ def generate_data_doi_data(doi_id, article_with_findings):
         'sections': prepare_sections(article_with_findings)}
 
 
-@main.route('/doiView/<string:doi_id>')
+class CommentForm(FlaskForm):
+    comment = StringField('comment')
+
+
+@main.route('/doiView/<string:doi_id>', methods=['GET', 'POST'])
 def view_doi(doi_id):
     db = DatabaseManager.get_instance()
     if not db:
         return redirect(url_for('main.index'))
-    article_with_findings = db.get_full_article(doi_id)
+
+    comment_form = CommentForm()
+    if comment_form.validate_on_submit():
+        if not session['user']:
+            flash("Please login to comment articles")
+        else:
+            db.add_comment(doi_id, str(comment_form.comment.data), session['user']['login'])
+
+    comment_form.comment.data = str()
 
     return render_template(
         "doi_view.html",
-        display_data=generate_data_doi_data(doi_id, article_with_findings))
+        display_data=generate_data_doi_data(db, doi_id),
+        comment_form=comment_form)
+
+
+@main.route('/removeComment/<string:doi_id>')
+def remove_comment(doi_id):
+    db = DatabaseManager.get_instance()
+    db.remove_comment(doi_id, int(request.args.get('comment_id')))
+    return redirect(url_for('main.view_doi', doi_id=doi_id))
+
 
 @main.route('/api/doiView/<string:doi_id>')
 def api_doi(doi_id):
     db = DatabaseManager.get_instance()
     if not db:
         return redirect(url_for('main.index'))
-    article_with_findings = db.get_full_article(doi_id)
+    return json.dumps(generate_data_doi_data(db, doi_id))
 
-    return json.dumps(generate_data_doi_data(doi_id, article_with_findings))
 
 @main.route('/next/<string:doi_id>')
 def next_doi(doi_id):
@@ -143,3 +197,75 @@ def prev_doi(doi_id):
     else:
         return redirect(url_for('main.index'))
 
+
+@main.route('/status/<string:doi_id>')
+def change_status(doi_id):
+    status = request.args.get('status')
+    db = DatabaseManager.get_instance()
+    if not db:
+        return redirect(url_for('main.index'))
+
+    if status == '1':
+        db.change_status(doi_id, Status.TO_BE_CHECKED)
+    elif status == '2':
+        db.change_status(doi_id, Status.ACCEPTED)
+    elif status == '3':
+        db.change_status(doi_id, Status.DECLINED)
+
+    return redirect(url_for('main.view_doi', doi_id=doi_id))
+
+
+class LoginForm(FlaskForm):
+    login = StringField('login')
+    password = PasswordField('password')
+
+
+@main.route('/login', methods=['GET', 'POST'])
+def login():
+    login_form = LoginForm()
+
+    if login_form.validate_on_submit():
+        user = get_user_database().login(login_form.login.data, login_form.password.data)
+        if user:
+            session['user'] = user
+            return redirect(url_for('main.index'))
+        else:
+            flash('Incorrect credentials')
+
+    return render_template('login.html', form=login_form)
+
+
+@main.route('/logout')
+def logout():
+    session['user'] = None
+    return redirect(url_for('main.index'))
+
+
+class RegisterForm(FlaskForm):
+    login = StringField('Login')
+    full_name = StringField('Name')
+    password = PasswordField('New Password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
+    confirm = PasswordField('Repeat Password')
+
+@main.route('/register', methods = ["GET", "POST"])
+def register():
+    if session['user']:
+        flash('Please logout if you want to register')
+        return redirect(url_for('main.index'))
+
+    register_form = RegisterForm()
+
+    if register_form.validate_on_submit():
+        register_success = get_user_database().register(register_form.login.data,
+                                                        register_form.full_name.data,
+                                                        register_form.password.data)
+        if register_success:
+            flash("Successfully registered new user, please log in")
+            return redirect(url_for('main.login'))
+        else:
+            flash("This login is occupied")
+
+    return render_template('register.html', form=register_form)

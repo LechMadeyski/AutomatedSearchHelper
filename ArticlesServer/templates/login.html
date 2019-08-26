@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+
+{% block body %}
+
+    <div class="container">
+        <form method="POST">
+            {{ form.csrf_token }}
+            <div class="input-field">
+                <label>{{ form.login.label }}</label>
+                {{ form.login}}
+            </div>
+            <div class="input-field">
+                <label>{{ form.password.label }}</label>
+                {{ form.password}}
+            </div>
+
+            <div class="input-field">
+                <button class="btn waves-effect waves-light" type="submit" name="action"
+                        href="{{ url_for('main.login')}}">
+                  Login
+                </button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

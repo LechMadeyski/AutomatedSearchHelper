@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+    <div class="container">
+        <form method="POST">
+            {{ form.csrf_token }}
+            <div class="input-field">
+                <label>{{ form.login.label }}</label>
+                {{ form.login}}
+            </div>
+            <div class="input-field">
+                <label>{{ form.full_name.label }}</label>
+                {{ form.full_name}}
+            </div>
+
+            <div class="input-field">
+                <label>{{ form.password.label }}</label>
+                {{ form.password}}
+            </div>
+            <div class="input-field">
+                <label>{{ form.confirm.label }}</label>
+                {{ form.confirm}}
+            </div>
+
+            <div class="input-field">
+                <button class="btn waves-effect waves-light" type="submit" name="action"
+                        href="{{ url_for('main.register')}}">
+                  Register
+                </button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

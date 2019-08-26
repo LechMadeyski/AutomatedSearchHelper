@@ -15,22 +15,24 @@
 </head>
 
 <body>
-
-
-
       <nav>
         <div class="nav-wrapper">
           <div class="brand-logo">Automated Search Helper</div>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
-              <li><a href="{{ url_for("main.upload_view") }}">Upload</a></li>
+              {% if session['user'] %}
+                <li> Logged as {{ session['user']['display_name']}} </li>
+                <li><a href="{{ url_for("main.logout") }}">Logout</a></li>
+              {% else %}
+                 <li><a href="{{ url_for("main.login") }}">Login</a></li>
+                 <li><a href="{{ url_for("main.register") }}">Register</a></li>
+              {% endif %}
+              <li><a href="{{ url_for("main.upload") }}">Upload</a></li>
               <li><a href="{{ url_for("main.index") }}">Index</a></li>
           {% block navbar %}
           {% endblock %}
           </ul>
         </div>
       </nav>
-
-
 {% block body %}
 {% endblock %}
 
@@ -38,6 +40,15 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class=flashes>
+    {% for message in messages %}
+        <script>   M.toast({html: "{{message}}" }) </script>
+    {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
 {% block scripts %}
 {% endblock %}
 

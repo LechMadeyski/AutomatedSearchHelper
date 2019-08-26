@@ -4,44 +4,56 @@ from TextSearchEngine.find_in_text_json import find_in_text_json
 import re
 
 
-def EXACT_WORD(word, case_sensitive=False):
-    def matcherFunction(text):
-        flags = 0
-        if not case_sensitive:
-            flags = re.IGNORECASE
-        result = re.search(r'\b' + word + r'\b', text, flags)
-        if result is not None:
-            return (result.start(), result.end())
-        else:
-            return None
+class EXACT_WORD:
+    def __init__(self, word, case_sensitive=False):
+        self._word = word
+        self._case_sensitive = case_sensitive
 
-    def returnFunction(data, finder_function=find_in_text_json):
+    def __call__(self, data, finder_function=find_in_text_json):
+        def matcherFunction(text):
+            flags = 0
+            if not self._case_sensitive:
+                flags = re.IGNORECASE
+            result = re.search(r'\b' + self._word + r'\b', text, flags)
+            if result is not None:
+                return (result.start(), result.end())
+            else:
+                return None
+
         return finder_function(data, matcherFunction)
 
-    return returnFunction
+    def __str__(self):
+        return f'EXACT_WORD("{self._word}"{",case_sensitive" if self._case_sensitive else ""})'
 
 
-def PARTIAL_WORD(word, case_sensitive=False):
-    def matcherFunction(text):
-        flags = 0
-        if not case_sensitive:
-            flags = re.IGNORECASE
-        result = re.search(word, text, flags)
-        if result is not None:
-            return (result.start(), result.end())
-        else:
-            return None
+class PARTIAL_WORD:
+    def __init__(self, word, case_sensitive=False):
+        self._word = word
+        self._case_sensitive = case_sensitive
 
-    def returnFunction(data, finder_function=find_in_text_json):
+    def __call__(self, data, finder_function=find_in_text_json):
+        def matcherFunction(text):
+            flags = 0
+            if not self._case_sensitive:
+                flags = re.IGNORECASE
+            result = re.search(self._word, text, flags)
+            if result is not None:
+                return (result.start(), result.end())
+            else:
+                return None
+
         return finder_function(data, matcherFunction)
 
-    return returnFunction
+    def __str__(self):
+        return f'PARTIAL_WORD("{self._word}"{",case_sensitive" if self._case_sensitive else ""})'
 
+class AND:
+    def __init__(self, *matchers):
+        self._matchers = matchers
 
-def AND(*textMatchers):
-    def returnFunction(data, finder_function=find_in_text_json, merge_function=merge_results):
+    def __call__(self, data, finder_function=find_in_text_json, merge_function=merge_results):
         result = []
-        for matcher in textMatchers:
+        for matcher in self._matchers:
             matchResult = matcher(data, finder_function)
             if matchResult is None:
                 return None
@@ -49,13 +61,17 @@ def AND(*textMatchers):
                 result.append(matchResult)
         return merge_function(result)
 
-    return returnFunction
+    def __str__(self):
+        return f'AND({", ".join([str(matcher) for matcher in self._matchers])})'
 
 
-def OR(*textMatchers):
-    def returnFunction(data, finder_function=find_in_text_json, merge_function=merge_results):
+class OR:
+    def __init__(self, *matchers):
+        self._matchers = matchers
+
+    def __call__(self, data, finder_function=find_in_text_json, merge_function=merge_results):
         result = []
-        for matcher in textMatchers:
+        for matcher in self._matchers:
             matchResult = matcher(data, finder_function)
             if matchResult is not None:
                 result.append(matchResult)
@@ -64,4 +80,5 @@ def OR(*textMatchers):
         else:
             return None
 
-    return returnFunction
+    def __str__(self):
+        return f'OR({", ".join([str(matcher) for matcher in self._matchers])})'

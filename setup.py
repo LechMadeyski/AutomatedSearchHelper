@@ -8,5 +8,6 @@ setup(
     name = "AutomatedSearchHelper",
     version = "0.0.1",
     author = "Marek Sośnicki",
-    packages=["ArticlesDataDownloader", "TextSearchEngine", "SearchResultHtmlDisplay", "ArticlesServer"]
+    packages=["ArticlesDataDownloader", "TextSearchEngine", "SearchResultHtmlDisplay", "ArticlesServer"],
+    install_requires=['flask', 'werkzeug', 'wtforms']
 )
