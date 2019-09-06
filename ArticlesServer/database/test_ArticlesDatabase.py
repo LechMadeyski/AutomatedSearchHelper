@@ -97,22 +97,84 @@ def test_get_status_shall_return_to_be_checked_by_default():
     database = ArticlesDatabase(get_basic_articles())
     ids = database.get_all_articles_id()
 
-    assert database.get_status(ids[0]) == Status.TO_BE_CHECKED
-    assert database.get_status(ids[3]) == Status.TO_BE_CHECKED
+    assert database.get_status(ids[0], 'user1') == Status.TO_BE_CHECKED
+    assert database.get_status(ids[3], 'user1') == Status.TO_BE_CHECKED
 
 
 def test_change_status_shall_properly_set_status():
     database = ArticlesDatabase(get_basic_articles())
     ids = database.get_all_articles_id()
 
-    database.change_status(ids[0], Status.ACCEPTED)
-    database.change_status(ids[1], Status.TO_BE_CHECKED)
-    database.change_status(ids[4], Status.DECLINED)
+    user = 'user'
 
-    assert database.get_status(ids[0]) == Status.ACCEPTED
-    assert database.get_status(ids[1]) == Status.TO_BE_CHECKED
-    assert database.get_status(ids[3]) == Status.TO_BE_CHECKED
-    assert database.get_status(ids[4]) == Status.DECLINED
+    database.change_status(ids[0], user, Status.ACCEPTED)
+    database.change_status(ids[1], user, Status.TO_BE_CHECKED)
+    database.change_status(ids[4], user, Status.DECLINED)
+
+    assert database.get_status(ids[0], user) == Status.ACCEPTED
+    assert database.get_status(ids[1], user) == Status.TO_BE_CHECKED
+    assert database.get_status(ids[3], user) == Status.TO_BE_CHECKED
+    assert database.get_status(ids[4], user) == Status.DECLINED
+
+
+def test_change_status_shall_properly_set_status_for_proper_user():
+    database = ArticlesDatabase(get_basic_articles())
+    ids = database.get_all_articles_id()
+
+    user1 = 'user1'
+    user2 = 'user2'
+
+    assert database.get_status(ids[0], user1) == Status.TO_BE_CHECKED
+    assert database.get_status(ids[0], user2) == Status.TO_BE_CHECKED
+
+    database.change_status(ids[0], user1, Status.ACCEPTED)
+    database.change_status(ids[0], user2, Status.DECLINED)
+
+    assert database.get_status(ids[0], user1) == Status.ACCEPTED
+    assert database.get_status(ids[0], user2) == Status.DECLINED
+
+def test_get_statuses_without_user_shall_return_statuses_in_user_order():
+    database = ArticlesDatabase(get_basic_articles())
+    ids = database.get_all_articles_id()
+
+    user1 = 'user1'
+    user2 = 'user2'
+    user3 = 'user3'
+
+    database.change_status(ids[0], user1, Status.ACCEPTED)
+    database.change_status(ids[0], user2, Status.DECLINED)
+    database.change_status(ids[0], user3, Status.TO_BE_CHECKED)
+
+    assert database.get_statuses(ids[0]) == [(user1, Status.ACCEPTED),
+                                             (user2, Status.DECLINED),
+                                             (user3, Status.TO_BE_CHECKED)]
+
+
+def test_get_statuses_without_user_shall_return_statuses_including_user_and_with_given_user_first():
+    database = ArticlesDatabase(get_basic_articles())
+    ids = database.get_all_articles_id()
+
+    user1 = 'user1'
+    user2 = 'user2'
+    user3 = 'user3'
+    user4 = 'user4'
+
+    database.change_status(ids[0], user1, Status.ACCEPTED)
+    database.change_status(ids[0], user2, Status.DECLINED)
+    database.change_status(ids[0], user3, Status.TO_BE_CHECKED)
+
+    assert database.get_statuses(ids[0], user1) == [(user1, Status.ACCEPTED),
+                                             (user2, Status.DECLINED),
+                                             (user3, Status.TO_BE_CHECKED)]
+
+    assert database.get_statuses(ids[0], user2) == [(user2, Status.DECLINED),
+                                             (user1, Status.ACCEPTED),
+                                             (user3, Status.TO_BE_CHECKED)]
+
+    assert database.get_statuses(ids[0], user4) == [(user4, Status.TO_BE_CHECKED),
+                                             (user1, Status.ACCEPTED),
+                                             (user2, Status.DECLINED),
+                                             (user3, Status.TO_BE_CHECKED)]
 
 
 def test_comments_shall_be_empty_for_basic():

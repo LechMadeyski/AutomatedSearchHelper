@@ -24,13 +24,18 @@ main = Blueprint('main', __name__)
 @main.route('/')
 def index():
     db = DatabaseManager.get_instance()
+
+    user = None
+    if session.get('user', None):
+        user = session['user']['login']
+
     if db:
         return render_template('main_with_articles.html',
-                               articles_with_findings=[db.get_short_article_info(x) for x in
+                               articles_with_findings=[db.get_short_article_info(x, user) for x in
                                                        db.get_all_valid_with_findings()],
-                               articles_without_findings=[db.get_short_article_info(x) for x in
+                               articles_without_findings=[db.get_short_article_info(x, user) for x in
                                                           db.get_all_valid_without_findings()],
-                               articles_with_error=[db.get_short_article_info(x) for x in
+                               articles_with_error=[db.get_short_article_info(x, user) for x in
                                                     db.get_all_invalid_articles()])
     else:
         return render_template('main_without_articles.html')
@@ -125,15 +130,24 @@ def prepare_comments(db, doi_id):
              can_delete=can_remove_comment(c['user'])) for c in db.get_comments(doi_id)]
 
 
+def prepare_statuses(db, doi_id):
+    if session.get('user', None):
+        return db.get_statuses(doi_id, session['user']['login'])
+    return db.get_statuses(doi_id)
+
+
 def generate_data_doi_data(db, doi_id):
     article_with_findings = db.get_full_article(doi_id)
     return {
         'doi_id': doi_id,
         'comments': prepare_comments(db, doi_id),
-        'status': db.get_status(doi_id),
+        'statuses': prepare_statuses(db, doi_id),
         'title': article_with_findings['article']['title'],
         'doi': article_with_findings['article']['doi'],
-        'publisher': article_with_findings['article']['doi'],
+        'issn': article_with_findings['article']['issn'],
+        'published_in' : article_with_findings['article']['journalName'],
+        'jurnal_info': article_with_findings['article']['journalInfo'],
+        'publisher': article_with_findings['article']['publisher'],
         'authors': article_with_findings['article']['authors'],
         'sections': prepare_sections(article_with_findings)}
 
@@ -205,12 +219,18 @@ def change_status(doi_id):
     if not db:
         return redirect(url_for('main.index'))
 
+    user = session['user']
+
+    if not user:
+        flash('Cannot change status without being logged in')
+        return redirect(url_for('main.login'))
+
     if status == '1':
-        db.change_status(doi_id, Status.TO_BE_CHECKED)
+        db.change_status(doi_id, user['login'], Status.TO_BE_CHECKED)
     elif status == '2':
-        db.change_status(doi_id, Status.ACCEPTED)
+        db.change_status(doi_id, user['login'],  Status.ACCEPTED)
     elif status == '3':
-        db.change_status(doi_id, Status.DECLINED)
+        db.change_status(doi_id, user['login'],  Status.DECLINED)
 
     return redirect(url_for('main.view_doi', doi_id=doi_id))
 
@@ -252,7 +272,7 @@ class RegisterForm(FlaskForm):
 
 @main.route('/register', methods = ["GET", "POST"])
 def register():
-    if session['user']:
+    if session.get('user', None):
         flash('Please logout if you want to register')
         return redirect(url_for('main.index'))
 

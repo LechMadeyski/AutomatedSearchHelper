@@ -3,6 +3,7 @@ import logging
 import os
 
 from ArticlesDataDownloader.IEEE.IEEEArticlesHandler import IEEEArticlesHandler
+from ArticlesDataDownloader.ScopusDataDownloader import ScopusDataDownloader
 from ArticlesDataDownloader.Willey.WilleyArticlesHandler import WilleyArticlesHandler
 from ArticlesDataDownloader.ScienceDirect.ScienceDirectArticlesHandler import ScienceDirectArticlesHandler
 from ArticlesDataDownloader.ACM.ACMArticlesHandler import ACMArticlesHandler
@@ -22,6 +23,8 @@ class ArticlesDataDownloader:
         self.__logger = logging.getLogger("ArticlesDataDownloader")
         self.__proxyFile = proxy_file
         self.__works = Works()
+        self.__scopus_downloader = None
+        self._driver = None
 
     def get_doi_filename(self, doi):
         return getDoiFilename(self.__outputFolder, doi)
@@ -31,20 +34,18 @@ class ArticlesDataDownloader:
         with open(filename) as json_file:
             return filename, json.load(json_file)
 
-    def write_article_to_file(self, article, doi):
+    def write_article_to_file(self, article, doi, scopus_link):
         filename = self.get_doi_filename(doi)
         self.__logger.info("Writing article to " + filename)
 
-        result_json = dict()
+        result_json = self.get_scopus_downloader().get_data(scopus_link)
         result_json["doi"] = doi
         result_json["text"] = article
 
         doi_data = self.__works.doi(doi)
         result_json["publisher"] = doi_data["publisher"]
-        result_json["authors"] = doi_data["author"]
-
+        result_json["authors"] = [x['given'] + ' ' + x['family'] for x in doi_data["author"]]
         result_json["title"] = ' '.join(doi_data["title"])
-
         result_json['read_status'] = 'OK'
 
         with open(filename, "w") as f:
@@ -57,67 +58,60 @@ class ArticlesDataDownloader:
 
     def get_handlers(self):
         if self.__handlers is None:
-            driver = getDriver(proxyFile=self.__proxyFile)
+            if self._driver is None:
+                self._driver = getDriver(proxyFile=self.__proxyFile)
             self.__handlers = [
-                IEEEArticlesHandler(driver),
-                WilleyArticlesHandler(driver),
-                ScienceDirectArticlesHandler(driver),
-                # ACMArticlesHandler(driver),
-                SpringerArticlesHandler(driver),
+                IEEEArticlesHandler(self._driver),
+                WilleyArticlesHandler(self._driver),
+                ScienceDirectArticlesHandler(self._driver),
+                # ACMArticlesHandler(self._driver),
+                SpringerArticlesHandler(self._driver),
             ]
         return self.__handlers
 
-    def write_incorrect_doi_result(self, doi):
+    def get_scopus_downloader(self):
+        if self.__scopus_downloader is None:
+            if self._driver is None:
+                self._driver = getDriver(proxyFile=self.__proxyFile)
+            self.__scopus_downloader = ScopusDataDownloader(self._driver)
+        return self.__scopus_downloader
+
+
+    def write_incorrect_doi_result(self, doi, scopus_link):
         filename = self.get_doi_filename(doi)
         self.__logger.info("Writing article to " + filename)
-        result_json = dict()
-        result_json["doi"] = doi
-        result_json["text"] = dict()
-
-        result_json["publisher"] = 'unknown'
-        result_json["authors"] = 'unknown'
-
-        result_json["title"] = 'unknown'
+        result_json = self.get_scopus_downloader().get_data(scopus_link)
+        if doi:
+            result_json["doi"] = doi
         result_json["read_status"] = 'ERROR READING DOI DATA'
         with open(filename, "w") as f:
             f.write(json.dumps(result_json))
         return filename, result_json
 
-    def write_missing_handler_result(self, doi):
+    def write_missing_handler_result(self, doi, scopus_link):
         filename = self.get_doi_filename(doi)
         self.__logger.info("Writing article to " + filename)
-        result_json = dict()
-        result_json["doi"] = doi
-        result_json["text"] = dict()
-
-        result_json["publisher"] = 'unknown'
-        result_json["authors"] = 'unknown'
-
-        result_json["title"] = 'unknown'
-
+        result_json = self.get_scopus_downloader().get_data(scopus_link)
+        if doi:
+            result_json["doi"] = doi
         result_json["read_status"] = 'NO HANDLER IMPLEMENTED'
         with open(filename, "w") as f:
             f.write(json.dumps(result_json))
         return filename, result_json
 
-    def write_error_reading_article(self, doi):
+    def write_error_reading_article(self, doi, scopus_link):
         filename = self.get_doi_filename(doi)
         self.__logger.info("Writing article to " + filename)
-        result_json = dict()
-        result_json["doi"] = doi
-        result_json["text"] = dict()
-
-        doi_data = self.__works.doi(doi)
-        result_json["publisher"] = doi_data["publisher"]
-        result_json["authors"] = doi_data["author"]
-        result_json["title"] = ' '.join(doi_data["title"])
+        result_json = self.get_scopus_downloader().get_data(scopus_link)
+        if doi:
+            result_json["doi"] = doi
 
         result_json["read_status"] = 'ERROR READING ARTICLE'
         with open(filename, "w") as f:
             f.write(json.dumps(result_json))
         return filename, result_json
 
-    def readArticle(self, doi):
+    def readArticle(self, doi, scopus_link):
         if self.doi_has_result_already(doi):
             self.__logger.info("Doi " + doi + " already parsed")
             return self.get_doi_filename_and_read_file(doi)
@@ -126,7 +120,7 @@ class ArticlesDataDownloader:
         real_link = getLinkFromDoi(doi)
         if real_link is None:
             self.__logger.error("Could not find link from doi")
-            return self.write_incorrect_doi_result(doi)
+            return self.write_incorrect_doi_result(doi, scopus_link)
 
         self.__logger.info("Real link is " + real_link)
 
@@ -138,18 +132,18 @@ class ArticlesDataDownloader:
 
                 if article is None:
                     self.__logger.error("Could not read article")
-                    return self.write_error_reading_article(doi)
+                    return self.write_error_reading_article(doi, scopus_link)
                 else:
-                    return self.write_article_to_file(article, doi)
+                    return self.write_article_to_file(article, doi, scopus_link)
         else:
             self.__logger.error("Could not find handler for " + real_link)
-            return self.write_missing_handler_result(doi)
+            return self.write_missing_handler_result(doi, scopus_link)
 
     def getDownloadArticles(self, doiList):
         result_filenames = list()
         self.__logger.info("Start downloading articles")
         for doi in doiList:
-            filename, resultData = self.readArticle(doi)
+            filename, resultData = self.readArticle(doi['doi'], doi['scopus_link'])
             if resultData['read_status'] == 'OK':
                 result_filenames.append(filename)
         return result_filenames

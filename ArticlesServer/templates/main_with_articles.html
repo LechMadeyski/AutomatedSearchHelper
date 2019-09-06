@@ -8,15 +8,19 @@
       <li  class="collection-item">
           <a class="action" href="{{ url_for('main.view_doi', doi_id=article['id']) }}" >
               {{ article['title'] }}
-
-        {% if article['status'].value == 1 %}
-            <a class="secondary-content waves-light btn-small yellow darken-2">To be checked</a>
-        {% elif article['status'].value == 2 %}
-            <a class="secondary-content waves-light btn-small green">Accepted</a>
-        {% elif article['status'].value == 3 %}
-            <a class="secondary-content waves-light btn-small red">Rejected</a>
-        {% endif %}
           </a>
+
+            {% for user, status in article['statuses'] %}
+                {% if status.value == 1 %}
+                    <a class="secondary-content waves-light btn-small yellow darken-2">To be checked
+                {% elif status.value == 2 %}
+                    <a class="secondary-content waves-light btn-small green">Accepted
+                {% elif status.value == 3 %}
+                    <a class="secondary-content waves-light btn-small red">Rejected
+                {% endif %}
+                     <div class="chip">{{ user }}</div>
+                  </a>
+            {% endfor %}
       </li>
      {% endfor %}
 </ul>
@@ -28,14 +32,6 @@
           <a class="action" href="{{ url_for('main.view_doi', doi_id=article['id']) }}" >
               {{ article['title'] }}
           </a>
-        {% if article['status'].value == 1 %}
-            <a class="waves-light btn-small yellow darken-2">To be checked</a>
-        {% elif article['status'].value == 2 %}
-            <a class="waves-light btn-small green">Accepted</a>
-        {% elif article['status'].value == 3 %}
-            <a class="waves-light btn-small red">Rejected</a>
-        {% endif %}
-
       </li>
      {% endfor %}
 </ul>
@@ -44,7 +40,11 @@
 <ul class="collection with-header">
   <li class="collection-header"><h4>DOIs with improper read:</h4></li>
      {% for article in articles_with_error %}
-         <li  class="collection-item">{{article["doi"]}} </li>
+          <li  class="collection-item">
+              <a class="action" href="{{ url_for('main.view_doi', doi_id=article['id']) }}" >
+                  {{ article['title'] }}
+              </a>
+          </li>
      {% endfor %}
 </ul>
 

@@ -16,26 +16,34 @@
             <div class="row">
                 <div class="col s6">
                     <div class="row">
-                        {% if display_data['status'].value == 1 %}
-                            <a class="waves-light btn-small yellow darken-2">To be checked</a>
-                        {% elif display_data['status'].value == 2 %}
-                            <a class="waves-light btn-small green">Accepted</a>
-                        {% elif display_data['status'].value == 3 %}
-                            <a class="waves-light btn-small red">Rejected</a>
+                    {% for user, status in display_data.statuses %}
+                        {% if status.value == 1 %}
+                            <a class="waves-light btn-small yellow darken-2">To be checked
+                        {% elif status.value == 2 %}
+                            <a class="waves-light btn-small green">Accepted
+                        {% elif status.value == 3 %}
+                            <a class="waves-light btn-small red">Rejected
                         {% endif %}
+                    <div class="chip"> {{ user }} </div>
+                    </a>
+                   {% endfor %}
                     </div>
+
 
                     <div class="row">
                           <h6> Authors:
                             {% for author in display_data['authors'] %}
-                                 <div class="chip"> {{ author['given'] }} {{ author['family'] }} </div>
+                                 <div class="chip"> {{ author }} </div>
                             {% endfor %}
                           </h6>
 
                     </div>
-                    <h6> Publisher:  </h6>
-                    <h6> Published in: </h6>
-                    <h6> Date of conference: </h6>
+                    <h6> Publisher: {{ display_data['publisher'] }} </h6>
+                    <h6> Published in: {{ display_data['published_in'] }} </h6>
+                    <h6> {{ display_data['jurnal_info'] }} </h6>
+                    <h6> ISSN: {{ display_data['issn'] }} </h6>
+
+
                     <h6> Doi: <a href="http://doi.org/{{ display_data['doi'] }}"> {{ display_data['doi'] }} </a></h6>
                 </div>
                 <div class="col s6">
