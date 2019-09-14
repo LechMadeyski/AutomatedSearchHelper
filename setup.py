@@ -1,13 +1,15 @@
 import os
 from setuptools import setup
 
+
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
+
 setup(
-    name = "AutomatedSearchHelper",
-    version = "0.0.1",
-    author = "Marek Sośnicki",
+    name="AutomatedSearchHelper",
+    version="0.0.1",
+    author="Marek Sośnicki",
     packages=["ArticlesDataDownloader", "TextSearchEngine", "SearchResultHtmlDisplay", "ArticlesServer"],
-    install_requires=['flask', 'werkzeug', 'wtforms']
+    install_requires=['flask', 'werkzeug', 'wtforms', 'beautifulsoup4', 'nltk']
 )

@@ -22,7 +22,7 @@ def run_articles_download(outputArticles, doiList, proxyFile):
 def getArgumentsParser():
     parser = argparse.ArgumentParser(description=__doc__, add_help=True)
     parser.add_argument('--output_articles', default='outputArticles', type=str, help='Location for articles .json files')
-    parser.add_argument('--doi_list', default='doiList.csv', type=str, help='CSV file containing DOI column with DOIs of articles')
+    parser.add_argument('--doi_list', default='dois.csv', type=str, help='CSV file containing DOI column with DOIs of articles')
     parser.add_argument('--proxy_file', default='proxy_auth_plugin.zip', type=str, help='Proxy configuration file')
     return parser
 

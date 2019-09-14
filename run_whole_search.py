@@ -41,7 +41,7 @@ def getArgumentsParser():
     parser.add_argument('--output_finder', default='outputFinder', type=str, help='Location for finder result .json files')
     parser.add_argument('--output_html', default='outputHtml', type=str, help='Location for result .html files')
     parser.add_argument('--finder', default='finder.py', type=str, help='Python file containing global variable finder which is created using TextSearchEngine.searchFunctions')
-    parser.add_argument('--doi_list', default='doiList.csv', type=str, help='CSV file containing DOI column with DOIs of articles')
+    parser.add_argument('--doi_list', default='dois.csv', type=str, help='CSV file containing DOI column with DOIs of articles')
     parser.add_argument('--proxy_file', default='proxy_auth_plugin.zip', type=str, help='Proxy configuration file')
     return parser
 

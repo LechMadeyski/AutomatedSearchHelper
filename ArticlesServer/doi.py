@@ -23,6 +23,9 @@ STATUS_REJECTED = '<a class="waves-light btn-small red">Rejected</a>'
 
 def prepareArticles(finderResultsFolder, articlesJsons):
     result = dict()
+    if not os.path.isdir(finderResultsFolder) or not os.path.isdir(articlesJsons):
+        return result
+
     for articleFilename in os.listdir(articlesJsons):
         articleFullPath = articlesJsons + "/" + articleFilename
         foundFullPath = finderResultsFolder + "/" + articleFilename

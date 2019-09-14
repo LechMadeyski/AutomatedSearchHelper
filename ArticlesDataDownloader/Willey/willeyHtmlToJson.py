@@ -4,8 +4,10 @@ import logging
 
 from nltk import tokenize
 
+
 def formatTextAndSplitIntoSentences(text):
     return tokenize.sent_tokenize(text.replace("\n", "").replace("\r", ""))
+
 
 def willeyHtmlToJson(textHTML):
     logger = logging.getLogger("willeyHtmlToJson")
@@ -21,18 +23,17 @@ def willeyHtmlToJson(textHTML):
         if len(titles) > 0:
             title = titles[0].text
         else:
-            title = "Abstract" # first is always an abstract and has no text in h2(title)
+            title = "Abstract"  # first is always an abstract and has no text in h2(title)
 
         paragraphs = []
         for par in sec.findAll('p'):
-            paragraphs.append({"sentences" :formatTextAndSplitIntoSentences(par.text)})
+            paragraphs.append({"sentences": formatTextAndSplitIntoSentences(par.text)})
 
-        logger.info("Reading section : "+ title )
+        logger.info("Reading section : " + title)
         secData = {
             'title': title,
-            'paragraphs' : paragraphs
+            'paragraphs': paragraphs
         }
         outputJson.append(secData)
 
     return outputJson
-

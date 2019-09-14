@@ -13,6 +13,7 @@ from .prepare_sections import prepare_sections
 from TextSearchEngine.parse_finder import parse_finder
 from .database.Status import Status
 from .database.UsersDatabase import get_user_database
+from .directories import DOIS_FILE, FINDER_FILE
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
@@ -48,21 +49,6 @@ def get_or_create_upload_path():
     return uploadFolder
 
 
-def read_file_from_request(files, name):
-    logger = logging.getLogger('read_file_from_request_' + name)
-    if name not in files:
-        logger.error('No doi list in request')
-        return None
-    file = files[name]
-    if not file or file.filename == str():
-        logger.error('No filename given')
-        return None
-    filename = secure_filename(file.filename)
-    filePath = os.path.join(get_or_create_upload_path(), filename)
-    file.save(filePath)
-    return filePath
-
-
 def get_doi_list(doi_list_form):
     filename = doi_list_form and doi_list_form.data and doi_list_form.data.filename
     if filename:
@@ -71,10 +57,15 @@ def get_doi_list(doi_list_form):
         return None
 
 
-def get_finder(finder_form):
+def get_finder_string_from_file(finder_form):
     filename = finder_form and finder_form.data and finder_form.data.filename
     if filename:
-        return load_variable(filename, 'finder')
+        try:
+            with open(filename, 'r') as finder_file:
+                return finder_file.read()
+        except:
+            flash('Could not open file '+ str(filename))
+            return None
     else:
         return None
 
@@ -98,22 +89,31 @@ def upload():
             logger.error('Wrong doi list provided')
             flash("Invalid doi list")
             return render_template('upload_view.html', form=form)
-        finder = get_finder(form.finder)
-        if finder is None:
-            try:
-                logger.info("Parsing finder from : " + str(form.finder_text.data))
-                finder = parse_finder(str(form.finder_text.data))
-            except ValueError as e:
-                flash("Invalid finder text " + str(e))
+        finder_text = get_finder_string_from_file(form.finder)
+        finder = None
+        if finder_text is None:
+            finder_text = str(form.finder_text.data)
+        try:
+            logger.info("Parsing finder from : " + finder_text)
+            finder = parse_finder(finder_text)
+        except ValueError as e:
+            flash("Invalid finder text " + str(e))
+
         if finder is None:
             logger.error('Wrong finder provided')
             return render_template('upload_view.html', form=form)
         logger.info('Properly read doiList and finder, doi list size is ' + str(len(doiList)))
 
+        form.doi_list.data.save(DOIS_FILE)
+
+        with open(FINDER_FILE, 'w') as finder_file:
+            finder_file.write(str(finder))
+
         DatabaseManager.reload_database(doiList, finder)
         return redirect(url_for('main.index'))
 
     return render_template('upload_view.html', form=form)
+
 
 def can_remove_comment(login):
     user = session['user']
@@ -269,6 +269,7 @@ class RegisterForm(FlaskForm):
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     confirm = PasswordField('Repeat Password')
+
 
 @main.route('/register', methods = ["GET", "POST"])
 def register():
