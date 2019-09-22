@@ -42,11 +42,15 @@ class ArticlesDataDownloader:
         result_json["doi"] = doi
         result_json["text"] = article
 
-        doi_data = self.__works.doi(doi)
-        result_json["publisher"] = doi_data["publisher"]
-        result_json["authors"] = [x['given'] + ' ' + x['family'] for x in doi_data["author"]]
-        result_json["title"] = ' '.join(doi_data["title"])
-        result_json['read_status'] = 'OK'
+        try:
+            doi_data = self.__works.doi(doi)
+            result_json["publisher"] = doi_data.get("publisher", str())
+            result_json["authors"] = [x.get('given', str()) + ' ' + x.get('family', str()) for x in doi_data.get("author", [])]
+            result_json["title"] = ' '.join(doi_data.get("title", str()))
+            result_json['read_status'] = 'OK'
+        except:
+            self.__logger.error("some error while reading doi data")
+            pass
 
         with open(filename, "w") as f:
             f.write(json.dumps(result_json))
@@ -117,12 +121,12 @@ class ArticlesDataDownloader:
             return self.get_doi_filename_and_read_file(doi)
 
         self.__logger.info("Reading doi : " + doi)
-        real_link = getLinkFromDoi(doi)
+        real_link = str(getLinkFromDoi(doi))
         if real_link is None:
             self.__logger.error("Could not find link from doi")
             return self.write_incorrect_doi_result(doi, scopus_link)
 
-        self.__logger.info("Real link is " + real_link)
+        self.__logger.info("Real link is " + str(real_link))
 
         for handler in self.get_handlers():
             self.__logger.debug("Checking " + handler.name() + " with link part " + handler.linkPart())
