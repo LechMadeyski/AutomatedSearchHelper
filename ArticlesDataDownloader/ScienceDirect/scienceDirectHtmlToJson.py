@@ -27,31 +27,14 @@ def scienceDirectHtmlToJson(textHTML):
 
     logger.debug("Abstract read correctly")
 
-    generateSectionId = None
-    if (soup.find(id="s0005")):
-        def generateSecId(i):
-            return "s"+str(10000 + i*5)[1:]
-        generateSectionId = generateSecId
-        logger.debug("Chosen sxxxx format")
-    if (soup.find(id="sec0001")):
-        def generateSecId(i):
-            return "sec"+str(10000 + i)[1:]
-        generateSectionId = generateSecId
-        logger.debug("Chosen secxxxx format")
 
-    if generateSectionId == None:
-        logger.error("Could not find section id generator")
-        return None
+    body = soup.find('div', {'id': 'body'})
 
+    if not body:
+        logger.error('Article has not body')
+        raise ValueError("article has no body")
 
-
-    for i in range(1,20):
-        secId = generateSectionId(i)
-        logger.info("looking for section " + secId)
-        sec = soup.find(id = secId)
-        if sec is None:
-            break
-
+    for sec in body.findAll('section'):
         titles = sec.findAll('h2') + sec.findAll('h3')
         title = str()
         if len(titles) > 0:
@@ -62,13 +45,12 @@ def scienceDirectHtmlToJson(textHTML):
 
         paragraphs = []
         for par in sec.findAll('p'):
-            paragraphs.append({"sentences" :formatTextAndSplitIntoSentences(par.text)})
+            paragraphs.append({"sentences": formatTextAndSplitIntoSentences(par.text)})
 
-        logger.info("Reading section : "+ title )
+        logger.info("Reading section : " + title)
         sec_data = {
             'title': title,
-            'paragraphs' : paragraphs
+            'paragraphs': paragraphs
         }
         outputJson.append(sec_data)
     return outputJson
-

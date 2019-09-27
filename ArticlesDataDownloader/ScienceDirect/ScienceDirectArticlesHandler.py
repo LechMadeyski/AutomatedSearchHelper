@@ -23,7 +23,7 @@ class ScienceDirectArticlesHandler():
             def ready(x):
                 found = False
                 try:
-                    x.find_element_by_id("sec0001")
+                    x.find_element_by_id("body")
                     found = True
                 except:
                     pass

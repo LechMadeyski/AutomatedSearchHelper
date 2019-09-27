@@ -153,11 +153,13 @@
                                         >
                                             {% for sentence in sentence_bundle['sentences'] %}
                                                 <span class="sentence">
-                                                  {% for sentence_part in sentence %}
-                                                      {% if sentence_part['marked'] %}
-                                                          <mark> {{ sentence_part['text'] }}</mark>
+                                                    {%for sentence_part in sentence%}
+                                                    {%if sentence_part['marked']%}
+                                                    <span class="marked" style="background-color:yellow">
+                                                        {{sentence_part['text']}}
+                                                    </span>
                                                       {% else %}
-                                                          {{ sentence_part['text'] }}
+                                                        {{sentence_part['text']}}
                                                       {% endif %}
                                                   {% endfor %}
                                                   </span>

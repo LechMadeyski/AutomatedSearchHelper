@@ -3,7 +3,7 @@
 
 {% block body %}
  <ul class="collection with-header">
-  <li class="collection-header"><h4>Articles with findings:</h4></li>
+  <li class="collection-header"><h4>Articles with findings: {{articles_with_findings|length}}</h4></li>
      {% for article in articles_with_findings %}
       <li  class="collection-item">
           <a class="action" href="{{ url_for('main.view_doi', doi_id=article['id']) }}" >
@@ -26,7 +26,7 @@
 </ul>
 
 <ul class="collection with-header">
-  <li class="collection-header"><h4>Articles without findings:</h4></li>
+  <li class="collection-header"><h4>Articles without findings: ({{articles_without_findings|length}})</h4></li>
      {% for article in articles_without_findings %}
       <li  class="collection-item">
           <a class="action" href="{{ url_for('main.view_doi', doi_id=article['id']) }}" >
@@ -38,7 +38,7 @@
 
 
 <ul class="collection with-header">
-  <li class="collection-header"><h4>DOIs with improper read:</h4></li>
+  <li class="collection-header"><h4>DOIs with improper read: {{articles_with_error|length}}</h4></li>
      {% for article in articles_with_error %}
           <li  class="collection-item">
               <a class="action" href="{{ url_for('main.view_doi', doi_id=article['id']) }}" >
