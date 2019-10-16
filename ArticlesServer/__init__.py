@@ -33,8 +33,4 @@ def create_app(test_config=None):
     from .main import main
     app.register_blueprint(main)
 
-    from .doi import doi
-    app.register_blueprint(doi)
-    #    app.add_url_rule('/doi', endpoint='index')
-
     return app

@@ -6,3 +6,7 @@ outputFinder
 outputArticles
 proxy_auth_plugin.zip
 *.log
+build
+dist
+.server_files
+.idea

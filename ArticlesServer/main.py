@@ -51,6 +51,8 @@ def get_or_create_upload_path():
 
 def get_doi_list(doi_list_form):
     filename = doi_list_form and doi_list_form.data and doi_list_form.data.filename
+
+    doi_list_form.data.save()
     if filename:
         return extract_doi_from_csv(filename)
     else:

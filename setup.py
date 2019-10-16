@@ -1,9 +1,16 @@
 import os
 from setuptools import setup
+from setuptools.command.install import install
+
+def _post_install():
+    import nltk
+    nltk.download('punkt')
 
 
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+class my_install(install):
+    def run(self):
+        install.run(self)
+        self.execute(_post_install, [], msg='running _post_install task')
 
 
 setup(
@@ -11,5 +18,20 @@ setup(
     version="0.0.1",
     author="Marek Sośnicki",
     packages=["ArticlesDataDownloader", "TextSearchEngine", "SearchResultHtmlDisplay", "ArticlesServer"],
-    install_requires=['flask', 'werkzeug', 'wtforms', 'beautifulsoup4', 'nltk']
+    cmdclass={'install': my_install},
+    install_requires=[
+        'flask',
+        'flask_wtf',
+        'werkzeug',
+        'wtforms',
+        'beautifulsoup4',
+        'crossrefapi',
+        'nltk'],
+    scripts=[
+        'run_articles_download.py',
+        'run_articles_search.py',
+        'run_results_html_generation.py',
+        'run_whole_search.py',
+        'create_proxy_configuration.py'
+    ]
 )
