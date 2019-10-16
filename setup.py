@@ -1,5 +1,5 @@
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.command.install import install
 
 def _post_install():
@@ -17,7 +17,7 @@ setup(
     name="AutomatedSearchHelper",
     version="0.0.1",
     author="Marek Sośnicki",
-    packages=["ArticlesDataDownloader", "TextSearchEngine", "SearchResultHtmlDisplay", "ArticlesServer"],
+    packages=find_packages(),
     cmdclass={'install': my_install},
     install_requires=[
         'flask',

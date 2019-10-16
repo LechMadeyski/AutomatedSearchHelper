@@ -6,14 +6,13 @@ Creates html representation of findings
 
 import argparse
 import sys
-import configuration
 import logging
-import runpy
 import os
 import json
 
-from utilities import load_function, load_variable, getDoiFilename, createDirectoryIfNotExists, createDirectoryIfNotExistsOrClean
+from AutomatedSearchHelperUtilities.utilities import getDoiFilename, createDirectoryIfNotExistsOrClean
 from SearchResultHtmlDisplay.findingsToHtml import findingsToHtml
+import AutomatedSearchHelperUtilities.configuration as configuration
 
 
 from distutils.dir_util import copy_tree

@@ -4,10 +4,8 @@ from flask import (
 import os
 import json
 import logging
-from werkzeug.utils import secure_filename
 
-from extract_doi_from_csv import extract_doi_from_csv
-from utilities import load_variable
+from AutomatedSearchHelperUtilities.extract_doi_from_csv import extract_doi_from_csv
 from ArticlesServer.database.DatabaseManager import DatabaseManager
 from .prepare_sections import prepare_sections
 from TextSearchEngine.parse_finder import parse_finder

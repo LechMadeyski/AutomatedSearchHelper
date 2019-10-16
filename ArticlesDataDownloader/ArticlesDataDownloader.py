@@ -6,12 +6,11 @@ from ArticlesDataDownloader.IEEE.IEEEArticlesHandler import IEEEArticlesHandler
 from ArticlesDataDownloader.ScopusDataDownloader import ScopusDataDownloader
 from ArticlesDataDownloader.Willey.WilleyArticlesHandler import WilleyArticlesHandler
 from ArticlesDataDownloader.ScienceDirect.ScienceDirectArticlesHandler import ScienceDirectArticlesHandler
-from ArticlesDataDownloader.ACM.ACMArticlesHandler import ACMArticlesHandler
 from ArticlesDataDownloader.Springer.SpringerArticlesHandler import SpringerArticlesHandler
 
 from ArticlesDataDownloader.getLinkFromDoi import getLinkFromDoi
 from ArticlesDataDownloader.getDriver import getDriver
-from getDoiFilename import getDoiFilename
+from AutomatedSearchHelperUtilities.getDoiFilename import getDoiFilename
 
 from crossref.restful import Works
 
@@ -148,52 +147,6 @@ class ArticlesDataDownloader:
         self.__logger.info("Start downloading articles")
         for doi in doiList:
             filename, resultData = self.readArticle(doi['doi'], doi['scopus_link'])
-            if resultData['read_status'] == 'OK':
-                result_filenames.append(filename)
+            result_filenames.append(filename)
         return result_filenames
 
-    def getDownloadArticles2(self, doiList):
-        self.__logger.info("Start downloading articles")
-
-        result_filenames = list()
-        handler_not_found_count = 0
-        error_occured_count = 0
-        for doi in doiList:
-            if self.doi_has_result_already(doi):
-                self.__logger.info("Doi " + doi + " already parsed")
-                result_filenames.append(self.get_doi_filename(doi))
-                continue
-
-            self.__logger.info("Reading doi : " + doi)
-            real_link = getLinkFromDoi(doi)
-            if real_link is None:
-                self.__logger.error("Could not find link from doi")
-                continue
-
-            self.__logger.info("Real link is " + real_link)
-
-            for handler in self.get_handlers():
-                self.__logger.debug("Checking " + handler.name() + " with link part " + handler.linkPart())
-                if handler.linkPart() in real_link:
-                    self.__logger.info("Link will be handled by " + handler.name())
-                    article = handler.getArticle(real_link)
-
-                    if article is None:
-                        self.__logger.error("Could not read article")
-                        error_occured_count += 1
-                    else:
-                        result_filename, _ = self.write_article_to_file(article, doi)
-                        result_filenames.append(result_filename)
-                    break
-            else:
-                self.__logger.error("Could not find handler for " + real_link)
-                handler_not_found_count += 1
-            self.__logger.info("Doi reading finished")
-
-        self.__logger.info(
-            "Finished analysing articles total analyzed : " + str(len(doiList)) \
-            + " successful :" + str(len(result_filenames)) \
-            + " handler not found : " + str(handler_not_found_count) \
-            + " error occured " + str(error_occured_count))
-
-        return result_filenames

@@ -6,13 +6,12 @@ Runs finder in articles provided by user
 
 import argparse
 import sys
-import configuration
 import logging
-import runpy
 import os
 import json
 
-from utilities import load_function, load_variable, getDoiFilename, createDirectoryIfNotExistsOrClean
+from AutomatedSearchHelperUtilities.utilities import load_function, getDoiFilename, createDirectoryIfNotExistsOrClean
+import AutomatedSearchHelperUtilities.configuration as configuration
 
 
 def run_articles_search(articles, finder, outputDirectory=None):

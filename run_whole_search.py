@@ -7,15 +7,15 @@ Then runs finder for it and creates html output
 
 import argparse
 import sys
-import configuration
 import logging
 
-from utilities import load_function, load_variable
+from AutomatedSearchHelperUtilities.utilities import load_variable
 
 from run_articles_download import run_articles_download
 from run_articles_search import run_articles_search
 from run_results_html_generation import run_results_html_generation
-from extract_doi_from_csv import extract_doi_from_csv
+from AutomatedSearchHelperUtilities.extract_doi_from_csv import extract_doi_from_csv
+import AutomatedSearchHelperUtilities.configuration as configuration
 
 def run_whole_search(doi_list, finder, output_articles, output_finder, output_html, proxy_file):
 

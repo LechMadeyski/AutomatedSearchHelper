@@ -1,6 +1,6 @@
 from ArticlesDataDownloader.ArticlesDataDownloader import ArticlesDataDownloader
 from .ArticlesDatabase import ArticlesDatabase
-from utilities import createDirectoryIfNotExists
+from AutomatedSearchHelperUtilities.utilities import createDirectoryIfNotExists
 from ArticlesServer.directories import OUTPUT_DIRECTORY, OUTPUT_DB
 
 PROXY = 'proxy_auth_plugin.zip'

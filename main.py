@@ -1,16 +1,12 @@
 import logging
-import os
 import json
-import argparse
-import configuration
 
 from TextSearchEngine.search_functions import *
 from ArticlesDataDownloader.ArticlesDataDownloader import ArticlesDataDownloader
-from doiList import doiList
-from getDoiFilename import getDoiFilename
+from AutomatedSearchHelperUtilities.getDoiFilename import getDoiFilename
 from SearchResultHtmlDisplay.findingsToHtml import findingsToHtml
-
-from utilities import createDirectoryIfNotExists
+import AutomatedSearchHelperUtilities.configuration as configuration
+from AutomatedSearchHelperUtilities.utilities import createDirectoryIfNotExists
 
 def logSearchResults(articleText, searchResult):
   for resultSection in searchResult:

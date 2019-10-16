@@ -7,7 +7,7 @@ Creates proxy file
 import argparse
 import zipfile
 import sys
-import configuration
+import AutomatedSearchHelperUtilities.configuration as configuration
 import logging
 
 manifest_json = """

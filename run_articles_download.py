@@ -6,12 +6,10 @@ Downloads articles from input, to given folder in .json format
 
 import argparse
 import sys
-import configuration
 import logging
-from extract_doi_from_csv import extract_doi_from_csv
-
-from utilities import createDirectoryIfNotExists
-
+from AutomatedSearchHelperUtilities.extract_doi_from_csv import extract_doi_from_csv
+from AutomatedSearchHelperUtilities.utilities import createDirectoryIfNotExists
+import AutomatedSearchHelperUtilities.configuration as configuration
 from ArticlesDataDownloader.ArticlesDataDownloader import ArticlesDataDownloader
 
 def run_articles_download(outputArticles, doiList, proxyFile):
