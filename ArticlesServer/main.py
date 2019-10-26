@@ -11,7 +11,7 @@ from .prepare_sections import prepare_sections
 from TextSearchEngine.parse_finder import parse_finder
 from .database.Status import Status
 from .database.UsersDatabase import get_user_database
-from .directories import DOIS_FILE, FINDER_FILE
+from .directories import DOIS_FILE, FINDER_FILE, DOIS_TEMP, FINDER_TEMP
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
@@ -48,23 +48,18 @@ def get_or_create_upload_path():
 
 
 def get_doi_list(doi_list_form):
-    filename = doi_list_form and doi_list_form.data and doi_list_form.data.filename
-
-    doi_list_form.data.save()
-    if filename:
-        return extract_doi_from_csv(filename)
-    else:
-        return None
+    doi_list_form.data.save(DOIS_TEMP)
+    return extract_doi_from_csv(DOIS_TEMP)
 
 
 def get_finder_string_from_file(finder_form):
-    filename = finder_form and finder_form.data and finder_form.data.filename
-    if filename:
+    if finder_form and finder_form.data and finder_form.data.filename:
+        finder_form.data.save(FINDER_TEMP)
         try:
-            with open(filename, 'r') as finder_file:
+            with open(FINDER_TEMP, 'r') as finder_file:
                 return finder_file.read()
         except:
-            flash('Could not open file '+ str(filename))
+            flash('Could not open file '+ str(FINDER_TEMP))
             return None
     else:
         return None

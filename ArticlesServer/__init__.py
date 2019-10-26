@@ -2,7 +2,7 @@ from flask import Flask
 from requests import Session
 
 from TextSearchEngine.parse_finder import parse_finder
-from configuration import configureLogger
+from AutomatedSearchHelperUtilities.configuration import configureLogger
 from AutomatedSearchHelperUtilities.extract_doi_from_csv import extract_doi_from_csv
 from AutomatedSearchHelperUtilities.utilities import createDirectoryIfNotExists
 from .directories import BASE_DIRECTORY, DOIS_FILE, FINDER_FILE
