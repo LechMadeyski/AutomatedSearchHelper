@@ -1,5 +1,6 @@
 import csv
 import logging
+import re
 
 def extract_doi_from_csv(csv_filename):
     logger = logging.getLogger("extract_doi_from_csv")
@@ -24,10 +25,16 @@ def extract_doi_from_csv(csv_filename):
                     return list()
                 line_count += 1
             else:
-                if row[doiIndex] != str():
-                    res = {'doi': row[doiIndex], 'scopus_link': str()}
-                    if scopusIndex:
-                        res['scopus_link'] = row[scopusIndex]
+                res = {'doi': row[doiIndex], 'scopus_link': str()}
+                if doiIndex is not None:
+                    res['doi'] = row[doiIndex]
+                if scopusIndex is not None:
+                    res['scopus_link'] = row[scopusIndex]
+                    if res['doi'] == str():
+                        found = re.findall("eid=(.*?)&", res['scopus_link'])
+                        if found:
+                            res['doi'] = 'scopus_link_' + found[0]
+                if res['doi'] != str() or res['scopus_link'] != str():
                     result.append(res)
                 else:
                     logger.warning('Could not find doi for row: ' + str(row))

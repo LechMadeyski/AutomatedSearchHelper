@@ -42,12 +42,15 @@ class ScopusDataDownloader:
             result['journalName'] = soup.findAll('span', {'id': "noSourceTitleLink"})[0].text
         result['journalInfo'] = soup.findAll('span', {'id': "journalInfo"})[0].text
         result['title'] = soup.find('h2', {'class': "h3"}).findAll(text=True, recursive=False)[0].strip()
-        authors_html = soup.findAll('section', {'id': 'authorlist'})[0].findAll('li')
-        result['authors'] = []
-        for item in authors_html:
-            author = item.findAll('span', {'class': "anchorText"})
-            if len(author) > 0:
-                result['authors'].append(author[0].text)
+        authors_base = soup.findAll('section', {'id': 'authorlist'})
+        if authors_base:
+            authors_html = authors_base[0].findAll('li')
+            result['authors'] = []
+            for item in authors_html:
+                author = item.findAll('span', {'class': "anchorText"})
+                if len(author) > 0:
+                    result['authors'].append(author[0].text)
+
         for ref in soup.findAll('section', {'id': 'referenceInfo'})[0].findAll('li'):
             pub_idx = ref.text.find(PUBLISHER)
             if pub_idx != -1:
