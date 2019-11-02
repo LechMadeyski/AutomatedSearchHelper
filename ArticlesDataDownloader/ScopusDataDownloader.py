@@ -18,7 +18,8 @@ def prepare_default():
         'title': str(),
         'authors': list(),
         'publisher': str(),
-        'issn':str()
+        'issn':str(),
+        'scopus_link':str()
     }
 
 class ScopusDataDownloader:
@@ -31,6 +32,7 @@ class ScopusDataDownloader:
         self._logger.info('Trying to read ' + link)
         self._driver.get(link)
         result = prepare_default()
+        result['scopus_link'] = link
         soup = BeautifulSoup(self._driver.page_source, "html.parser")
         abstract_text = soup.findAll('section', {'id': 'abstractSection'})[0].findAll('p')[0].text
         result['text'] = [

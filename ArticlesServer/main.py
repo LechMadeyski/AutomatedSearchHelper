@@ -4,6 +4,7 @@ from flask import (
 import os
 import json
 import logging
+import io
 
 from AutomatedSearchHelperUtilities.extract_doi_from_csv import extract_doi_from_csv
 from ArticlesServer.database.DatabaseManager import DatabaseManager
@@ -16,6 +17,8 @@ from .directories import DOIS_FILE, FINDER_FILE, DOIS_TEMP, FINDER_TEMP
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
 from wtforms import StringField, PasswordField, validators
+from shutil import copyfile
+from flask import make_response
 
 main = Blueprint('main', __name__)
 
@@ -99,7 +102,7 @@ def upload():
             return render_template('upload_view.html', form=form)
         logger.info('Properly read doiList and finder, doi list size is ' + str(len(doiList)))
 
-        form.doi_list.data.save(DOIS_FILE)
+        copyfile(DOIS_TEMP, DOIS_FILE)
 
         with open(FINDER_FILE, 'w') as finder_file:
             finder_file.write(str(finder))
@@ -285,3 +288,30 @@ def register():
             flash("This login is occupied")
 
     return render_template('register.html', form=register_form)
+
+
+@main.route('/results')
+def results():
+
+    db = DatabaseManager.get_instance()
+    if not db:
+        return redirect(url_for('main.index'))
+
+    response = 'DOI;TITLE;AUTHORS;'
+
+    users = get_user_database().users()
+
+    response += ';'.join(users) + '\n'
+
+    articles = db.get_all_articles_id()
+
+    for article_id in articles:
+        full_text = db.get_full_article(article_id)['article']
+        response += full_text['doi'] + ';' + full_text['title'] + ';' + ','.join(full_text['authors']) + ';'
+        response += ';'.join([str(db.get_status(article_id, user)) for user in users])
+        response += '\n'
+
+    output = make_response(response)
+    output.headers["Content-Disposition"] = "attachment; filename=export.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output

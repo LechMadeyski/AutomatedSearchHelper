@@ -41,6 +41,9 @@ class UserDatabase:
         except FileNotFoundError:
             print(USERS_FILE + " directory not found. could not create file ")
 
+    def users(self):
+        return self._users.keys()
+
 
 user_database = UserDatabase()
 
