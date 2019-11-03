@@ -1,2 +1,1 @@
-# PhD19MarekSosnicki
-PhD19MarekSosnicki
+For more information read (https://github.com/LechMadeyski/PhD19MarekSosnicki/wiki)[Wiki]
