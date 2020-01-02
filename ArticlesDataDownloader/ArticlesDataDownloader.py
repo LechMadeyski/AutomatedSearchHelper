@@ -44,7 +44,8 @@ class ArticlesDataDownloader:
         try:
             doi_data = self.__works.doi(doi)
             result_json["publisher"] = doi_data.get("publisher", str())
-            result_json["authors"] = [x.get('given', str()) + ' ' + x.get('family', str()) for x in doi_data.get("author", [])]
+            result_json["authors"] = [x.get('given', str()) + ' ' + x.get('family', str()) for x in
+                                      doi_data.get("author", [])]
             result_json["title"] = ' '.join(doi_data.get("title", str()))
             result_json['read_status'] = 'OK'
         except:
@@ -79,14 +80,13 @@ class ArticlesDataDownloader:
             self.__scopus_downloader = ScopusDataDownloader(self._driver)
         return self.__scopus_downloader
 
-
     def write_incorrect_doi_result(self, doi, scopus_link):
         filename = self.get_doi_filename(doi)
         self.__logger.info("Writing article to " + filename)
         result_json = self.get_scopus_downloader().get_data(scopus_link)
         if doi:
             result_json["doi"] = doi
-        result_json["read_status"] = 'ERROR READING DOI DATA'
+        result_json["read_status"] = 'Incorrect doi'
         with open(filename, "w") as f:
             f.write(json.dumps(result_json))
         return filename, result_json
@@ -97,7 +97,7 @@ class ArticlesDataDownloader:
         result_json = self.get_scopus_downloader().get_data(scopus_link)
         if doi:
             result_json["doi"] = doi
-        result_json["read_status"] = 'NO HANDLER IMPLEMENTED'
+        result_json["read_status"] = 'Publisher not supported'
         with open(filename, "w") as f:
             f.write(json.dumps(result_json))
         return filename, result_json
@@ -109,7 +109,7 @@ class ArticlesDataDownloader:
         if doi:
             result_json["doi"] = doi
 
-        result_json["read_status"] = 'ERROR READING ARTICLE'
+        result_json["read_status"] = 'Error while reading article or full text not available'
         with open(filename, "w") as f:
             f.write(json.dumps(result_json))
         return filename, result_json
@@ -149,4 +149,3 @@ class ArticlesDataDownloader:
             filename, resultData = self.readArticle(doi['doi'], doi['scopus_link'])
             result_filenames.append(filename)
         return result_filenames
-

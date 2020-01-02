@@ -39,12 +39,38 @@
 
                     </div>
                     <h6> Publisher: {{ display_data['publisher'] }} </h6>
-                    <h6> Published in: {{ display_data['published_in'] }} </h6>
-                    <h6> {{ display_data['jurnal_info'] }} </h6>
-                    <h6> ISSN: {{ display_data['issn'] }} </h6>
+
+                    {% if display_data['published_in'] %}
+                        <h6> Published in: {{ display_data['published_in'] }} </h6>
+                    {% endif %}
+
+                    {% if display_data['jurnal_info'] %}
+                        <h6> {{ display_data['jurnal_info'] }} </h6>
+                    {% endif %}
+
+                    {% if display_data['issn'] %}
+                        <h6> ISSN: {{ display_data['issn'] }} </h6>
+                    {% endif %}
+
+                    {% if display_data['doi_link'] %}
+                        <h6> Doi: <a href="{{ display_data['doi_link'] }}"> {{ display_data['doi'] }} </a></h6>
+                    {% else %}
+                        <h6> Doi: {{ display_data['doi'] }} </h6>
+                    {% endif %}
+                    {% if display_data['scopus_link'] %}
+                        <h6> <a href="{{ display_data['scopus_link'] }}"> Scopus link </a></h6>
+                    {% endif %}
+
+                    {% if display_data['read_error'] %}
+                        <h6> Read error : {{ display_data['read_error'] }} </h6>
+                    {% endif %}
+
+                    <a class="waves-effect waves-light btn blue-2"
+                        href="{{url_for("main.reload", doi_id = display_data['doi_id'])}}">
+                        Reload
+                    </a>
 
 
-                    <h6> Doi: <a href="http://doi.org/{{ display_data['doi'] }}"> {{ display_data['doi'] }} </a></h6>
                 </div>
                 <div class="col s6">
                    {% if session['user'] %}

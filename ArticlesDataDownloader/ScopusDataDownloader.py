@@ -10,16 +10,19 @@ def formatTextAndSplitIntoSentences(text):
 PUBLISHER = 'Publisher: '
 ISSN = 'ISSN: '
 DOI = 'DOI: '
-def prepare_default():
+
+def prepare_default(scopus_link):
     return {
         'text': list(),
+        'doi': str(),
         'journalName': str(),
         'journalInfo': str(),
         'title': str(),
         'authors': list(),
         'publisher': str(),
-        'issn':str(),
-        'scopus_link':str()
+        'issn': str(),
+        'scopus_link': str(scopus_link),
+        'publisher_link': str()
     }
 
 class ScopusDataDownloader:
@@ -31,7 +34,7 @@ class ScopusDataDownloader:
     def _try_getting_data(self, link):
         self._logger.info('Trying to read ' + link)
         self._driver.get(link)
-        result = prepare_default()
+        result = prepare_default(link)
         result['scopus_link'] = link
         soup = BeautifulSoup(self._driver.page_source, "html.parser")
         abstract_text = soup.findAll('section', {'id': 'abstractSection'})[0].findAll('p')[0].text
@@ -67,7 +70,7 @@ class ScopusDataDownloader:
         return result
 
     def get_data(self, link):
-        if link:
+        if link and link != str():
             for i in range(3):
                 try:
                     return self._try_getting_data(link)
@@ -76,4 +79,4 @@ class ScopusDataDownloader:
             return self._try_getting_data(link)
 
         self._logger.error('Could not read data from ' + link)
-        return prepare_default()
+        return prepare_default(link)

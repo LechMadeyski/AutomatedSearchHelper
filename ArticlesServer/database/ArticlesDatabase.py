@@ -1,5 +1,6 @@
 from collections import defaultdict
 
+from .ArticleData import ArticleData
 from .Status import Status
 import json
 
@@ -34,15 +35,20 @@ class ArticlesDatabase:
         self._output_db = output_db
         for index, file in enumerate(files):
             article_id = str(index)
-            self._articles[article_id] = file
-            if len(file['findings']) > 0:
-                self._valid_dois_with_findings.append(article_id)
-            elif file['article']['read_status'] == 'OK':
-                self._valid_dois_without_findings.append(article_id)
-            else:
-                self._invalid_dois.append(article_id)
+            self._articles[article_id] = ArticleData(file)
+            article_data = self._articles[article_id]
+            print('reading article no: ' + article_id + ' name: '  + article_data.doi)
+            self._assign_to_category(article_data, article_id)
 
         self._load_comments_and_statuses()
+
+    def _assign_to_category(self, article_data, article_id):
+        if article_data.findings:
+            self._valid_dois_with_findings.append(article_id)
+        elif article_data.read_status == 'OK':
+            self._valid_dois_without_findings.append(article_id)
+        else:
+            self._invalid_dois.append(article_id)
 
     def _load_comments_and_statuses(self):
         for article_id in self._articles.keys():
@@ -103,10 +109,10 @@ class ArticlesDatabase:
         return self._invalid_dois
 
     def get_short_article_info(self, article_id, user = None):
-        article = self._articles[article_id]
+        article_data = self._articles[article_id]
         return {'id': article_id,
-                'title': article['article']['title'],
-                'doi': article['article']['doi'],
+                'title': article_data.title,
+                'doi': article_data.doi,
                 'statuses': self.get_statuses(article_id, user)}
 
     def get_comments(self, article_id):
@@ -126,11 +132,11 @@ class ArticlesDatabase:
 
     def _create_comments_filename(self, article_id):
         return self._output_db + \
-               "/" + self._articles[article_id]['article']['doi'].replace('/', '_') + "_comments.json"
+               "/" + self._articles[article_id].doi.replace('/', '_') + "_comments.json"
 
     def _create_statuses_filename(self, article_id):
         return self._output_db + \
-               "/" + self._articles[article_id]['article']['doi'].replace('/', '_') + "_status.json"
+               "/" + self._articles[article_id].doi.replace('/', '_') + "_status.json"
 
     def _update_comments(self, article_id):
         file_path = self._create_comments_filename(article_id)
@@ -147,3 +153,18 @@ class ArticlesDatabase:
                 json.dump(self._statuses[article_id], file_object)
         except FileNotFoundError:
             print(file_path + " not found. ")
+
+    def reload_article(self, article_id, article, findings):
+        self._articles[article_id] = ArticleData(dict(article=article, findings=findings))
+
+        if article_id in self._valid_dois_with_findings:
+            self._valid_dois_with_findings.remove(article_id)
+
+        if article_id in self._valid_dois_without_findings:
+            self._valid_dois_without_findings.remove(article_id)
+
+        if article_id in self._invalid_dois:
+            self._invalid_dois.remove(article_id)
+
+        self._assign_to_category(self._articles[article_id], article_id)
+

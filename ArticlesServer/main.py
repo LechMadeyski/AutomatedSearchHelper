@@ -13,6 +13,7 @@ from TextSearchEngine.parse_finder import parse_finder
 from .database.Status import Status
 from .database.UsersDatabase import get_user_database
 from .directories import DOIS_FILE, FINDER_FILE, DOIS_TEMP, FINDER_TEMP
+from .database.reload_article import reload_article
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
@@ -135,19 +136,22 @@ def prepare_statuses(db, doi_id):
 
 
 def generate_data_doi_data(db, doi_id):
-    article_with_findings = db.get_full_article(doi_id)
+    article_data = db.get_full_article(doi_id)
     return {
         'doi_id': doi_id,
         'comments': prepare_comments(db, doi_id),
         'statuses': prepare_statuses(db, doi_id),
-        'title': article_with_findings['article']['title'],
-        'doi': article_with_findings['article']['doi'],
-        'issn': article_with_findings['article']['issn'],
-        'published_in' : article_with_findings['article']['journalName'],
-        'jurnal_info': article_with_findings['article']['journalInfo'],
-        'publisher': article_with_findings['article']['publisher'],
-        'authors': article_with_findings['article']['authors'],
-        'sections': prepare_sections(article_with_findings)}
+        'title': article_data.title,
+        'doi': article_data.doi,
+        'issn': article_data.issn,
+        'published_in' : article_data.journal_name,
+        'jurnal_info': article_data.journal_info,
+        'publisher': article_data.publisher,
+        'authors': article_data.authors,
+        'scopus_link': article_data.scopus_link,
+        'doi_link': article_data.doi_link,
+        'read_error': article_data.read_error,
+        'sections': prepare_sections(article_data)}
 
 
 class CommentForm(FlaskForm):
@@ -306,8 +310,8 @@ def results():
     articles = db.get_all_articles_id()
 
     for article_id in articles:
-        full_text = db.get_full_article(article_id)['article']
-        response += full_text['doi'] + ';' + full_text['title'] + ';' + ','.join(full_text['authors']) + ';'
+        article_data = db.get_full_article(article_id)
+        response += article_data.doi + ';' + article_data.title + ';' + ','.join(article_data.authors) + ';'
         response += ';'.join([str(db.get_status(article_id, user)) for user in users])
         response += '\n'
 
@@ -315,3 +319,9 @@ def results():
     output.headers["Content-Disposition"] = "attachment; filename=export.csv"
     output.headers["Content-type"] = "text/csv"
     return output
+
+@main.route('/reload/<string:doi_id>')
+def reload(doi_id):
+    reload_article(doi_id)
+    return redirect(url_for('main.view_doi', doi_id=doi_id))
+

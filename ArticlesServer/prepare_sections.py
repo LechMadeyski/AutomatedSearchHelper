@@ -84,10 +84,10 @@ def prepare_paragraphs(section, findings_section):
         return [res] if res['paragraphs'] else []
 
 
-def prepare_sections(article_with_findings):
+def prepare_sections(article_data):
     result = []
-    for section_index, section in enumerate(article_with_findings['article']['text']):
-        findings_section = find_matching_section(section_index, article_with_findings['findings'])
+    for section_index, section in enumerate(article_data.text):
+        findings_section = find_matching_section(section_index, article_data.findings)
 
         section_data = {
             'title': section['title'],

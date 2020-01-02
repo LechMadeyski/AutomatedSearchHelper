@@ -1,5 +1,5 @@
 from ArticlesDataDownloader.ArticlesDataDownloader import ArticlesDataDownloader
-from .ArticlesDatabase import ArticlesDatabase
+from ArticlesServer.database.ArticlesDatabase import ArticlesDatabase
 
 OUTPUT_DIRECTORY = 'outputArticles'
 PROXY = 'proxy_auth_plugin.zip'
