@@ -26,6 +26,8 @@ setup(
         'wtforms',
         'beautifulsoup4',
         'crossrefapi',
+        'slate',
+        'utils',
         'nltk'],
     scripts=[
         'run_articles_download.py',

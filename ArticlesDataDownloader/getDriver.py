@@ -95,6 +95,12 @@ def getDriver(proxyFile=None):
     if proxyFile is not None:
         pluginfile = proxyFile
         chrome_options.add_extension(pluginfile)
+
+    preferences = {
+                   "download.default_directory": os.getcwd(),
+                   "directory_upgrade": True,
+                   "safebrowsing.enabled": True}
+    chrome_options.add_experimental_option("prefs", preferences)
     driver = webdriver.Chrome(
         chrome_options=chrome_options)
     driver.refresh()

@@ -16,9 +16,14 @@ def springerHtmlToJson(textHTML):
     outputJson = []
 
     logging.info("Reading section : Abstract" )
-    abstractText = soup.findAll('section', {'class': 'Abstract'})[0].text
+    absractObjects = soup.findAll('section', {'class': 'Abstract'})
+    abstractText = str()
 
-    abstractText = abstractText[len('Abstract'):]
+
+    for abstractObj in absractObjects:
+        for abstractPar in abstractObj.findAll('p'):
+            abstractText += abstractPar.text
+
     outputJson.append(
         {
         'title':'Abstract',

@@ -7,6 +7,7 @@ from ArticlesDataDownloader.ScopusDataDownloader import ScopusDataDownloader
 from ArticlesDataDownloader.Willey.WilleyArticlesHandler import WilleyArticlesHandler
 from ArticlesDataDownloader.ScienceDirect.ScienceDirectArticlesHandler import ScienceDirectArticlesHandler
 from ArticlesDataDownloader.Springer.SpringerArticlesHandler import SpringerArticlesHandler
+from ArticlesDataDownloader.ACM.ACMArticlesHandler import ACMArticlesHandler
 
 from ArticlesDataDownloader.getLinkFromDoi import getLinkFromDoi
 from ArticlesDataDownloader.getDriver import getDriver
@@ -68,7 +69,7 @@ class ArticlesDataDownloader:
                 IEEEArticlesHandler(self._driver),
                 WilleyArticlesHandler(self._driver),
                 ScienceDirectArticlesHandler(self._driver),
-                # ACMArticlesHandler(self._driver),
+                ACMArticlesHandler(self._driver),
                 SpringerArticlesHandler(self._driver),
             ]
         return self.__handlers
