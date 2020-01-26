@@ -4,11 +4,11 @@
 {% block body %}
     <style>
 td.details-control {
-    background: #0f9d58   no-repeat center center;
+    background: #0f9d58   no-repeat;
     cursor: pointer;
 }
 tr.shown td.details-control {
-    background: red  no-repeat center center;
+    background: red  no-repeat;
 }
     </style>
 
@@ -17,11 +17,14 @@ tr.shown td.details-control {
 
   <div id="admin" class="col s12">
       <table id="datatable" class="display" style="width:100%">
+          <caption>
+            <a id="FullWithFindingsButton"> Full read with findings </a>
+            <a id="PartialWithFindingsButton"> Partial read with findings </a>
+            <a id="PartialWithoutFindingsButton"> Partial read without findings </a>
+            <a id="FullWithoutFindingsButton"> Full read without findings </a>
+
+          </caption>
         <thead>
-        <a id="FullWithFindingsButton"> Full read with findings </a>
-        <a id="PartialWithFindingsButton"> Partial read with findings </a>
-        <a id="PartialWithoutFindingsButton"> Partial read without findings </a>
-        <a id="FullWithoutFindingsButton"> Full read without findings </a>
           <tr>
             <th></th>
             <th>Id</th>
@@ -75,17 +78,11 @@ tr.shown td.details-control {
                     function (statusData) {
                         var result = '';
                         if (statusData[1] == 1)
-                        {
-                            result+= '<a class="waves-light btn-small yellow darken-2">To be checked';
-                        }
+                            result+= '<a class="waves-light btn-small yellow">To be checked';
                         else if (statusData[1] == 2)
-                        {
                             result+= '<a class="waves-light btn-small green">Accepted'
-                        }
                         else
-                        {
                             result+= '<a class="waves-light btn-small red">Rejected'
-                        }
                         result += '<div class="chip">' + statusData[0]+ '</div></a>'
                         return result;
                     }
@@ -93,21 +90,28 @@ tr.shown td.details-control {
                 return data;
         });
 
+        $.fn.dataTable.ext.order['articleStatus'] = function  ( settings, col )
+        {
+            return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
+                return articlesData[i].article_status;
+            } );
+        };
         $.fn.dataTable.ext.search.push(
             function( settings, data, dataIndex ) {
-                if($("#FullWithFindingsButton").attr("class") == DISABLED_FullWithFindingsButton && data[3] == 1)
+                var rowStatus = articlesData[dataIndex].article_status;
+                if($("#FullWithFindingsButton").attr("class") == DISABLED_FullWithFindingsButton && rowStatus == 1)
                 {
                     return false;
                 }
-                if($("#PartialWithFindingsButton").attr("class") == DISABLED_PartialWithFindingsButton && data[3] == 2)
+                if($("#PartialWithFindingsButton").attr("class") == DISABLED_PartialWithFindingsButton && rowStatus == 2)
                 {
                     return false;
                 }
-                if($("#PartialWithoutFindingsButton").attr("class") == DISABLED_PartialWithoutFindingsButton && data[3] == 3)
+                if($("#PartialWithoutFindingsButton").attr("class") == DISABLED_PartialWithoutFindingsButton && rowStatus == 3)
                 {
                     return false;
                 }
-                if($("#FullWithoutFindingsButton").attr("class") == DISABLED_FullWithoutFindingsButton && data[3] == 4)
+                if($("#FullWithoutFindingsButton").attr("class") == DISABLED_FullWithoutFindingsButton &&  rowStatus == 4)
                 {
                     return false;
                 }
@@ -126,7 +130,7 @@ tr.shown td.details-control {
                             "className":      'details-control',
                             "orderable":      false,
                             "data":           null,
-                            "defaultContent": '+'
+                            "defaultContent": '<i class="material-icons">expand_more</i>'
                         },
                         {data: "id"},
                         {
@@ -140,28 +144,28 @@ tr.shown td.details-control {
                         },
                         {
                             data: "article_status",
-                            {#render: function ( data, type, row, meta ) {#}
-                            {#  var result = '<a class="';#}
-                            {#  if (data == 1)#}
-                            {#  {#}
-                            {#      result+=ENABLED_FullWithFindingsButton#}
-                            {#  }#}
-                            {#  if (data == 2)#}
-                            {#  {#}
-                            {#      result+=ENABLED_PartialWithFindingsButton#}
-                            {#  }#}
-                            {#  if (data == 3)#}
-                            {#  {#}
-                            {#      result+= ENABLED_PartialWithoutFindingsButton#}
-                            {#  }#}
-                            {#  if (data == 4)#}
-                            {#  {#}
-                            {#      result += ENABLED_FullWithoutFindingsButton#}
-                            {#  }#}
-                            {#  result +='">x</a>';#}
-                            {#  return result;#}
-                            {#}#}
-
+                            render: function ( data, type, row, meta ) {
+                              var result = '<a style="width:90%" class="';
+                              if (data == 1)
+                              {
+                                  result+=ENABLED_FullWithFindingsButton
+                              }
+                              if (data == 2)
+                              {
+                                  result+=ENABLED_PartialWithFindingsButton
+                              }
+                              if (data == 3)
+                              {
+                                  result+= ENABLED_PartialWithoutFindingsButton
+                              }
+                              if (data == 4)
+                              {
+                                  result += ENABLED_FullWithoutFindingsButton
+                              }
+                              result +='"></a>';
+                              return result;
+                            },
+                            "orderDataType": "articleStatus"
                         },
                     ],
                     "order": [[1, 'asc']]
@@ -176,11 +180,13 @@ tr.shown td.details-control {
                 if ( row.child.isShown() ) {
                     // This row is already open - close it
                     row.child.hide();
+                    $(this).html('<i class="material-icons">expand_more</i>');
                     tr.removeClass('shown');
                 }
                 else {
                     // Open this row
                     row.child( format(row.data()) ).show();
+                    $(this).html('<i class="material-icons">expand_less</i>');
                     tr.addClass('shown');
                 }
             } );

@@ -72,14 +72,14 @@ class ArticlesDatabase:
         return self._articles[article_id]
 
     def get_next_article(self, article_id):
-        return try_to_find_next(article_id, self._valid_dois_with_findings) or \
-               try_to_find_next(article_id, self._valid_dois_without_findings) or \
-               try_to_find_next(article_id, self._invalid_dois)
+        if int(article_id) + 1 >= len(self._articles):
+            return None
+        return str(int(article_id)+1)
 
     def get_prev_article(self, article_id):
-        return try_to_find_prev(article_id, self._valid_dois_with_findings) or \
-               try_to_find_prev(article_id, self._valid_dois_without_findings) or \
-               try_to_find_prev(article_id, self._invalid_dois)
+        if int(article_id) - 1 < 0:
+            return None
+        return str(int(article_id)-1)
 
     def change_status(self, article_id, user, status):
         self._statuses[article_id][user] = status
