@@ -33,13 +33,7 @@ def index():
         user = session['user']['login']
 
     if db:
-        return render_template('main_with_articles.html',
-                               articles_with_findings=[db.get_short_article_info(x, user) for x in
-                                                       db.get_all_valid_with_findings()],
-                               articles_without_findings=[db.get_short_article_info(x, user) for x in
-                                                          db.get_all_valid_without_findings()],
-                               articles_with_error=[db.get_short_article_info(x, user) for x in
-                                                    db.get_all_invalid_articles()])
+        return render_template('main_with_articles.html', articles=db.get_all_articles_short_info(user))
     else:
         return render_template('main_without_articles.html')
 
@@ -115,7 +109,7 @@ def upload():
 
 
 def can_remove_comment(login):
-    user = session['user']
+    user = session.get('user', None)
     if user:
         return user['login'] == login
     else:

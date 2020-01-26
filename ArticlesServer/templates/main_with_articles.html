@@ -2,50 +2,223 @@
 
 
 {% block body %}
- <ul class="collection with-header">
-  <li class="collection-header"><h4>Articles with findings: {{articles_with_findings|length}}</h4></li>
-     {% for article in articles_with_findings %}
-      <li  class="collection-item">
-          <a class="action" href="{{ url_for('main.view_doi', doi_id=article['id']) }}" >
-              {{ article['title'] }}
-          </a>
-
-            {% for user, status in article['statuses'] %}
-                {% if status.value == 1 %}
-                    <a class="secondary-content waves-light btn-small yellow darken-2">To be checked
-                {% elif status.value == 2 %}
-                    <a class="secondary-content waves-light btn-small green">Accepted
-                {% elif status.value == 3 %}
-                    <a class="secondary-content waves-light btn-small red">Rejected
-                {% endif %}
-                     <div class="chip">{{ user }}</div>
-                  </a>
-            {% endfor %}
-      </li>
-     {% endfor %}
-</ul>
-
-<ul class="collection with-header">
-  <li class="collection-header"><h4>Articles without findings: ({{articles_without_findings|length}})</h4></li>
-     {% for article in articles_without_findings %}
-      <li  class="collection-item">
-          <a class="action" href="{{ url_for('main.view_doi', doi_id=article['id']) }}" >
-              {{ article['title'] }}
-          </a>
-      </li>
-     {% endfor %}
-</ul>
+    <style>
+td.details-control {
+    background: #0f9d58   no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: red  no-repeat center center;
+}
+    </style>
 
 
-<ul class="collection with-header">
-  <li class="collection-header"><h4>DOIs with improper read: {{articles_with_error|length}}</h4></li>
-     {% for article in articles_with_error %}
-          <li  class="collection-item">
-              <a class="action" href="{{ url_for('main.view_doi', doi_id=article['id']) }}" >
-                  {{ article['title'] }}
-              </a>
-          </li>
-     {% endfor %}
-</ul>
+<div class="row">
+
+  <div id="admin" class="col s12">
+      <table id="datatable" class="display" style="width:100%">
+        <thead>
+        <a id="FullWithFindingsButton"> Full read with findings </a>
+        <a id="PartialWithFindingsButton"> Partial read with findings </a>
+        <a id="PartialWithoutFindingsButton"> Partial read without findings </a>
+        <a id="FullWithoutFindingsButton"> Full read without findings </a>
+          <tr>
+            <th></th>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Article Status</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+</div>
+
 
 {% endblock %}
+
+{% block scripts %}
+    <script>
+        const ENABLED_FullWithFindingsButton ='waves-light btn green darken-2';
+        const DISABLED_FullWithFindingsButton ='waves-light btn green lighten-4';
+        const ENABLED_PartialWithFindingsButton ='waves-light btn orange darken-2';
+        const DISABLED_PartialWithFindingsButton ='waves-light btn orange lighten-4';
+        const ENABLED_PartialWithoutFindingsButton ='waves-light btn yellow darken-2';
+        const DISABLED_PartialWithoutFindingsButton ='waves-light btn yellow lighten-4';
+        const ENABLED_FullWithoutFindingsButton ='waves-light btn red darken-2';
+        const DISABLED_FullWithoutFindingsButton ='waves-light btn red lighten-4';
+    </script>
+
+
+    <script>
+        function format ( d ) {
+        // `d` is the original data object for the row
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+                '<tr>'+
+                    '<td>Doi:</td>'+
+                    '<td>'+d.doi+'</td>'+
+                '</tr>'+
+                '<tr>'+
+                    '<td>Statuses:</td>'+
+                    '<td>'+d.statuses+'</td>'+
+                '</tr>'+
+            '</table>';
+          }
+
+
+
+        var articlesData = {{ articles|tojson }};
+
+        articlesData = articlesData.map(function (data) {
+             data.statuses = data.statuses.map(
+                    function (statusData) {
+                        var result = '';
+                        if (statusData[1] == 1)
+                        {
+                            result+= '<a class="waves-light btn-small yellow darken-2">To be checked';
+                        }
+                        else if (statusData[1] == 2)
+                        {
+                            result+= '<a class="waves-light btn-small green">Accepted'
+                        }
+                        else
+                        {
+                            result+= '<a class="waves-light btn-small red">Rejected'
+                        }
+                        result += '<div class="chip">' + statusData[0]+ '</div></a>'
+                        return result;
+                    }
+                ).join(' ');
+                return data;
+        });
+
+        $.fn.dataTable.ext.search.push(
+            function( settings, data, dataIndex ) {
+                if($("#FullWithFindingsButton").attr("class") == DISABLED_FullWithFindingsButton && data[3] == 1)
+                {
+                    return false;
+                }
+                if($("#PartialWithFindingsButton").attr("class") == DISABLED_PartialWithFindingsButton && data[3] == 2)
+                {
+                    return false;
+                }
+                if($("#PartialWithoutFindingsButton").attr("class") == DISABLED_PartialWithoutFindingsButton && data[3] == 3)
+                {
+                    return false;
+                }
+                if($("#FullWithoutFindingsButton").attr("class") == DISABLED_FullWithoutFindingsButton && data[3] == 4)
+                {
+                    return false;
+                }
+                return true;
+            }
+        );
+
+        $(document).ready( function () {
+            var table = $('#datatable')
+                .DataTable(
+                {
+                    data : articlesData,
+                    paging: false,
+                    columns : [
+                        {
+                            "className":      'details-control',
+                            "orderable":      false,
+                            "data":           null,
+                            "defaultContent": '+'
+                        },
+                        {data: "id"},
+                        {
+                            data: "title",
+                            render: function ( data, type, row, meta ) {
+                              return  '<a class="action" href="'
+                                  + Flask.url_for('main.view_doi', {'doi_id' : row.id})
+                                  + '" >'
+                                  + data + '</a>';
+                            }
+                        },
+                        {
+                            data: "article_status",
+                            {#render: function ( data, type, row, meta ) {#}
+                            {#  var result = '<a class="';#}
+                            {#  if (data == 1)#}
+                            {#  {#}
+                            {#      result+=ENABLED_FullWithFindingsButton#}
+                            {#  }#}
+                            {#  if (data == 2)#}
+                            {#  {#}
+                            {#      result+=ENABLED_PartialWithFindingsButton#}
+                            {#  }#}
+                            {#  if (data == 3)#}
+                            {#  {#}
+                            {#      result+= ENABLED_PartialWithoutFindingsButton#}
+                            {#  }#}
+                            {#  if (data == 4)#}
+                            {#  {#}
+                            {#      result += ENABLED_FullWithoutFindingsButton#}
+                            {#  }#}
+                            {#  result +='">x</a>';#}
+                            {#  return result;#}
+                            {#}#}
+
+                        },
+                    ],
+                    "order": [[1, 'asc']]
+                }
+            );
+
+            // Add event listener for opening and closing details
+            $('#datatable tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row( tr );
+
+                if ( row.child.isShown() ) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child( format(row.data()) ).show();
+                    tr.addClass('shown');
+                }
+            } );
+
+            $('#FullWithFindingsButton').attr("class", ENABLED_FullWithFindingsButton);
+            $('#FullWithFindingsButton').on('click', function () {
+                if (this.className == ENABLED_FullWithFindingsButton)
+                    this.className = DISABLED_FullWithFindingsButton;
+                else
+                    this.className = ENABLED_FullWithFindingsButton;
+                table.draw()
+            });
+            $('#PartialWithFindingsButton').attr("class", ENABLED_PartialWithFindingsButton);
+            $('#PartialWithFindingsButton').on('click', function () {
+                if (this.className == ENABLED_PartialWithFindingsButton)
+                    this.className = DISABLED_PartialWithFindingsButton;
+                else
+                    this.className = ENABLED_PartialWithFindingsButton;
+                table.draw()
+            });
+            $('#PartialWithoutFindingsButton').attr("class", ENABLED_PartialWithoutFindingsButton);
+            $('#PartialWithoutFindingsButton').on('click', function () {
+                if (this.className == ENABLED_PartialWithoutFindingsButton)
+                    this.className = DISABLED_PartialWithoutFindingsButton;
+                else
+                    this.className = ENABLED_PartialWithoutFindingsButton;
+                table.draw()
+            });
+            $('#FullWithoutFindingsButton').attr("class", ENABLED_FullWithoutFindingsButton);
+            $('#FullWithoutFindingsButton').on('click', function () {
+                if (this.className == ENABLED_FullWithoutFindingsButton)
+                    this.className = DISABLED_FullWithoutFindingsButton;
+                else
+                    this.className = ENABLED_FullWithoutFindingsButton;
+                table.draw()
+            });
+
+        } );
+    </script>
+{% endblock %}
+

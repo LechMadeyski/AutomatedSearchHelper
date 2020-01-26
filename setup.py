@@ -22,6 +22,7 @@ setup(
     install_requires=[
         'flask',
         'flask_wtf',
+        'flask_jsglue',
         'werkzeug',
         'wtforms',
         'beautifulsoup4',

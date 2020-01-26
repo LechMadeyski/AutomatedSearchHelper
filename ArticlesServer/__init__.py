@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_jsglue import JSGlue
 from requests import Session
 
 from TextSearchEngine.parse_finder import parse_finder
@@ -14,7 +15,7 @@ def create_app(test_config=None):
     createDirectoryIfNotExists(BASE_DIRECTORY)
     configureLogger()
     app = Flask(__name__, instance_relative_config=True)
-
+    jsglue = JSGlue(app)
     try:
         doi_list = extract_doi_from_csv(DOIS_FILE)
         with open(FINDER_FILE, 'r') as finder_file:

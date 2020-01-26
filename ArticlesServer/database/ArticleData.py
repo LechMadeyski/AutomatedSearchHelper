@@ -1,3 +1,5 @@
+from .ArticleStatus import ArticleStatus
+
 class ArticleData:
     def __init__(self, article_and_finding_json):
         self._article_data = article_and_finding_json.get('article', dict())
@@ -67,3 +69,16 @@ class ArticleData:
             else:
                 return error_status
         return str()
+
+    @property
+    def status(self):
+        if self.read_status == 'OK':
+            if self.findings:
+                return ArticleStatus.READ_CORRECT_WITH_FINDINGS
+            else:
+                return ArticleStatus.READ_CORRECT_NO_FINDINGS
+        else:
+            if self.findings:
+                return ArticleStatus.READ_PARTIAL_WITH_FINDINGS
+            else:
+                return ArticleStatus.READ_PARTIAL_NO_FINDINGS

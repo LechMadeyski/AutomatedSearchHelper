@@ -110,10 +110,14 @@ class ArticlesDatabase:
 
     def get_short_article_info(self, article_id, user = None):
         article_data = self._articles[article_id]
-        return {'id': article_id,
+        return
+
+    def get_all_articles_short_info(self, user):
+        return [{'id': article_id,
                 'title': article_data.title,
                 'doi': article_data.doi,
-                'statuses': self.get_statuses(article_id, user)}
+                'article_status': article_data.status,
+                'statuses': self.get_statuses(article_id, user)} for article_id, article_data in self._articles.items()]
 
     def get_comments(self, article_id):
         return self._comments[article_id]

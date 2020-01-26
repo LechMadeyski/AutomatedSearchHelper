@@ -8,10 +8,12 @@
 
   <!--Import materialize.css-->
   <link rel="stylesheet" type="text/css" media="screen,projection" href="{{ url_for('static', filename='css/materialize.min.css') }}">
-
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css">
 
   <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    {{ JSGlue.include() }}
+
 </head>
 
 <body>
@@ -40,6 +42,8 @@
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
 
 {% with messages = get_flashed_messages() %}
     {% if messages %}
