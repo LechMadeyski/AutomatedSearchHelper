@@ -16,6 +16,27 @@
             <div class="row">
                 <div class="col s6">
                     <div class="row">
+                    <div class="col s6">
+                    Read status: <a id="ArticleStatusButton"> Invalid status </a>
+                    </div>
+
+                    <div class="col s6">
+                        {% if display_data['is_ignored'] %}
+                            <a class="waves-effect waves-light btn grey"
+                               href="{{url_for("main.toggle_ignored", doi_id = display_data['doi_id'])}}">
+                               Remove ignored
+                            </a>
+                        {% else %}
+                            <a class="waves-effect waves-light btn grey darken-2"
+                               href="{{url_for("main.toggle_ignored", doi_id = display_data['doi_id'])}}">
+                               Mark ignored
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    </div>
+
+                    <div class="row">
                     {% for user, status in display_data.statuses %}
                         {% if status.value == 1 %}
                             <a class="waves-light btn-small yellow darken-2">To be checked
@@ -87,7 +108,7 @@
 
                                 <a class="waves-effect waves-light btn red"
                                    href="{{url_for("main.change_status", doi_id = display_data['doi_id'], status = 3)}}">
-                                   Decline
+                                   Reject
                                 </a>
                         </div>
                    {% endif %}
@@ -234,6 +255,14 @@
               direction: 'right'
             });
         });
+    </script>
+
+    <script>
+        var status = "{{ display_data['status']|tojson}}";
+        console.log("status is " + status);
+        var button = $('#ArticleStatusButton');
+        button.attr('class', ArticleStatusMap[status].class_enabled);
+        button.text(ArticleStatusMap[status].name);
     </script>
 
 {% endblock %}

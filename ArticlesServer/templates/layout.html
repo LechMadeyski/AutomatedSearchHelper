@@ -13,7 +13,6 @@
   <!--Let browser know website is optimized for mobile-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     {{ JSGlue.include() }}
-
 </head>
 
 <body>
@@ -43,6 +42,47 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+<script>
+    const ArticleStatusMap ={
+        "1" : {
+            "name" : "Full read with findings",
+            "class_enabled" : 'waves-light btn green darken-2',
+            "class_disabled": 'waves-light btn green lighten-4',
+            "id_string": "FullWithFindingsButton"
+        },
+        "2" : {
+            "name" : "Partial read with findings",
+            "class_enabled" : 'waves-light btn light-green darken-2',
+            "class_disabled": 'waves-light btn light-green lighten-4',
+            "id_string": "PartialWithFindingsButton"
+        },
+        "3" : {
+            "name" : "Partial read - error",
+            "class_enabled" : 'waves-light btn orange darken-2',
+            "class_disabled": 'waves-light btn orange lighten-4',
+            "id_string": "PartialWithoutFindingsErrorReadingButton"
+        },
+        "4" : {
+            "name" : "Partial read - not supported",
+            "class_enabled" : 'waves-light btn yellow darken-2',
+            "class_disabled": 'waves-light btn yellow lighten-4',
+            "id_string": "PartialWithoutFindingsPublisherNotSupportedButton"
+        },
+        "5" : {
+            "name" : "Full read no findings",
+            "class_enabled" : 'waves-light btn red darken-2',
+            "class_disabled": 'waves-light btn red lighten-4',
+            "id_string": "FullWithoutFindingsButton"
+        },
+        "6" : {
+            "name" : "Ignored",
+            "class_enabled" : "waves-light btn grey darken-2",
+            "class_disabled": "waves-light btn grey lighten-2",
+            "id_string": "IgnoredButton"
+        },
+    };
+</script>
 
 
 {% with messages = get_flashed_messages() %}

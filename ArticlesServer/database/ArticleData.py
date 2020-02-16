@@ -4,6 +4,10 @@ class ArticleData:
     def __init__(self, article_and_finding_json):
         self._article_data = article_and_finding_json.get('article', dict())
         self._findings = article_and_finding_json.get('findings', [])
+        self._is_ignored = False
+
+    def toggle_ignored(self):
+        self._is_ignored = not self._is_ignored
 
     @property
     def title(self):
@@ -72,6 +76,8 @@ class ArticleData:
 
     @property
     def status(self):
+        if self._is_ignored:
+            return ArticleStatus.ARTICLE_IGNORED
         if self.read_status == 'OK':
             if self.findings:
                 return ArticleStatus.READ_CORRECT_WITH_FINDINGS
@@ -80,5 +86,7 @@ class ArticleData:
         else:
             if self.findings:
                 return ArticleStatus.READ_PARTIAL_WITH_FINDINGS
+            elif self.read_status == 'Publisher not supported':
+                return ArticleStatus.READ_PARTIAL_PUBLISHER_NOT_SUPPORTED_NO_FINDINGS
             else:
-                return ArticleStatus.READ_PARTIAL_NO_FINDINGS
+                return ArticleStatus.READ_PARTIAL_ERROR_READING_NO_FINDINGS

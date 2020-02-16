@@ -2,15 +2,15 @@
 
 
 {% block body %}
-    <style>
+<style>
 td.details-control {
-    background: #0f9d58   no-repeat;
+    background: lightgreen   no-repeat;
     cursor: pointer;
 }
 tr.shown td.details-control {
-    background: red  no-repeat;
+    background: lightcoral  no-repeat;
 }
-    </style>
+</style>
 
 
 <div class="row">
@@ -20,15 +20,17 @@ tr.shown td.details-control {
           <caption>
             <a id="FullWithFindingsButton"> Full read with findings </a>
             <a id="PartialWithFindingsButton"> Partial read with findings </a>
-            <a id="PartialWithoutFindingsButton"> Partial read without findings </a>
-            <a id="FullWithoutFindingsButton"> Full read without findings </a>
-
+            <a id="PartialWithoutFindingsErrorReadingButton"> Partial read - error </a>
+            <a id="PartialWithoutFindingsPublisherNotSupportedButton"> Partial read - not supported </a>
+            <a id="FullWithoutFindingsButton"> Full read no findings </a>
+            <a id="IgnoredButton"> Ignored </a>
           </caption>
         <thead>
           <tr>
             <th></th>
             <th>Id</th>
             <th>Title</th>
+            <th>Publisher</th>
             <th>Article Status</th>
           </tr>
         </thead>
@@ -38,22 +40,9 @@ tr.shown td.details-control {
     </div>
 </div>
 
-
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        const ENABLED_FullWithFindingsButton ='waves-light btn green darken-2';
-        const DISABLED_FullWithFindingsButton ='waves-light btn green lighten-4';
-        const ENABLED_PartialWithFindingsButton ='waves-light btn orange darken-2';
-        const DISABLED_PartialWithFindingsButton ='waves-light btn orange lighten-4';
-        const ENABLED_PartialWithoutFindingsButton ='waves-light btn yellow darken-2';
-        const DISABLED_PartialWithoutFindingsButton ='waves-light btn yellow lighten-4';
-        const ENABLED_FullWithoutFindingsButton ='waves-light btn red darken-2';
-        const DISABLED_FullWithoutFindingsButton ='waves-light btn red lighten-4';
-    </script>
-
-
     <script>
         function format ( d ) {
         // `d` is the original data object for the row
@@ -68,8 +57,6 @@ tr.shown td.details-control {
                 '</tr>'+
             '</table>';
           }
-
-
 
         var articlesData = {{ articles|tojson }};
 
@@ -99,22 +86,16 @@ tr.shown td.details-control {
         $.fn.dataTable.ext.search.push(
             function( settings, data, dataIndex ) {
                 var rowStatus = articlesData[dataIndex].article_status;
-                if($("#FullWithFindingsButton").attr("class") == DISABLED_FullWithFindingsButton && rowStatus == 1)
+
+                for (status in ArticleStatusMap)
                 {
-                    return false;
+                    var buttonClass = $("#" + ArticleStatusMap[status].id_string).attr("class")
+                    if(buttonClass == ArticleStatusMap[status].class_disabled && rowStatus == status)
+                    {
+                        return false;
+                    }
                 }
-                if($("#PartialWithFindingsButton").attr("class") == DISABLED_PartialWithFindingsButton && rowStatus == 2)
-                {
-                    return false;
-                }
-                if($("#PartialWithoutFindingsButton").attr("class") == DISABLED_PartialWithoutFindingsButton && rowStatus == 3)
-                {
-                    return false;
-                }
-                if($("#FullWithoutFindingsButton").attr("class") == DISABLED_FullWithoutFindingsButton &&  rowStatus == 4)
-                {
-                    return false;
-                }
+
                 return true;
             }
         );
@@ -142,26 +123,12 @@ tr.shown td.details-control {
                                   + data + '</a>';
                             }
                         },
+                        {data: "publisher"},
                         {
                             data: "article_status",
                             render: function ( data, type, row, meta ) {
                               var result = '<a style="width:90%" class="';
-                              if (data == 1)
-                              {
-                                  result+=ENABLED_FullWithFindingsButton
-                              }
-                              if (data == 2)
-                              {
-                                  result+=ENABLED_PartialWithFindingsButton
-                              }
-                              if (data == 3)
-                              {
-                                  result+= ENABLED_PartialWithoutFindingsButton
-                              }
-                              if (data == 4)
-                              {
-                                  result += ENABLED_FullWithoutFindingsButton
-                              }
+                              result += ArticleStatusMap[data].class_enabled
                               result +='"></a>';
                               return result;
                             },
@@ -191,39 +158,19 @@ tr.shown td.details-control {
                 }
             } );
 
-            $('#FullWithFindingsButton').attr("class", ENABLED_FullWithFindingsButton);
-            $('#FullWithFindingsButton').on('click', function () {
-                if (this.className == ENABLED_FullWithFindingsButton)
-                    this.className = DISABLED_FullWithFindingsButton;
-                else
-                    this.className = ENABLED_FullWithFindingsButton;
-                table.draw()
-            });
-            $('#PartialWithFindingsButton').attr("class", ENABLED_PartialWithFindingsButton);
-            $('#PartialWithFindingsButton').on('click', function () {
-                if (this.className == ENABLED_PartialWithFindingsButton)
-                    this.className = DISABLED_PartialWithFindingsButton;
-                else
-                    this.className = ENABLED_PartialWithFindingsButton;
-                table.draw()
-            });
-            $('#PartialWithoutFindingsButton').attr("class", ENABLED_PartialWithoutFindingsButton);
-            $('#PartialWithoutFindingsButton').on('click', function () {
-                if (this.className == ENABLED_PartialWithoutFindingsButton)
-                    this.className = DISABLED_PartialWithoutFindingsButton;
-                else
-                    this.className = ENABLED_PartialWithoutFindingsButton;
-                table.draw()
-            });
-            $('#FullWithoutFindingsButton').attr("class", ENABLED_FullWithoutFindingsButton);
-            $('#FullWithoutFindingsButton').on('click', function () {
-                if (this.className == ENABLED_FullWithoutFindingsButton)
-                    this.className = DISABLED_FullWithoutFindingsButton;
-                else
-                    this.className = ENABLED_FullWithoutFindingsButton;
-                table.draw()
-            });
-
+            for (status in ArticleStatusMap)
+            {
+                const info = ArticleStatusMap[status];
+                var button = $('#'+info.id_string);
+                button.attr("class", info.class_enabled);
+                button.on('click', function () {
+                    if (this.className == info.class_enabled)
+                        this.className = info.class_disabled;
+                    else
+                        this.className = info.class_enabled;
+                    table.draw()
+                });
+            }
         } );
     </script>
 {% endblock %}

@@ -68,6 +68,7 @@ class ACMArticlesHandler():
             self.__logger.error("ERROR TYPE: " + str(type(error)))
             self.__logger.error(error)
             self.__logger.error("some error occured, moving on")
+            os.remove('temporary.pdf')
             return None
 
     def linkPart(self):

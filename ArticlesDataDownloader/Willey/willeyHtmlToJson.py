@@ -17,7 +17,7 @@ def willeyHtmlToJson(textHTML):
 
     outputJson = []
 
-    for sec in soup.findAll('div', {"class": "article-section__content"}):
+    for sec in soup.findAll(attrs={"class": "article-section__content"}):
         titles = sec.findAll('h2')
         title = ""
         if len(titles) > 0:

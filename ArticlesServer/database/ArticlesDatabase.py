@@ -1,6 +1,8 @@
 from collections import defaultdict
 
 from .ArticleData import ArticleData
+from .ArticleStatus import ArticleStatus
+
 from .Status import Status
 import json
 
@@ -33,6 +35,7 @@ class ArticlesDatabase:
         self._statuses = defaultdict(dict)
         self._comments = defaultdict(list)
         self._output_db = output_db
+        self._ignore_list = list()
         for index, file in enumerate(files):
             article_id = str(index)
             self._articles[article_id] = ArticleData(file)
@@ -41,6 +44,7 @@ class ArticlesDatabase:
             self._assign_to_category(article_data, article_id)
 
         self._load_comments_and_statuses()
+        self._load_ignore_list()
 
     def _assign_to_category(self, article_data, article_id):
         if article_data.findings:
@@ -67,6 +71,26 @@ class ArticlesDatabase:
                         self._statuses[article_id][user] = Status(self._statuses[article_id][user])
             except FileNotFoundError:
                 pass
+
+    def _load_ignore_list(self):
+        try:
+            with open(self._create_ignore_list_filename(), 'r') as file_object:
+                ignore_list = json.load(file_object)
+                for _, article in self._articles.items():
+                    if article.doi in ignore_list:
+                        article.toggle_ignored()
+        except FileNotFoundError:
+            ignore_list = list()
+            for _, article in self._articles.items():
+                if "Proceedings" in article.title:
+                    ignore_list.append(article.doi)
+                    article.toggle_ignored()
+            file_path = self._create_ignore_list_filename()
+            try:
+                with open(file_path, 'w') as file_object:
+                    json.dump(ignore_list, file_object)
+            except FileNotFoundError:
+                print(file_path + " not found. ")
 
     def get_full_article(self, article_id):
         return self._articles[article_id]
@@ -108,15 +132,12 @@ class ArticlesDatabase:
     def get_all_invalid_articles(self):
         return self._invalid_dois
 
-    def get_short_article_info(self, article_id, user = None):
-        article_data = self._articles[article_id]
-        return
-
     def get_all_articles_short_info(self, user):
         return [{'id': article_id,
                 'title': article_data.title,
                 'doi': article_data.doi,
                 'article_status': article_data.status,
+                'publisher' : article_data.publisher,
                 'statuses': self.get_statuses(article_id, user)} for article_id, article_data in self._articles.items()]
 
     def get_comments(self, article_id):
@@ -134,6 +155,27 @@ class ArticlesDatabase:
         self._comments[article_id] = [x for x in self._comments[article_id] if x['comment_id'] != comment_id]
         self._update_comments(article_id)
 
+    def toggle_ignored(self, article_id):
+        article = self._articles[article_id]
+        article.toggle_ignored()
+        ignore_list = list()
+        file_path = self._create_ignore_list_filename()
+        try:
+            with open(file_path, 'r') as file_object:
+                ignore_list = json.load(file_object)
+        except FileNotFoundError:
+            print(file_path + " not found. ")
+
+        if article.status == ArticleStatus.ARTICLE_IGNORED:
+            ignore_list.append(article.doi)
+        else:
+            ignore_list.remove(article.doi)
+        try:
+            with open(file_path, 'w') as file_object:
+                json.dump(ignore_list, file_object)
+        except FileNotFoundError:
+            print(file_path + " not found. ")
+
     def _create_comments_filename(self, article_id):
         return self._output_db + \
                "/" + self._articles[article_id].doi.replace('/', '_') + "_comments.json"
@@ -141,6 +183,9 @@ class ArticlesDatabase:
     def _create_statuses_filename(self, article_id):
         return self._output_db + \
                "/" + self._articles[article_id].doi.replace('/', '_') + "_status.json"
+
+    def _create_ignore_list_filename(self):
+        return self._output_db + "/ignore_list.json"
 
     def _update_comments(self, article_id):
         file_path = self._create_comments_filename(article_id)

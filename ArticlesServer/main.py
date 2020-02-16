@@ -6,6 +6,7 @@ import json
 import logging
 import io
 
+from .database.ArticleStatus import ArticleStatus
 from AutomatedSearchHelperUtilities.extract_doi_from_csv import extract_doi_from_csv
 from ArticlesServer.database.DatabaseManager import DatabaseManager
 from .prepare_sections import prepare_sections
@@ -145,6 +146,8 @@ def generate_data_doi_data(db, doi_id):
         'scopus_link': article_data.scopus_link,
         'doi_link': article_data.doi_link,
         'read_error': article_data.read_error,
+        'status' : article_data.status,
+        'is_ignored': (article_data.status == ArticleStatus.ARTICLE_IGNORED),
         'sections': prepare_sections(article_data)}
 
 
@@ -228,6 +231,14 @@ def change_status(doi_id):
     elif status == '3':
         db.change_status(doi_id, user['login'],  Status.DECLINED)
 
+    return redirect(url_for('main.view_doi', doi_id=doi_id))
+
+@main.route('/toggle_ignored/<string:doi_id>')
+def toggle_ignored(doi_id):
+    db = DatabaseManager.get_instance()
+    if not db:
+        return redirect(url_for('main.index'))
+    db.toggle_ignored(doi_id)
     return redirect(url_for('main.view_doi', doi_id=doi_id))
 
 

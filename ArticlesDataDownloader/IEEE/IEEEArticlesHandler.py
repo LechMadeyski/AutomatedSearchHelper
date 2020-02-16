@@ -27,7 +27,7 @@ class IEEEArticlesHandler():
             return None
 
     def linkPart(self):
-        return "ieeexplore.ieee.org/document"
+        return "ieeexplore.ieee.org"
 
     def name(self):
         return "IEEE"

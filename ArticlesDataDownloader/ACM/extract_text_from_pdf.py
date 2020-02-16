@@ -12,7 +12,7 @@ def read_pdf_as_json(filename):
     split_text = []
 
     for extracted_part in extracted_text:
-        split_text += extracted_part.replace('\\n', '\n').split('\n\n')
+        split_text += extracted_part.replace('\\n', '\n').split('\n')
 
     sections = []
     current_section = dict(title='Begining data', text=str())
