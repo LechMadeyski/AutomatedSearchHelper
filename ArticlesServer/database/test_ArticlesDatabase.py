@@ -19,7 +19,7 @@ def test_get_all_articles_shall_return_all_dois():
             "findings": []
         }
     ]
-    database = ArticlesDatabase(articles_input)
+    database = ArticlesDatabase(articles_input, "someTestPath")
     assert database.get_all_articles_id() == ['0', '1']
 
 
@@ -52,49 +52,18 @@ def get_basic_articles():
     ]
 
 
-def test_get_all_articles_of_given_type():
-    database = ArticlesDatabase(get_basic_articles())
-    ids = database.get_all_articles_id()
-    assert database.get_all_valid_with_findings() == [ids[0], ids[3]]
-    assert database.get_all_valid_without_findings() == [ids[1], ids[5]]
-    assert database.get_all_invalid_articles() == [ids[2], ids[4]]
-
-
-def test_get_next_article_shall_return_next_of_given_type():
-    database = ArticlesDatabase(get_basic_articles())
-    ids = database.get_all_articles_id()
-
-    assert database.get_next_article(ids[0]) == ids[3]
-    assert database.get_next_article(ids[1]) == ids[5]
-    assert database.get_next_article(ids[2]) == ids[4]
-    assert database.get_next_article(ids[3]) is None
-    assert database.get_next_article(ids[4]) is None
-    assert database.get_next_article(ids[5]) is None
-
-
-def test_get_prev_article_shall_return_prev_of_given_type():
-    database = ArticlesDatabase(get_basic_articles())
-    ids = database.get_all_articles_id()
-
-    assert database.get_prev_article(ids[3]) == ids[0]
-    assert database.get_prev_article(ids[4]) == ids[2]
-    assert database.get_prev_article(ids[5]) == ids[1]
-    assert database.get_prev_article(ids[0]) is None
-    assert database.get_prev_article(ids[1]) is None
-    assert database.get_prev_article(ids[2]) is None
-
 
 def test_get_full_article_shall_return_article():
     articles = get_basic_articles()
-    database = ArticlesDatabase(articles)
+    database = ArticlesDatabase(articles, "someTestPath")
     ids = database.get_all_articles_id()
 
-    assert database.get_full_article(ids[0]) == articles[0]
-    assert database.get_full_article(ids[3]) == articles[3]
+    assert database.get_full_article(ids[0]).findings == articles[0]['findings']
+    assert database.get_full_article(ids[3]).findings == articles[3]['findings']
 
 
 def test_get_status_shall_return_to_be_checked_by_default():
-    database = ArticlesDatabase(get_basic_articles())
+    database = ArticlesDatabase(get_basic_articles(), "someTestPath")
     ids = database.get_all_articles_id()
 
     assert database.get_status(ids[0], 'user1') == Status.TO_BE_CHECKED
@@ -102,7 +71,7 @@ def test_get_status_shall_return_to_be_checked_by_default():
 
 
 def test_change_status_shall_properly_set_status():
-    database = ArticlesDatabase(get_basic_articles())
+    database = ArticlesDatabase(get_basic_articles(), "someTestPath")
     ids = database.get_all_articles_id()
 
     user = 'user'
@@ -118,7 +87,7 @@ def test_change_status_shall_properly_set_status():
 
 
 def test_change_status_shall_properly_set_status_for_proper_user():
-    database = ArticlesDatabase(get_basic_articles())
+    database = ArticlesDatabase(get_basic_articles(), "someTestPath")
     ids = database.get_all_articles_id()
 
     user1 = 'user1'
@@ -134,7 +103,7 @@ def test_change_status_shall_properly_set_status_for_proper_user():
     assert database.get_status(ids[0], user2) == Status.DECLINED
 
 def test_get_statuses_without_user_shall_return_statuses_in_user_order():
-    database = ArticlesDatabase(get_basic_articles())
+    database = ArticlesDatabase(get_basic_articles(), "someTestPath")
     ids = database.get_all_articles_id()
 
     user1 = 'user1'
@@ -151,7 +120,7 @@ def test_get_statuses_without_user_shall_return_statuses_in_user_order():
 
 
 def test_get_statuses_without_user_shall_return_statuses_including_user_and_with_given_user_first():
-    database = ArticlesDatabase(get_basic_articles())
+    database = ArticlesDatabase(get_basic_articles(), "someTestPath")
     ids = database.get_all_articles_id()
 
     user1 = 'user1'
@@ -178,14 +147,14 @@ def test_get_statuses_without_user_shall_return_statuses_including_user_and_with
 
 
 def test_comments_shall_be_empty_for_basic():
-    database = ArticlesDatabase(get_basic_articles())
+    database = ArticlesDatabase(get_basic_articles(), "someTestPath")
     ids = database.get_all_articles_id()
     assert database.get_comments(ids[0]) == list()
     assert database.get_comments(ids[4]) == list()
 
 
 def test_adding_comments():
-    database = ArticlesDatabase(get_basic_articles())
+    database = ArticlesDatabase(get_basic_articles(), "someTestPath")
     ids = database.get_all_articles_id()
 
     database.add_comment(ids[0], "a", user="U1")
@@ -206,7 +175,7 @@ def test_adding_comments():
 
 
 def test_removing_comments():
-    database = ArticlesDatabase(get_basic_articles())
+    database = ArticlesDatabase(get_basic_articles(), "someTestPath")
     ids = database.get_all_articles_id()
 
     database.add_comment(ids[0], "a", user="U1")

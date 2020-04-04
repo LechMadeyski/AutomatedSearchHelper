@@ -37,21 +37,6 @@
                     </div>
 
                     <div class="row">
-                    {% for user, status in display_data.statuses %}
-                        {% if status.value == 1 %}
-                            <a class="waves-light btn-small yellow darken-2">To be checked
-                        {% elif status.value == 2 %}
-                            <a class="waves-light btn-small green">Accepted
-                        {% elif status.value == 3 %}
-                            <a class="waves-light btn-small red">Rejected
-                        {% endif %}
-                    <div class="chip"> {{ user }} </div>
-                    </a>
-                   {% endfor %}
-                    </div>
-
-
-                    <div class="row">
                           <h6> Authors:
                             {% for author in display_data['authors'] %}
                                  <div class="chip"> {{ author }} </div>
@@ -94,6 +79,20 @@
 
                 </div>
                 <div class="col s6">
+                <div class="row">
+                    {% for user, status in display_data.statuses %}
+                        {% if status.value == 1 %}
+                            <a class="waves-light btn-small yellow darken-2">To be checked
+                        {% elif status.value == 2 %}
+                            <a class="waves-light btn-small green">Accepted
+                        {% elif status.value == 3 %}
+                            <a class="waves-light btn-small red">Rejected
+                        {% endif %}
+                    <div class="chip"> {{ user }} </div>
+                    </a>
+                   {% endfor %}
+                </div>
+
                    {% if session['user'] %}
                         <div class="row">
                                 <a class="waves-effect waves-light btn yellow darken-2"

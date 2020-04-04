@@ -1,7 +1,7 @@
 import pytest
 from copy import deepcopy
 
-from mergeResults import mergeResults
+from .mergeResults import mergeResults
 
 def test_mergeResultShouldReturnNoneIfEmptyResultsAreGiven():
     assert mergeResults([]) is None

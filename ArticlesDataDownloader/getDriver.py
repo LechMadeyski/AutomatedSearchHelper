@@ -102,7 +102,7 @@ def getDriver(proxyFile=None):
                    "safebrowsing.enabled": True}
     chrome_options.add_experimental_option("prefs", preferences)
     driver = webdriver.Chrome(
-        chrome_options=chrome_options)
+        options=chrome_options)
     driver.refresh()
 
     return driver

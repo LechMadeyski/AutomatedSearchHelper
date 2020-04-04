@@ -1,6 +1,6 @@
 import pytest
 
-from findInTextJson import findInTextJson
+from .findInTextJson import findInTextJson
 
 
 def a_matcherFunction(text):
