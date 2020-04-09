@@ -12,8 +12,7 @@ from ArticlesDataDownloader.ACM.ACMArticlesHandler import ACMArticlesHandler
 from ArticlesDataDownloader.getLinkFromDoi import getLinkFromDoi
 from ArticlesDataDownloader.getDriver import getDriver
 from AutomatedSearchHelperUtilities.getDoiFilename import getDoiFilename
-
-from crossref.restful import Works
+from ArticlesDataDownloader.RefworksDataDownloader import RefworksDataDownloader
 
 
 class ArticlesDataDownloader:
@@ -22,7 +21,7 @@ class ArticlesDataDownloader:
         self.__handlers = None
         self.__logger = logging.getLogger("ArticlesDataDownloader")
         self.__proxyFile = proxy_file
-        self.__works = Works()
+        self.__refworks_downloader = RefworksDataDownloader()
         self.__scopus_downloader = None
         self._driver = None
 
@@ -34,28 +33,17 @@ class ArticlesDataDownloader:
         with open(filename) as json_file:
             return filename, json.load(json_file)
 
-    def write_article_to_file(self, article, doi, scopus_link):
+    def write_article_to_file(self, result_data, doi, scopus_link):
         filename = self.get_doi_filename(doi)
         self.__logger.info("Writing article to " + filename)
-
-        result_json = self.get_scopus_downloader().get_data(scopus_link)
-        result_json["doi"] = doi
-        result_json["text"] = article
-
-        try:
-            doi_data = self.__works.doi(doi)
-            result_json["publisher"] = doi_data.get("publisher", str())
-            result_json["authors"] = [x.get('given', str()) + ' ' + x.get('family', str()) for x in
-                                      doi_data.get("author", [])]
-            result_json["title"] = ' '.join(doi_data.get("title", str()))
-            result_json['read_status'] = 'OK'
-        except:
-            self.__logger.error("some error while reading doi data")
-            pass
+        result_data.doi = doi
+        result_data.merge(self.get_scopus_downloader().get_data(scopus_link))
+        result_data.merge(self.__refworks_downloader.get_data(doi))
+        result_data.read_status = 'OK'
 
         with open(filename, "w") as f:
-            f.write(json.dumps(result_json))
-        return filename, result_json
+            f.write(json.dumps(result_data.to_dict()))
+        return filename, result_data.to_dict()
 
     def doi_has_result_already(self, doi):
         filename = self.get_doi_filename(doi)
@@ -84,38 +72,62 @@ class ArticlesDataDownloader:
     def write_incorrect_doi_result(self, doi, scopus_link):
         filename = self.get_doi_filename(doi)
         self.__logger.info("Writing article to " + filename)
-        result_json = self.get_scopus_downloader().get_data(scopus_link)
+        result_data = self.get_scopus_downloader().get_data(scopus_link)
         if doi:
-            result_json["doi"] = doi
-        result_json["read_status"] = 'Incorrect doi'
+            result_data.doi = doi
+        result_data.read_status = 'Incorrect doi'
         with open(filename, "w") as f:
-            f.write(json.dumps(result_json))
-        return filename, result_json
+            f.write(json.dumps(result_data.to_dict()))
+        return filename, result_data.to_dict()
 
     def write_missing_handler_result(self, doi, scopus_link):
         filename = self.get_doi_filename(doi)
         self.__logger.info("Writing article to " + filename)
-        result_json = self.get_scopus_downloader().get_data(scopus_link)
+        result_data = self.get_scopus_downloader().get_data(scopus_link)
         if doi:
-            result_json["doi"] = doi
-        result_json["read_status"] = 'Publisher not supported'
+            result_data.doi = doi
+        result_data.read_status = 'Publisher not supported'
         with open(filename, "w") as f:
-            f.write(json.dumps(result_json))
-        return filename, result_json
+            f.write(json.dumps(result_data.to_dict()))
+        return filename, result_data.to_dict()
 
     def write_error_reading_article(self, doi, scopus_link):
         filename = self.get_doi_filename(doi)
         self.__logger.info("Writing article to " + filename)
-        result_json = self.get_scopus_downloader().get_data(scopus_link)
+        result_data = self.get_scopus_downloader().get_data(scopus_link)
         if doi:
-            result_json["doi"] = doi
-
-        result_json["read_status"] = 'Error while reading article or full text not available'
+            result_data.doi = doi
+        result_data.read_status = 'Error while reading article or full text not available'
         with open(filename, "w") as f:
-            f.write(json.dumps(result_json))
-        return filename, result_json
+            f.write(json.dumps(result_data.to_dict()))
+        return filename, result_data.to_dict()
 
     def readArticle(self, doi, scopus_link):
+        # if DOI NOT EMPTY
+            # Save scopus link
+            # Get link from doi
+        # if link empty and scopus link empty
+            # save incorrect
+        # for handler in handlers
+            # if link part matchers
+                # get filename for link/doi
+                # try reading filename
+                    # if successful
+                        # save
+                    # else
+                        # Try reading data
+                        # if success ->
+                            # save
+                        # Else
+                            # save read error
+                        # break
+        # if scopus link
+            # Get data from scopus
+            # if article has data
+                # merge
+            # else
+                # save scopus
+
         if self.doi_has_result_already(doi):
             self.__logger.info("Doi " + doi + " already parsed")
             return self.get_doi_filename_and_read_file(doi)

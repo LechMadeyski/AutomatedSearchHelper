@@ -2,6 +2,7 @@ from ArticlesDataDownloader.Willey.willeyHtmlToJson import willeyHtmlToJson
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from ArticlesDataDownloader.ArticleData import ArticleData
 import logging
 
 class WilleyArticlesHandler:
@@ -17,8 +18,7 @@ class WilleyArticlesHandler:
             element = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "article-section__content"))
             )
-            result = willeyHtmlToJson(self.driver.page_source)
-            return result
+            return ArticleData(text = willeyHtmlToJson(self.driver.page_source))
         except Exception as error:
             self.__logger.error(error)
             self.__logger.error("some error occured, moving on")

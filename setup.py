@@ -29,7 +29,7 @@ setup(
         'crossrefapi',
         'slate',
         'utils',
-        'RISparser',
+        'rispy',
         'nltk'],
     scripts=[
         'run_articles_download.py',

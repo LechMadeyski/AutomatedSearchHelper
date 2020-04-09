@@ -4,8 +4,7 @@ import logging
 
 from nltk import tokenize
 
-def formatTextAndSplitIntoSentences(text):
-    return tokenize.sent_tokenize(text.replace("\n", "").replace("\r", ""))
+from ArticlesDataDownloader.format_text_and_split_into_sentences import format_text_and_split_into_sentences
 
 
 def scienceDirectHtmlToJson(textHTML):
@@ -22,7 +21,7 @@ def scienceDirectHtmlToJson(textHTML):
 
     outputJson.append({
         'title':'Abstract',
-        'paragraphs' : [{"sentences":formatTextAndSplitIntoSentences(abstractText)}]
+        'paragraphs' : [{"sentences":format_text_and_split_into_sentences(abstractText)}]
     })
 
     logger.debug("Abstract read correctly")
@@ -45,7 +44,7 @@ def scienceDirectHtmlToJson(textHTML):
 
         paragraphs = []
         for par in sec.findAll('p'):
-            paragraphs.append({"sentences": formatTextAndSplitIntoSentences(par.text)})
+            paragraphs.append({"sentences": format_text_and_split_into_sentences(par.text)})
 
         logger.info("Reading section : " + title)
         sec_data = {

@@ -2,12 +2,7 @@ from bs4 import BeautifulSoup
 
 import logging
 
-from nltk import tokenize
-
-
-def formatTextAndSplitIntoSentences(text):
-    return tokenize.sent_tokenize(text.replace("\n", "").replace("\r", ""))
-
+from ArticlesDataDownloader.format_text_and_split_into_sentences import format_text_and_split_into_sentences
 
 def willeyHtmlToJson(textHTML):
     logger = logging.getLogger("willeyHtmlToJson")
@@ -27,7 +22,7 @@ def willeyHtmlToJson(textHTML):
 
         paragraphs = []
         for par in sec.findAll('p'):
-            paragraphs.append({"sentences": formatTextAndSplitIntoSentences(par.text)})
+            paragraphs.append({"sentences": format_text_and_split_into_sentences(par.text)})
 
         logger.info("Reading section : " + title)
         secData = {

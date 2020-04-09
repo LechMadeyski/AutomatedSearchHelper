@@ -140,7 +140,7 @@ def generate_data_doi_data(db, doi_id):
         'doi': article_data.doi,
         'issn': article_data.issn,
         'published_in' : article_data.journal_name,
-        'jurnal_info': article_data.journal_info,
+        'journal_info': article_data.journal_info,
         'publisher': article_data.publisher,
         'authors': article_data.authors,
         'scopus_link': article_data.scopus_link,

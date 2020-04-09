@@ -21,7 +21,6 @@ def setup_downloader(should_clear = SHOULD_CLEAR):
         shutil.rmtree(TEST_DIRECTORY)
 
 
-
 def test_science_direct_html_by_doi(setup_downloader):
     DOI = "10.1016/j.ins.2019.08.077"
     filename, resultData = setup_downloader.readArticle(DOI, '')
@@ -49,6 +48,9 @@ def test_springer_html_by_doi(setup_downloader):
     filename, resultData = setup_downloader.readArticle(DOI, '')
 
     assert filename == TEST_DIRECTORY + '/10.1007_978-3-030-38364-0_32.json'
+    assert resultData['publisher_link'] == 'http://link.springer.com/10.1007/978-3-030-38364-0_32'
+    assert resultData['publish_year'] == '2020'
+
     assert resultData['read_status'] == 'OK'
     assert resultData['title'] == 'An Improvement of Applying Multi-objective Optimization Algorithm into Higher Order Mutation Testing'
     assert resultData['doi'] == DOI
@@ -141,6 +143,23 @@ def test_acm_pdf_by_doi(setup_downloader):
     assert 'RESULT ANALYSIS' in resultData['text'][6]['title']
     assert 'CONCLUSION' in resultData['text'][7]['title']
     assert 'REFERENCES' in resultData['text'][8]['title']
+
+
+def test_article_with_scopus_link_only(setup_downloader):
+    SCOPUS_LINK = 'https://www.scopus.com/record/display.uri?eid=2-s2.0-85074719668&origin=inward&txGid=743ab63d74ada4f8f3059ad6e752522e'
+    filename, resultData = setup_downloader.readArticle('anyName', SCOPUS_LINK)
+
+    assert filename == TEST_DIRECTORY + '/anyName.json'
+
+
+
+
+
+
+
+
+
+
 
 
 #Already has file

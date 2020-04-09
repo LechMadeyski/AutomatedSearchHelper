@@ -2,10 +2,7 @@ from bs4 import BeautifulSoup
 
 import logging
 
-from nltk import tokenize
-
-def formatTextAndSplitIntoSentences(text):
-    return [s for s in tokenize.sent_tokenize(text.replace("\n", "").replace("\r", "")) if len(s)>0]
+from ArticlesDataDownloader.format_text_and_split_into_sentences import format_text_and_split_into_sentences
 
 def ieeeHtmlToJson(textHTML):
     logger = logging.getLogger("ieeeHtmlToJson")
@@ -21,7 +18,7 @@ def ieeeHtmlToJson(textHTML):
 
     outputJson.append({
         'title':'Abstract',
-        'paragraphs' : [{"sentences":formatTextAndSplitIntoSentences(abstractText)}]
+        'paragraphs' : [{"sentences":format_text_and_split_into_sentences(abstractText)}]
     })
 
     logger.debug("Abstract read correctly")
@@ -34,7 +31,7 @@ def ieeeHtmlToJson(textHTML):
 
         paragraphs = [{"sentences": [title]}]
         for par in sec.findAll('p'):
-            sentences = formatTextAndSplitIntoSentences(par.text)
+            sentences = format_text_and_split_into_sentences(par.text)
             if len(sentences) > 0:
                 paragraphs.append({"sentences" : sentences})
 

@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from nltk import tokenize
 import time
 import logging
+from .ArticleData import ArticleData
 
 def formatTextAndSplitIntoSentences(text):
     return tokenize.sent_tokenize(text.replace("\n", "").replace("\r", ""))
@@ -12,18 +13,7 @@ ISSN = 'ISSN: '
 DOI = 'DOI: '
 
 def prepare_default(scopus_link):
-    return {
-        'text': list(),
-        'doi': str(),
-        'journalName': str(),
-        'journalInfo': str(),
-        'title': str(),
-        'authors': list(),
-        'publisher': str(),
-        'issn': str(),
-        'scopus_link': str(scopus_link),
-        'publisher_link': str()
-    }
+    return ArticleData(scopus_link = scopus_link)
 
 class ScopusDataDownloader:
 
@@ -35,38 +25,37 @@ class ScopusDataDownloader:
         self._logger.info('Trying to read ' + link)
         self._driver.get(link)
         result = prepare_default(link)
-        result['scopus_link'] = link
         soup = BeautifulSoup(self._driver.page_source, "html.parser")
         abstract_text = soup.findAll('section', {'id': 'abstractSection'})[0].findAll('p')[0].text
-        result['text'] = [
+        result.text = [
             {'title': 'Abstract', 'paragraphs': [{'sentences': formatTextAndSplitIntoSentences(abstract_text)}]}]
-        journalName = soup.findAll('span', {'id': "publicationTitle"})
-        if journalName:
-            result['journalName'] = journalName[0].text
+        journal_name = soup.findAll('span', {'id': "publicationTitle"})
+        if journal_name:
+            result.journal_name = journal_name[0].text
         else:
-            result['journalName'] = soup.findAll('span', {'id': "noSourceTitleLink"})[0].text
-        result['journalInfo'] = soup.findAll('span', {'id': "journalInfo"})[0].text
-        result['title'] = soup.find('h2', {'class': "h3"}).findAll(text=True, recursive=False)[0].strip()
+            result.journal_name = soup.findAll('span', {'id': "noSourceTitleLink"})[0].text
+        result.journal_info = soup.findAll('span', {'id': "journalInfo"})[0].text
+        result.title = soup.find('h2', {'class': "h3"}).findAll(text=True, recursive=False)[0].strip()
         authors_base = soup.findAll('section', {'id': 'authorlist'})
         if authors_base:
             authors_html = authors_base[0].findAll('li')
-            result['authors'] = []
+            result.authors = []
             for item in authors_html:
                 author = item.findAll('span', {'class': "anchorText"})
                 if len(author) > 0:
-                    result['authors'].append(author[0].text)
+                    result.authors.append(author[0].text)
 
         for ref in soup.findAll('section', {'id': 'referenceInfo'})[0].findAll('li'):
             pub_idx = ref.text.find(PUBLISHER)
             if pub_idx != -1:
-                result['publisher'] = ref.text[pub_idx + len(PUBLISHER):]
+                result.publisher = ref.text[pub_idx + len(PUBLISHER):]
 
             issn_idx = ref.text.find(ISSN)
             if issn_idx != -1:
-                result['issn'] = ref.text[issn_idx + len(ISSN):]
+                result.issn = ref.text[issn_idx + len(ISSN):]
             doi_idx = ref.text.find(DOI)
             if doi_idx != -1:
-                result['doi'] = ref.text[doi_idx+len(DOI):]
+                result.doi = ref.text[doi_idx+len(DOI):]
         return result
 
     def get_data(self, link):

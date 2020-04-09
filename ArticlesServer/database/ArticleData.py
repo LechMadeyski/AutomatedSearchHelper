@@ -23,11 +23,11 @@ class ArticleData:
 
     @property
     def journal_name(self):
-        return self._article_data.get('journalName', str())
+        return self._article_data.get('journalName', str()) or self._article_data.get('journal_name', str())
 
     @property
     def journal_info(self):
-        return self._article_data.get('journalInfo', str())
+        return self._article_data.get('journalInfo', str()) or self._article_data.get('journal_info', str())
 
     @property
     def publisher(self):

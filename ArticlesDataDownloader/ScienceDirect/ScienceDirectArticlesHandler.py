@@ -4,6 +4,7 @@ import selenium
 import logging
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
+from ArticlesDataDownloader.ArticleData import ArticleData
 
 ##RIS EXAMPLE LINK https://www.sciencedirect.com/sdfe/arp/cite?pii=S0020025519308242&format=application%2Fx-research-info-systems&withabstract=false
 
@@ -35,7 +36,7 @@ class ScienceDirectArticlesHandler():
             self.driver.get(url)
             self.__logger.debug("Called get for  " + url)
             WebDriverWait(self.driver, 20).until(article_ready)
-            return scienceDirectHtmlToJson(self.driver.page_source)
+            return ArticleData(text = scienceDirectHtmlToJson(self.driver.page_source))
         except Exception as error:
             self.__logger.error(str(error))
             self.__logger.error("some error occured, moving on")

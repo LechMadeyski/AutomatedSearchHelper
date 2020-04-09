@@ -5,6 +5,7 @@ import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.wait import WebDriverWait
+from ArticlesDataDownloader.ArticleData import ArticleData
 
 class IEEEArticlesHandler():
     def __init__(self, driver):
@@ -20,7 +21,7 @@ class IEEEArticlesHandler():
             element = WebDriverWait(self.driver, 10).until(
                 lambda x: x.find_element_by_id("article"))
 
-            return ieeeHtmlToJson(self.driver.page_source)
+            return ArticleData(text = ieeeHtmlToJson(self.driver.page_source))
         except Exception as error:
             self.__logger.error(error)
             self.__logger.error("some error occured, moving on")
