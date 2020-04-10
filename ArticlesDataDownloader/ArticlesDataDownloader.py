@@ -141,10 +141,10 @@ class ArticlesDataDownloader:
         self.__logger.info("Real link is " + str(real_link))
 
         for handler in self.get_handlers():
-            self.__logger.debug("Checking " + handler.name() + " with link part " + handler.linkPart())
-            if handler.linkPart() in real_link:
+            self.__logger.debug("Checking " + handler.name() + " with link part " + handler.link_part())
+            if handler.link_part() in real_link:
                 self.__logger.info("Link will be handled by " + handler.name())
-                article = handler.getArticle(real_link)
+                article = handler.get_article(real_link)
 
                 if article is None:
                     self.__logger.error("Could not read article")

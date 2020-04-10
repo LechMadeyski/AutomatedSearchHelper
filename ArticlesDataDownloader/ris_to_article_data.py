@@ -24,12 +24,14 @@ def __entry_to_article_data(entry):
     return res
 
 
-def ris_to_article_data(filepath):
-    with open(filepath, 'r', buffering=-1, encoding=None) as bibliography_file:
-        file_as_string = bibliography_file.read()
-        entries = rispy.loads(file_as_string)
-        for entry in entries:
-            print('Analyzing entry ' + str(entry))
-            return __entry_to_article_data(entry)
+def ris_text_to_article_data(text):
+    entries = rispy.loads(text)
+    for entry in entries:
+        print('Analyzing entry ' + str(entry))
+        return __entry_to_article_data(entry)
     raise AssertionError('Could not find proper ris entry')
 
+
+def ris_to_article_data(filepath):
+    with open(filepath, 'r', buffering=-1, encoding=None) as bibliography_file:
+        return ris_text_to_article_data(bibliography_file.read())

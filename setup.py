@@ -30,7 +30,7 @@ setup(
         'slate',
         'utils',
         'rispy',
-        'nltk'],
+        'nltk', 'selenium'],
     scripts=[
         'run_articles_download.py',
         'run_articles_search.py',

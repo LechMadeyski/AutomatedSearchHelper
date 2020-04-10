@@ -5,29 +5,33 @@ import logging
 from ArticlesDataDownloader.ArticleData import ArticleData
 from ArticlesDataDownloader.Springer.springer_html_to_article_data import springer_html_to_article_data
 from ArticlesDataDownloader.ris_to_article_data import ris_to_article_data
-
-from ArticlesDataDownloader.download_file_from_link_to_path import download_file_from_link_to_path
+from ArticlesDataDownloader.download_utilities import wait_for_file_download, wait_until_all_files_downloaded
+import os
+import time
+from ArticlesDataDownloader.download_utilities import download_file_from_link_to_path
 
 class SpringerArticlesHandler():
     def __init__(self, driver):
         self.driver = driver
         self.__logger = logging.getLogger("SpringerArticlesHandler")
 
-    def getArticle(self, url):
+    def get_article(self, url):
         self.__logger.debug("Springer::getArticle start " + url)
 
         result_data = ArticleData(publisher_link=url)
-
-
         url_to_ris = url.replace('http://link.springer.com/', 'https://citation-needed.springer.com/v2/references/')+ \
                      '?format=refman&flavour=citation'
         self.driver.get(url_to_ris)
-        filename = url.replace('http://link.springer.com/', '').replace('/', '_') +'.ris'
-        print(self.driver.page_source)
+        filename = url.replace('http://link.springer.com/', '').replace('/', '_') + '.ris'
 
         self.__logger.debug('Trying to ger article data from', filename)
-
-        result_data.merge(ris_to_article_data(filename))
+        wait_until_all_files_downloaded(self.driver)
+        if wait_for_file_download(filename):
+            self.__logger.debug('File downloaded successfully - reading data')
+            result_data.merge(ris_to_article_data(filename))
+            os.remove(filename)
+        else:
+            self.__logger.warning('Could not download ris file for ' + url)
 
         try:
             self.driver.get(url)
@@ -43,8 +47,10 @@ class SpringerArticlesHandler():
             self.__logger.error("some error occured, moving on")
             return None
 
-    def linkPart(self):
+
+    def link_part(self):
         return "link.springer.com"
+
 
     def name(self):
         return "Springer"

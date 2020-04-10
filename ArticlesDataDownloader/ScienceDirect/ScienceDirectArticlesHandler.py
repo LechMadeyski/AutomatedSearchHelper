@@ -27,7 +27,7 @@ class ScienceDirectArticlesHandler():
         self.driver = driver
         self.__logger = logging.getLogger("ScienceDirectArticlesHandler")
 
-    def getArticle(self, url):
+    def get_article(self, url):
         url = url.replace("linkinghub.elsevier.com/retrieve/", "sciencedirect.com/science/article/")
         self.__logger.info("Url changed to " + url)
         self.__logger.debug("ScienceDirect::getArticle start " + url)
@@ -42,7 +42,7 @@ class ScienceDirectArticlesHandler():
             self.__logger.error("some error occured, moving on")
             return None
 
-    def linkPart(self):
+    def link_part(self):
         return "linkinghub.elsevier.com"
 
     def name(self):

@@ -1,6 +1,38 @@
 
 import time
+import os
 from os import path
+from selenium.webdriver.support.wait import WebDriverWait
+
+
+def __download_indictor_is_present():
+    for i in os.listdir("."):
+        if ".crdownload" in i:
+            return True
+    return False
+
+
+def wait_for_file_download(file_path, max_times=10):
+    for i in range(max_times):
+        if os.path.exists(file_path) and not __download_indictor_is_present():
+            return True
+        time.sleep(0.5)
+    return False
+
+
+def __every_downloads_chrome(driver):
+    if not driver.current_url.startswith("chrome://downloads"):
+        driver.get("chrome://downloads/")
+    return driver.execute_script("""
+        var items = downloads.Manager.get().items_;
+        if (items.every(e => e.state === "COMPLETE"))
+            return items.map(e => e.fileUrl || e.file_url);
+        """)
+
+
+def wait_until_all_files_downloaded(driver):
+    WebDriverWait(driver, 120, 1).until(__every_downloads_chrome)
+
 
 def download_file_from_link_to_path(driver, link, output_name):
     file_saver_min_js = '''
@@ -23,5 +55,5 @@ def download_file_from_link_to_path(driver, link, output_name):
                     }});
                     ''' % (link, output_name)
     driver.execute_script(download_script)
-    time.sleep(10)
+    wait_until_all_files_downloaded(driver)
 
