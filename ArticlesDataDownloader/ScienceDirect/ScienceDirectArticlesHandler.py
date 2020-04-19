@@ -1,12 +1,19 @@
+import os
+
 from ArticlesDataDownloader.ScienceDirect.scienceDirectHtmlToJson import scienceDirectHtmlToJson
 
 import selenium
+import re
 import logging
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from ArticlesDataDownloader.ArticleData import ArticleData
+from ArticlesDataDownloader.download_utilities import wait_until_all_files_downloaded, wait_for_file_download
+from ArticlesDataDownloader.ris_to_article_data import ris_to_article_data
+from ArticlesDataDownloader.download_utilities import download_file_from_link_to_path
 
-##RIS EXAMPLE LINK https://www.sciencedirect.com/sdfe/arp/cite?pii=S0020025519308242&format=application%2Fx-research-info-systems&withabstract=false
+from ArticlesDataDownloader.ACM.extract_text_from_pdf import read_pdf_as_json
+
 
 def article_ready(x):
     found = False
@@ -32,14 +39,52 @@ class ScienceDirectArticlesHandler():
         self.__logger.info("Url changed to " + url)
         self.__logger.debug("ScienceDirect::getArticle start " + url)
 
+
+        result_data = ArticleData(publisher_link=url)
+
+        self.driver.get(url)
+
+        export_button = WebDriverWait(self.driver, 10).until(
+            lambda x: x.find_element_by_xpath(
+                "//div[@id='popover-trigger-export-citation-popover']/button"))
+        export_button.click()
+
+        ris_download_button = WebDriverWait(self.driver, 10).until(
+            lambda x: x.find_element_by_xpath("//button[@aria-label='ris']"))
+        ris_download_button.click()
+
+
+        ris_filename = url.split('/')[-1] + '.ris'
+        wait_until_all_files_downloaded(self.driver)
+        if wait_for_file_download(ris_filename):
+            self.__logger.debug('File downloaded successfully - reading data')
+            result_data.merge(ris_to_article_data(ris_filename))
+            os.remove(ris_filename)
+
         try:
             self.driver.get(url)
             self.__logger.debug("Called get for  " + url)
             WebDriverWait(self.driver, 20).until(article_ready)
-            return ArticleData(text = scienceDirectHtmlToJson(self.driver.page_source))
+            result_data.merge(ArticleData(text = scienceDirectHtmlToJson(self.driver.page_source)))
+            return result_data
         except Exception as error:
             self.__logger.error(str(error))
-            self.__logger.error("some error occured, moving on")
+            self.__logger.error("Could not read html text for " + url)
+
+            try:
+                id = re.findall("/pii/(.*?)/", url+'/')[0]
+                pdf_link = 'https://www.sciencedirect.com/science/article/pii/%s/pdfft?isDTMRedir=true&download=true'%id
+                self.__logger.info('Trying to get pdf from ' + pdf_link)
+                print('PDF LINK :  ' + pdf_link)
+                output_filename = 'temporary.pdf'
+                download_file_from_link_to_path(self.driver, pdf_link, output_filename)
+                result_reading = ArticleData(text=read_pdf_as_json('temporary.pdf'))
+                os.remove('temporary.pdf')
+                result_data.merge(result_reading)
+                return result_data
+            except:
+                os.remove('temporary.pdf')
+                self.__logger.error('Failed to read from pdf')
             return None
 
     def link_part(self):

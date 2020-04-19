@@ -37,7 +37,7 @@ class ArticlesDataDownloader:
         filename = self.get_doi_filename(doi)
         self.__logger.info("Writing article to " + filename)
         result_data.doi = doi
-        result_data.merge(self.get_scopus_downloader().get_data(scopus_link))
+        # result_data.merge(self.get_scopus_downloader().get_data(scopus_link))
         result_data.merge(self.__refworks_downloader.get_data(doi))
         result_data.read_status = 'OK'
 
@@ -102,49 +102,31 @@ class ArticlesDataDownloader:
             f.write(json.dumps(result_data.to_dict()))
         return filename, result_data.to_dict()
 
-    def readArticle(self, doi, scopus_link):
-        # if DOI NOT EMPTY
-            # Save scopus link
-            # Get link from doi
-        # if link empty and scopus link empty
-            # save incorrect
-        # for handler in handlers
-            # if link part matchers
-                # get filename for link/doi
-                # try reading filename
-                    # if successful
-                        # save
-                    # else
-                        # Try reading data
-                        # if success ->
-                            # save
-                        # Else
-                            # save read error
-                        # break
-        # if scopus link
-            # Get data from scopus
-            # if article has data
-                # merge
-            # else
-                # save scopus
 
+    def readArticle(self, doi, scopus_link, publisher_link=''):
+        self.__logger.info("Reading doi : " + doi)
         if self.doi_has_result_already(doi):
             self.__logger.info("Doi " + doi + " already parsed")
             return self.get_doi_filename_and_read_file(doi)
 
-        self.__logger.info("Reading doi : " + doi)
-        real_link = str(getLinkFromDoi(doi))
-        if real_link is None:
-            self.__logger.error("Could not find link from doi")
+        if not doi and scopus_link:
+            # try get data from scopus
+            self.write_incorrect_doi_result(doi, scopus_link)
+
+        if not publisher_link:
+            publisher_link = str(getLinkFromDoi(doi))
+
+        if not publisher_link:
+            self.__logger.error('could not find publisher link for DOI ' + doi)
             return self.write_incorrect_doi_result(doi, scopus_link)
 
-        self.__logger.info("Real link is " + str(real_link))
+        self.__logger.info("Publisher link is " + str(publisher_link))
 
         for handler in self.get_handlers():
             self.__logger.debug("Checking " + handler.name() + " with link part " + handler.link_part())
-            if handler.link_part() in real_link:
+            if handler.link_part() in publisher_link:
                 self.__logger.info("Link will be handled by " + handler.name())
-                article = handler.get_article(real_link)
+                article = handler.get_article(publisher_link)
 
                 if article is None:
                     self.__logger.error("Could not read article")
@@ -152,8 +134,9 @@ class ArticlesDataDownloader:
                 else:
                     return self.write_article_to_file(article, doi, scopus_link)
         else:
-            self.__logger.error("Could not find handler for " + real_link)
+            self.__logger.error("Could not find handler for " + publisher_link)
             return self.write_missing_handler_result(doi, scopus_link)
+
 
     def getDownloadArticles(self, doiList):
         result_filenames = list()

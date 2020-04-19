@@ -6,6 +6,7 @@ from ArticlesDataDownloader.ArticleData import ArticleData
 from ArticlesDataDownloader.ris_to_article_data import ris_text_to_article_data
 import logging
 
+
 class WilleyArticlesHandler:
     def __init__(self, driver):
         self.driver = driver
@@ -40,9 +41,6 @@ class WilleyArticlesHandler:
         download_button = WebDriverWait(self.driver, 10).until(
             lambda x: x.find_element_by_xpath("//input[@value='Download']"))
         download_button.click()
-
-        import time
-        time.sleep(1)
 
         pre = WebDriverWait(self.driver, 10).until(lambda x: x.find_element_by_xpath("//pre"))
         result_data.merge(ris_text_to_article_data(pre.get_attribute('innerHTML')))

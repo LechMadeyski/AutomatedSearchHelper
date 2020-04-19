@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from nltk import tokenize
-import time
+from selenium.webdriver.support.wait import WebDriverWait
 import logging
 from .ArticleData import ArticleData
 
@@ -23,9 +23,16 @@ class ScopusDataDownloader:
 
     def _try_getting_data(self, link):
         self._logger.info('Trying to read ' + link)
+        self._logger.info("Calling get")
         self._driver.get(link)
+
+        WebDriverWait(self._driver, 10).until(
+            lambda x: self._driver.find_element_by_xpath("//section[@id='abstractSection']"))
+
         result = prepare_default(link)
+        self._logger.info("Got link preparin soap")
         soup = BeautifulSoup(self._driver.page_source, "html.parser")
+        self._logger.info("Got soap - analysis start")
         abstract_text = soup.findAll('section', {'id': 'abstractSection'})[0].findAll('p')[0].text
         result.text = [
             {'title': 'Abstract', 'paragraphs': [{'sentences': formatTextAndSplitIntoSentences(abstract_text)}]}]
@@ -56,15 +63,12 @@ class ScopusDataDownloader:
             doi_idx = ref.text.find(DOI)
             if doi_idx != -1:
                 result.doi = ref.text[doi_idx+len(DOI):]
+
+        self._logger.info("Soap analysis end")
         return result
 
     def get_data(self, link):
         if link and link != str():
-            for i in range(3):
-                try:
-                    return self._try_getting_data(link)
-                except:
-                    time.sleep(2)
             return self._try_getting_data(link)
 
         self._logger.error('Could not read data from ' + link)
