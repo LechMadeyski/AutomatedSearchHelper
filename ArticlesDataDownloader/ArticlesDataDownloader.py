@@ -3,7 +3,7 @@ import logging
 import os
 
 from ArticlesDataDownloader.IEEE.IEEEArticlesHandler import IEEEArticlesHandler
-from ArticlesDataDownloader.ScopusDataDownloader import ScopusDataDownloader
+from ArticlesDataDownloader.Scopus.ScopusDataDownloader import ScopusDataDownloader
 from ArticlesDataDownloader.Willey.WilleyArticlesHandler import WilleyArticlesHandler
 from ArticlesDataDownloader.ScienceDirect.ScienceDirectArticlesHandler import ScienceDirectArticlesHandler
 from ArticlesDataDownloader.Springer.SpringerArticlesHandler import SpringerArticlesHandler

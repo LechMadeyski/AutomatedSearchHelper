@@ -13,7 +13,7 @@ def __entry_to_article_data(entry):
     res.authors = entry.get('authors', list())
     res.issn = entry.get('issn', str())
     res.publisher = entry.get('publisher', str())
-    res.doi = entry.get('doi', str())
+    res.doi = entry.get('doi', str()).replace('https://doi.org/', str())
     res.journal_name = entry.get('journal_name', str())
     res.publish_year = entry.get('year', str())
 
@@ -35,3 +35,8 @@ def ris_text_to_article_data(text):
 def ris_to_article_data(filepath):
     with open(filepath, 'r', buffering=-1, encoding=None) as bibliography_file:
         return ris_text_to_article_data(bibliography_file.read())
+
+
+def ris_to_article_datas(filepath):
+    with open(filepath, 'r', buffering=-1, encoding=None) as bibliography_file:
+        return [__entry_to_article_data(x) for x in rispy.loads(bibliography_file.read())]

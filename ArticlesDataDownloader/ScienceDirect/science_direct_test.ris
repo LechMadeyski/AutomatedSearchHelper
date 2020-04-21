@@ -1,0 +1,604 @@
+TY  - JOUR
+T1  - A path-aware approach to mutant reduction in mutation testing
+AU  - Sun, Chang-ai
+AU  - Xue, Feifei
+AU  - Liu, Huai
+AU  - Zhang, Xiangyu
+JO  - Information and Software Technology
+VL  - 81
+SP  - 65
+EP  - 81
+PY  - 2017
+DA  - 2017/01/01/
+SN  - 0950-5849
+DO  - https://doi.org/10.1016/j.infsof.2016.02.006
+UR  - http://www.sciencedirect.com/science/article/pii/S0950584916300246
+KW  - Mutation testing
+KW  - Selective mutation testing
+KW  - Control flow
+KW  - Path depth
+AB  - Context: Mutation testing, which systematically generates a set of mutants by seeding various faults into the base program under test, is a popular technique for evaluating the effectiveness of a testing method. However, it normally requires the execution of a large amount of mutants and thus incurs a high cost. Objective: A common way to decrease the cost of mutation testing is mutant reduction, which selects a subset of representative mutants. In this paper, we propose a new mutant reduction approach from the perspective of program structure. Method: Our approach attempts to explore path information of the program under test, and select mutants that are as diverse as possible with respect to the paths they cover. We define two path-aware heuristic rules, namely module-depth and loop-depth rules, and combine them with statement- and operator-based mutation selection to develop four mutant reduction strategies. Results: We evaluated the cost-effectiveness of our mutant reduction strategies against random mutant selection on 11 real-life C programs with varying sizes and sampling ratios. Our empirical studies show that two of our mutant reduction strategies, which primarily rely on the path-aware heuristic rules, are more effective and systematic than pure random mutant selection strategy in terms of selecting more representative mutants. In addition, among all four strategies, the one giving loop-depth the highest priority has the highest effectiveness. Conclusion: In general, our path-aware approach can reduce the number of mutants without jeopardizing its effectiveness, and thus significantly enhance the overall cost-effectiveness of mutation testing. Our approach is particularly useful for the mutation testing on large-scale complex programs that normally involve a huge amount of mutants with diverse fault characteristics.
+ER  - 
+
+TY  - JOUR
+T1  - Memory mutation testing
+AU  - Wu, Fan
+AU  - Nanavati, Jay
+AU  - Harman, Mark
+AU  - Jia, Yue
+AU  - Krinke, Jens
+JO  - Information and Software Technology
+VL  - 81
+SP  - 97
+EP  - 111
+PY  - 2017
+DA  - 2017/01/01/
+SN  - 0950-5849
+DO  - https://doi.org/10.1016/j.infsof.2016.03.002
+UR  - http://www.sciencedirect.com/science/article/pii/S0950584916300362
+KW  - Mutation testing
+KW  - Memory mutation
+AB  - Context Three decades of mutation testing development have given software testers a rich set of mutation operators, yet relatively few operators can target memory faults (as we demonstrate in this paper). Objective To address this shortcoming, we introduce Memory Mutation Testing, proposing 9 Memory Mutation Operators each of which targets common forms of memory fault. We compare Memory Mutation Operators with traditional Mutation Operators, while handling equivalent and duplicate mutants. Method We extend our previous workshop paper, which introduced Memory Mutation Testing, with a more extensive and precise analysis of 18 open source programs, including 2 large real-world programs, all of which come with well-designed unit test suites. Specifically, our empirical study makes use of recent results on Trivial Compiler Equivalence (TCE) to identify both equivalent and duplicate mutants. Though the literature on mutation testing has previously deployed various techniques to cater for equivalent mutants, no previous study has catered for duplicate mutants. Results Catering for such extraneous mutants improves the precision with which claims about mutation scores can be interpreted. We also report the results of a new empirical study that compares Memory Mutation Testing with traditional Mutation Testing, providing evidence to support the claim that traditional mutation testing inadequately captures memory faults; 2% of the memory mutants are TCE-duplicates of traditional mutants and average test suite effectiveness drops by 44% when the target shifts from traditional mutants to memory mutants. Conclusions Introducing Memory Mutation Operators will cost only a small portion of the overall testing effort, yet generate higher quality mutants compared with traditional operators. Moreover, TCE technique does not only help with reducing testing effort, but also improves the precision of assessment on test quality, therefore should be considered in other Mutation Testing studies.
+ER  - 
+
+TY  - JOUR
+T1  - Multicenter Evaluation of the Idylla NRAS-BRAF Mutation Test in Metastatic Colorectal Cancer
+AU  - Prieto-Potin, Iván
+AU  - Montagut, Clara
+AU  - Bellosillo, Beatriz
+AU  - Evans, Matthew
+AU  - Smith, Matthew
+AU  - Melchior, Linea
+AU  - Reiltin, Werner
+AU  - Bennett, Michael
+AU  - Pennati, Veronica
+AU  - Castiglione, Francesca
+AU  - Bürrig, Karl-Friedrich
+AU  - Cooper, Ulrike
+AU  - Dockhorn-Dworniczak, Barbara
+AU  - Rossenbach, Christiana
+AU  - Luna-Aguirre, Claudia M.
+AU  - Barrera-Saldaña, Hugo A.
+AU  - Machado, José C.
+AU  - Costa, José L.
+AU  - Yacobi, Rinat
+AU  - Tabibian-Keissar, Hilla
+AU  - Buglioni, Simonetta
+AU  - Ronchetti, Livia
+AU  - Douglas-Berger, Lotte
+AU  - Dubbink, Hendrikus J.
+AU  - Alorini, Mohammed
+AU  - Sabourin, Jean-Christophe
+AU  - Rojo, Federico
+JO  - The Journal of Molecular Diagnostics
+VL  - 20
+IS  - 5
+SP  - 664
+EP  - 676
+PY  - 2018
+DA  - 2018/09/01/
+SN  - 1525-1578
+DO  - https://doi.org/10.1016/j.jmoldx.2018.05.008
+UR  - http://www.sciencedirect.com/science/article/pii/S1525157818300953
+AB  - Treatment of colorectal cancer (CRC) with monoclonal antibodies against epidermal growth factor receptor requires the assessment of the mutational status of exons 2, 3, and 4 of the NRAS and KRAS oncogenes. Moreover, the mutational status of exon 15 of the BRAF oncogene is a marker of poor prognosis in CRC. The Idylla NRAS-BRAF Mutation Test is a reliable, simple (<2 minutes hands-on time), and quick (<2 hours turnaround time) sample-to-result solution, enabling the detection of clinically relevant mutations in NRAS (18 mutations) and BRAF (5 mutations). A multicenter study was conducted in 14 centers using the Idylla NRAS-BRAF Mutation Test to assess the NRAS and BRAF mutational status of 418 formalin-fixed, paraffin-embedded tissue samples from CRC patients. Results were compared with those obtained earlier by routine reference methods, including next-generation sequencing, pyrosequencing, mass spectrometry–based assays, PCR-based assays, and Sanger sequencing. In case of discordance, additional tests were performed by digital droplet PCR. Overall, after testing confirmation and excluding invalids/errors by design, concordances between the Idylla NRAS-BRAF Mutation Test and the reference test results were found in almost perfect agreement. In conclusion, the Idylla NRAS-BRAF Mutation Test enables the routine detection of all NRAS and BRAF mutations deemed clinically relevant according to the latest clinical guidelines, without necessitating molecular expertise or infrastructure.
+ER  - 
+
+TY  - CHAP
+T1  - Chapter Six - Mutation Testing Advances: An Analysis and Survey
+AU  - Papadakis, Mike
+AU  - Kintis, Marinos
+AU  - Zhang, Jie
+AU  - Jia, Yue
+AU  - Traon, Yves Le
+AU  - Harman, Mark
+A2  - Memon, Atif M.
+BT  - Advances in Computers
+PB  - Elsevier
+VL  - 112
+SP  - 275
+EP  - 378
+PY  - 2019
+DA  - 2019/01/01/
+SN  - 0065-2458
+DO  - https://doi.org/10.1016/bs.adcom.2018.03.015
+UR  - http://www.sciencedirect.com/science/article/pii/S0065245818300305
+KW  - Mutation testing
+KW  - Software testing
+KW  - Survey
+KW  - Seeded faults
+AB  - Mutation testing realizes the idea of using artificial defects to support testing activities. Mutation is typically used as a way to evaluate the adequacy of test suites, to guide the generation of test cases, and to support experimentation. Mutation has reached a maturity phase and gradually gains popularity both in academia and in industry. This chapter presents a survey of recent advances, over the past decade, related to the fundamental problems of mutation testing and sets out the challenges and open problems for the future development of the method. It also collects advices on best practices related to the use of mutation in empirical studies of software testing. Thus, giving the reader a “mini-handbook”-style roadmap for the application of mutation testing as experimental methodology.
+ER  - 
+
+TY  - JOUR
+T1  - Semantic mutation testing
+AU  - Clark, John A.
+AU  - Dan, Haitao
+AU  - Hierons, Robert M.
+JO  - Science of Computer Programming
+VL  - 78
+IS  - 4
+SP  - 345
+EP  - 363
+PY  - 2013
+DA  - 2013/04/01/
+T2  - Special section on Mutation Testing and Analysis (Mutation 2010) & Special section on the Programming Languages track at the 25th ACM Symposium on Applied Computing
+SN  - 0167-6423
+DO  - https://doi.org/10.1016/j.scico.2011.03.011
+UR  - http://www.sciencedirect.com/science/article/pii/S0167642311000992
+KW  - Mutation testing
+KW  - Semantics
+KW  - Misunderstandings
+AB  - Mutation testing is a powerful and flexible test technique. Traditional mutation testing makes a small change to the syntax of a description (usually a program) in order to create a mutant. A test suite is considered to be good if it distinguishes between the original description and all of the (functionally non-equivalent) mutants. These mutants can be seen as representing potential small slips and thus mutation testing aims to produce a test suite that is good at finding such slips. It has also been argued that a test suite that finds such small changes is likely to find larger changes. This paper describes a new approach to mutation testing, called semantic mutation testing. Rather than mutate the description, semantic mutation testing mutates the semantics of the language in which the description is written. The mutations of the semantics of the language represent possible misunderstandings of the description language and thus capture a different class of faults. Since the likely misunderstandings are highly context dependent, this context should be used to determine which semantic mutants should be produced. The approach is illustrated through examples with statecharts and C code. The paper also describes a semantic mutation testing tool for C and the results of experiments that investigated the nature of some semantic mutation operators for C.
+ER  - 
+
+TY  - JOUR
+T1  - A systematic review on search based mutation testing
+AU  - Silva, Rodolfo Adamshuk
+AU  - Senger de Souza, Simone do Rocio
+AU  - Lopes de Souza, Paulo Sérgio
+JO  - Information and Software Technology
+VL  - 81
+SP  - 19
+EP  - 35
+PY  - 2017
+DA  - 2017/01/01/
+SN  - 0950-5849
+DO  - https://doi.org/10.1016/j.infsof.2016.01.017
+UR  - http://www.sciencedirect.com/science/article/pii/S0950584916300167
+KW  - Mutation testing
+KW  - Search based software testing
+KW  - Meta-heuristic
+AB  - Context
+Search Based Software Testing refers to the use of meta-heuristics for the optimization of a task in the context of software testing. Meta-heuristics can solve complex problems in which an optimum solution must be found among a large amount of possibilities. The use of meta-heuristics in testing activities is promising because of the high number of inputs that should be tested. Previous studies on search based software testing have focused on the application of meta-heuristics for the optimization of structural and functional criteria. Recently, some researchers have proposed the use of SBST for mutation testing and explored solutions for the cost of application of this testing criterion.
+Objective
+The objective is to identify how SBST has been explored in the context of mutation testing, how fitness functions are defined and the challenges and research opportunities in the application of meta-heuristic search techniques.
+Method
+A systematic review involving 263 papers published between 1996 and 2014 examined the studies on the use of meta-heuristic search techniques for the optimization of mutation testing.
+Results
+The results show meta-heuristic search techniques have been applied for the optimization of test data generation, mutant generation and selection of effective mutation operators. Five meta-heuristic techniques, namely Genetic Algorithm, Ant Colony, Bacteriological Algorithm, Hill Climbing and Simulated Annealing have been used in search based mutation testing. The review addressed different fitness functions used to guide the search.
+Conclusion
+Search based mutation testing is a field of interest, however, some issues remain unexplored. For instance, the use of meta-heuristics for the selection of effective mutation operators was identified in only one study. The results have pointed a range of possibilities for new studies to be developed, i.e., identification of equivalent mutants, experimental studies and application to different domains, such as concurrent programs.
+ER  - 
+
+TY  - JOUR
+T1  - Particle Swarm and Genetic Algorithm applied to mutation testing for test data generation: A comparative evaluation
+AU  - Jatana, Nishtha
+AU  - Suri, Bharti
+JO  - Journal of King Saud University - Computer and Information Sciences
+PY  - 2019
+DA  - 2019/05/17/
+SN  - 1319-1578
+DO  - https://doi.org/10.1016/j.jksuci.2019.05.004
+UR  - http://www.sciencedirect.com/science/article/pii/S1319157819301466
+KW  - Particle Swarm Optimization
+KW  - Search-based mutation testing
+KW  - Genetic Algorithm
+KW  - Test case generation
+KW  - Test case optimization
+AB  - Search based test data generation has gained popularity in recent times. Mutation testing can assist in improving the effectiveness of the generated test data. We recently proposed PSO-MT (Particle Swarm Optimization along with Mutation Testing) for generation of test data. In this paper, we fortify our proposal by applying the proposed approach on larger programs from Software-artifact Infrastructure Repository (SIR). PSO exhibits similar working characteristics with those of Genetic Algorithm (GA) which has extensively been applied for evolution of test data with mutation testing. The results are evaluated against comparison with GA used with mutation testing (GA-MT) for generation of test data which is already implemented in the literature of Search based Mutation Testing. The results depict that PSO-MT exhibits better computational efficiency than GA-MT for most of the benchmark programs. Statistical test (MannWhitney U-test) has been conducted to statistically analyze the presented results.
+ER  - 
+
+TY  - JOUR
+T1  - Mutant reduction based on dominance relation for weak mutation testing
+AU  - Gong, Dunwei
+AU  - Zhang, Gongjie
+AU  - Yao, Xiangjuan
+AU  - Meng, Fanlin
+JO  - Information and Software Technology
+VL  - 81
+SP  - 82
+EP  - 96
+PY  - 2017
+DA  - 2017/01/01/
+SN  - 0950-5849
+DO  - https://doi.org/10.1016/j.infsof.2016.05.001
+UR  - http://www.sciencedirect.com/science/article/pii/S0950584916300805
+KW  - Software testing
+KW  - Weak mutation testing
+KW  - Mutant
+KW  - Reduction
+KW  - Dominance relation
+AB  - Context: As a fault-based testing technique, mutation testing is effective at evaluating the quality of existing test suites. However, a large number of mutants result in the high computational cost in mutation testing. As a result, mutant reduction is of great importance to improve the efficiency of mutation testing. Objective: We aim to reduce mutants for weak mutation testing based on the dominance relation between mutant branches. Method: In our method, a new program is formed by inserting mutant branches into the original program. By analyzing the dominance relation between mutant branches in the new program, the non-dominated one is obtained, and the mutant corresponding to the non-dominated mutant branch is the mutant after reduction. Results: The proposed method is applied to test ten benchmark programs and six classes from open-source projects. The experimental results show that our method reduces over 80% mutants on average, which greatly improves the efficiency of mutation testing. Conclusion: We conclude that dominance relation between mutant branches is very important and useful in reducing mutants for mutation testing.
+ER  - 
+
+TY  - JOUR
+T1  - Model-based mutation testing—Approach and case studies
+AU  - Belli, Fevzi
+AU  - Budnik, Christof J.
+JO  - Science of Computer Programming
+VL  - 120
+SP  - 25
+EP  - 48
+PY  - 2016
+DA  - 2016/05/01/
+SN  - 0167-6423
+DO  - https://doi.org/10.1016/j.scico.2016.01.003
+UR  - http://www.sciencedirect.com/science/article/pii/S0167642316000137
+KW  - Mutation testing
+KW  - Model-based testing
+KW  - Model-based mutation testing
+KW  - Mutation operator
+KW  - Fault detection capability
+AB  - Some abstract. Two sentences.
+ER  - 
+
+TY  - JOUR
+T1  - Towards Incremental Mutation Testing
+AU  - Cachia, Mark Anthony
+AU  - Micallef, Mark
+AU  - Colombo, Christian
+JO  - Electronic Notes in Theoretical Computer Science
+VL  - 294
+SP  - 2
+EP  - 11
+PY  - 2013
+DA  - 2013/03/22/
+T2  - Proceedings of the 2013 Validation Strategies for Software Evolution (VSSE) Workshop
+SN  - 1571-0661
+DO  - https://doi.org/10.1016/j.entcs.2013.02.012
+UR  - http://www.sciencedirect.com/science/article/pii/S1571066113000145
+KW  - Mutation Testing
+KW  - Agile Development Processes
+KW  - Incremental Mutation Testing
+AB  - Proponents of Agile development processes claim that adhering to Agile principles leads to the delivery of high quality code in evolutionary increments. Confidence in resulting systems is mostly gained through the use of unit test suites, entrusted to catch regressions as soon as they occur. Consequently, the system can only be as trustworthy as its tests, meaning that measurements of the testsʼ quality is crucial. Whilst mutation testing has been proposed as a means of uncovering test suite defects, it has not been widely adopted in the industry; mainly due to its computational expense and manual effort required by developers investigating unkilled mutants. To make mutation testing affordable, we propose incremental mutation testing — a variation of mutation testing which leverages the iterative nature of agile development by limiting the scope of mutant generation to sections of code which have changed since the last mutation run. Preliminary results show that the number of mutants generated is drastically reduced along with the time required to generate mutants and execute tests against them.
+ER  - 
+
+TY  - JOUR
+T1  - A systematic literature review of techniques and metrics to reduce the cost of mutation testing
+AU  - Pizzoleto, Alessandro Viola
+AU  - Ferrari, Fabiano Cutigi
+AU  - Offutt, Jeff
+AU  - Fernandes, Leo
+AU  - Ribeiro, Márcio
+JO  - Journal of Systems and Software
+VL  - 157
+SP  - 110388
+PY  - 2019
+DA  - 2019/11/01/
+SN  - 0164-1212
+DO  - https://doi.org/10.1016/j.jss.2019.07.100
+UR  - http://www.sciencedirect.com/science/article/pii/S0164121219301554
+KW  - Mutation analysis
+KW  - Mutation testing
+KW  - Cost reduction
+KW  - Systematic review
+AB  - Historically, researchers have proposed and applied many techniques to reduce the cost of mutation testing. It has become difficult to find all techniques and to understand the cost-benefit tradeoffs among them, which is critical to transitioning this technology to practice. This paper extends a prior workshop paper to summarize and analyze the current knowledge about reducing the cost of mutation testing through a systematic literature review. We selected 175 peer-reviewed studies, from which 153 present either original or updated contributions. Our analysis resulted in six main goals for cost reduction and 21 techniques. In the last decade, a growing number of studies explored techniques such as selective mutation, evolutionary algorithms, control-flow analysis, and higher-order mutation. Furthermore, we characterized 18 metrics, with particular interest in the number of mutants to be executed, test cases required, equivalent mutants generated and detected, and mutant execution speedup. We found that cost reduction for mutation is increasingly becoming interdisciplinary, often combining multiple techniques. Additionally, measurements vary even for studies that use the same techniques. Researchers can use our results to find more detailed information about particular techniques, and to design comparable and reproducible experiments.
+ER  - 
+
+TY  - JOUR
+T1  - Plasma EGFR mutation testing in non-small cell lung cancer: A value proposition
+AU  - Oellerich, Michael
+AU  - Christenson, Robert H.
+AU  - Beck, Julia
+AU  - Walson, Philip D.
+JO  - Clinica Chimica Acta
+VL  - 495
+SP  - 481
+EP  - 486
+PY  - 2019
+DA  - 2019/08/01/
+SN  - 0009-8981
+DO  - https://doi.org/10.1016/j.cca.2019.05.019
+UR  - http://www.sciencedirect.com/science/article/pii/S0009898119318807
+KW  - Molecular diagnostics
+KW  - Value proposition
+KW  - Liquid biopsy
+KW  -  mutations
+KW  - Non-small cell lung cancer
+KW  - Health economics
+AB  - Genomics-driven precision medicine using targeted therapies requires advanced molecular diagnostic tests. Decisions about the use and reimbursement for such tests are increasingly being made on the basis of more outcome-based and value-based approaches. The value proposition concept is a tool to assess the benefits of laboratory testing to each stakeholder of the care pathway with respect to outcomes. This concept was applied to the use of noninvasive plasma epidermal growth factor receptor (EGFR) mutation testing in patients with advanced or metastatic non-small cell lung cancer (NSCLC) to guide treatment with EGFR tyrosine kinase inhibitors (TKIs). Using the value proposition framework, we evaluated published key evidence regarding clinical validity, economic implications, and limitations of this approach. It has been shown that plasma EGFR mutation testing is essential for guiding clinical decisions regarding prediction of eligibility of individual patients for TKI treatment, real-time monitoring, or adjustment of treatment regimens and tracking resistance. The appropriate use of plasma EGFR mutation testing has been shown to deliver both clinical and economic benefits to stakeholders across the entire care pathway; especially in clinical situations where biopsy material is inadequate or unavailable and where it leads to fewer tissue biopsies.
+ER  - 
+
+TY  - JOUR
+T1  - Mutomvo: Mutation testing framework for simulated cloud and HPC environments
+AU  - Cañizares, Pablo C.
+AU  - Núñez, Alberto
+AU  - Merayo, Mercedes G.
+JO  - Journal of Systems and Software
+VL  - 143
+SP  - 187
+EP  - 207
+PY  - 2018
+DA  - 2018/09/01/
+SN  - 0164-1212
+DO  - https://doi.org/10.1016/j.jss.2018.05.010
+UR  - http://www.sciencedirect.com/science/article/pii/S0164121218300931
+KW  - Software testing
+KW  - Mutation testing
+KW  - Distributed systems
+KW  - Simulation
+AB  - Many current applications provide high performance to process large volumes of data. These applications usually run in highly distributed environments, like cloud and HPC systems. Nevertheless, the large and complex architectures required for deploying these applications may not be available during the development phase. This limitation can be overcome by using simulation platforms to model a wide range of distributed system configurations and execute these applications in the modeled system. Usually, these applications are tested against a small number of test cases that are manually designed by the testers. It is desirable to have effective test suites in order to detect failures in the application models. In this paper we propose a mutation testing framework for detecting errors in distributed applications executed in simulated environments. The execution of a test suite against the set of mutated models allows to determine its effectiveness for detecting different errors. The proposal has been implemented in a tool called MuTomVo. In order to support the feasibility of the proposal, we have carried out a case study over three applications running in different distributed systems: a client/server model, intensive computation and scientific pipeline.
+ER  - 
+
+TY  - JOUR
+T1  - Update on EGFR Mutational Testing and the Potential of Noninvasive Liquid Biopsy in Non–Small-cell Lung Cancer
+AU  - Kim, Edward
+AU  - Feldman, Rebecca
+AU  - Wistuba, Ignacio I.
+JO  - Clinical Lung Cancer
+VL  - 19
+IS  - 2
+SP  - 105
+EP  - 114
+PY  - 2018
+DA  - 2018/03/01/
+SN  - 1525-7304
+DO  - https://doi.org/10.1016/j.cllc.2017.08.001
+UR  - http://www.sciencedirect.com/science/article/pii/S1525730417302292
+KW  - Circulating-free tumor DNA
+KW  - Epidermal growth factor receptor
+KW  - Mutational testing
+KW  - NSCLC
+KW  - Tyrosine kinase inhibitor
+AB  - Mutations in the epidermal growth factor receptor (EGFR) are important drivers of non–small-cell lung cancer (NSCLC) and have led to the emergence of EGFR-targeted therapies as critical treatment options for NSCLC. Although these agents have shown clinical activity in NSCLC patients, acquired resistance to EGFR-targeted agents is inevitable. Therefore, the ability to conveniently biopsy patient tumors is of increasing importance as new mechanisms of resistance and agents to target these resistance mutations are identified. Rapid and accurate EGFR mutational testing of patient biopsy specimens, including liquid biopsy specimens, allows for the identification of potentially actionable mutations that could guide treatment. In the present review, we discuss the various methods and best practices for tumor sampling and EGFR mutational testing in NSCLC.
+ER  - 
+
+TY  - JOUR
+T1  - EMINENT: Embarrassingly Parallel Mutation Testing
+AU  - Cañizares, Pablo C.
+AU  - Merayo, Mercedes G.
+AU  - Núñez, Alberto
+JO  - Procedia Computer Science
+VL  - 80
+SP  - 63
+EP  - 73
+PY  - 2016
+DA  - 2016/01/01/
+T2  - International Conference on Computational Science 2016, ICCS 2016, 6-8 June 2016, San Diego, California, USA
+SN  - 1877-0509
+DO  - https://doi.org/10.1016/j.procs.2016.05.298
+UR  - http://www.sciencedirect.com/science/article/pii/S1877050916306494
+KW  - Mutation testing
+KW  - Scientific Computing
+KW  - Parallel and Distributed Computing
+AB  - During the last decade, the fast evolution in communication networks has facilitated the development of complex applications that manage vast amounts of data, like Big Data applications. Unfortunately, the high complexity of these applications hampers the testing process. Moreover, generating adequate test suites to properly check these applications is a challenging task due to the elevated number of potential test cases. Mutation testing is a valuable technique to measure the quality of the selected test suite that can be used to overcome this difficulty. However, one of the main drawbacks of mutation testing lies on the high computational cost associated to this process. In this paper we propose a dynamic distributed algorithm focused on HPC systems, called EMINENT, which has been designed to face the performance problems in mutation testing techniques. EMINENT alleviates the computational cost associated with this technique since it exploits parallelism in cluster systems to reduce the final execution time. In addition, several experiments have been carried out on three applications in order to analyse the scalability and performance of EMINENT. The results show that EMINENT provides an increase in the speed-up in most scenarios.
+ER  - 
+
+TY  - JOUR
+T1  - A systematic mapping study on higher order mutation testing
+AU  - Prado Lima, Jackson Antonio do
+AU  - Vergilio, Silvia Regina
+JO  - Journal of Systems and Software
+VL  - 154
+SP  - 92
+EP  - 109
+PY  - 2019
+DA  - 2019/08/01/
+SN  - 0164-1212
+DO  - https://doi.org/10.1016/j.jss.2019.04.031
+UR  - http://www.sciencedirect.com/science/article/pii/S0164121219300809
+KW  - Mutation testing
+KW  - Higher order mutation
+KW  - Systematic mapping
+AB  - Context: Higher Order Mutants (HOMs) present some advantages concerning the First-Order Mutants (FOMs). HOMs can better simulate real and subtle faults, reduce the number of generated mutants and test cases, and so on. Objective: In order to characterize the Higher Order Mutation Testing (HOMT) field, this paper presents results of a mapping study, by synthesizing characteristics of the HOMT approaches, HOM generation strategies, evaluation aspects, trends and research opportunities. Method: We followed a research plan to locate, assess, extract and group the outcomes from relevant studies. We found 69 primary studies, which were classified based on dimensions related to aspects of the conducted evaluation, purpose and use of HOMs. Results: Java is the preferred language. Most approaches use Second-Order Mutants (SOMs). We found 50 different techniques used to generate/select HOMs. We observed that from 39 primary studies which apply a strategy,  ≈49% use search-based techniques. Conclusions: HOMT has been arising interest in the last years. The results herein presented provide researchers the start-of-the-art on HOMT, allowing them to understand existing approaches, and how the HOMs have been used and evaluated. Furthermore, this paper points out open issues and not addressed topics, which require more investigation, discussing trends and research opportunities in the field.
+ER  - 
+
+TY  - JOUR
+T1  - Peritoneal washing is an adequate source for somatic BRCA1/2 mutation testing in ovarian malignancies
+AU  - Barquín, Miguel
+AU  - Maximiano, Constanza
+AU  - Pérez-Barrios, Clara
+AU  - Sanchez-Herrero, Estela
+AU  - Soriano, María
+AU  - Colmena, Marta
+AU  - García-Espantaleón, Manuel
+AU  - Tejerina González, Eva
+AU  - Gutierrez, Lourdes
+AU  - Sánchez Ruiz, Antonio Carlos
+AU  - Torrente, María
+AU  - Provencio, Mariano
+AU  - Romero, Atocha
+JO  - Pathology - Research and Practice
+VL  - 215
+IS  - 2
+SP  - 392
+EP  - 394
+PY  - 2019
+DA  - 2019/02/01/
+SN  - 0344-0338
+DO  - https://doi.org/10.1016/j.prp.2018.10.028
+UR  - http://www.sciencedirect.com/science/article/pii/S034403381830894X
+KW  - Peritoneal washing
+KW  - BRCA1
+KW  - BRCA2
+KW  - Ovarian cancer
+AB  - Genetic screening for BRCA mutations should be offered to all women diagnosed with epithelial ovarian, fallopian tube, and/or peritoneal cancers given the implications for treatment options and cancer risk assessments. Yet, while germline breast cancer susceptibility gene 1 (BRCA1) and breast cancer susceptibility gene 2 (BRCA2) testing is commonly performed, BRCA1/2 somatic mutations testing is rather challenging since the poor quality of DNA extracted from formalin fixed paraffin embedded (FFPE) samples can significantly impair this process. Peritoneal lavage is routinely performed in surgeries of suspected ovarian malignancies. We have analyzed fresh tumor, peritoneal lavage and blood samples from ten patients and we have found an excellent agreement (88%) between fresh tumor and peritoneal lavage for BRCA mutation testing. Importantly, 112 of the 114 genomic alterations detected in fresh tumor samples were also found in peritoneal lavage fluids. Our data suggest that peritoneal washings can indeed streamline BRCA genes mutation testing procedures.
+ER  - 
+
+TY  - JOUR
+T1  - OUTRIDER: Optimizing the mUtation Testing pRocess In Distributed EnviRonments
+AU  - Cañizares, Pablo C.
+AU  - Núñez, Alberto
+AU  - de Lara, Juan
+JO  - Procedia Computer Science
+VL  - 108
+SP  - 505
+EP  - 514
+PY  - 2017
+DA  - 2017/01/01/
+T2  - International Conference on Computational Science, ICCS 2017, 12-14 June 2017, Zurich, Switzerland
+SN  - 1877-0509
+DO  - https://doi.org/10.1016/j.procs.2017.05.095
+UR  - http://www.sciencedirect.com/science/article/pii/S1877050917306440
+KW  - Parallel
+KW  - Distributed Computing
+KW  - High Performance Computing
+KW  - Mutation testing
+AB  - The adoption of commodity clusters has been widely extended due to its cost-effectiveness and the evolution of networks. These systems can be used to reduce the long execution time of applications that require a vast amount of computational resources, and especially of those techniques that are usually deployed in centralized environments, like testing. Currently, one of the main challenges in testing is to obtain an appropriate test suite. Mutation testing is a widely used technique aimed at generating high quality test suites. However, the execution of this technique requires a high computational cost. In this work we propose OUTRIDER, an HPC-based optimization that contributes to bridging the gap between the high computational cost of mutation testing and the parallel infrastructures of HPC systems aimed to speed-up the execution of computational applications. This optimization is based on our previous work called EMINENT, an algorithm focused on parallelizing the mutation testing process using MPI. However, since EMINENT does not efficiently exploit the computational resources in HPC systems, we propose 4 strategies to alleviate this issue. A thorough experimental study using different applications shows an increase of up to 70% performance improvement using these optimizations.
+ER  - 
+
+TY  - JOUR
+T1  - Mutation testing cost reduction by clustering overlapped mutants
+AU  - Ma, Yu-Seung
+AU  - Kim, Sang-Woon
+JO  - Journal of Systems and Software
+VL  - 115
+SP  - 18
+EP  - 30
+PY  - 2016
+DA  - 2016/05/01/
+SN  - 0164-1212
+DO  - https://doi.org/10.1016/j.jss.2016.01.007
+UR  - http://www.sciencedirect.com/science/article/pii/S0164121216000078
+KW  - Software testing
+KW  - Mutation testing
+AB  - Mutation testing is a powerful but computationally expensive testing technique. Several approaches have been developed to reduce the cost of mutation testing by decreasing the number of mutants to be executed; however, most of these approaches are not as effective as mutation testing which uses a full set of mutants. This paper presents a new approach for executing fewer mutants while retaining nearly the same degree of effectiveness as is produced by mutation testing using a full set of mutants. Our approach dynamically clusters expression-level weakly killed mutants that are expected to produce the same result under a test case; only one mutant from each cluster is fully executed under the test case. We implemented this approach and demonstrated that our approach efficiently reduced the cost of mutation testing without loss of effectiveness.
+ER  - 
+
+TY  - JOUR
+T1  - Higher order mutation testing: A Systematic Literature Review
+AU  - Ghiduk, Ahmed S.
+AU  - Girgis, Moheb R.
+AU  - Shehata, Marwa H.
+JO  - Computer Science Review
+VL  - 25
+SP  - 29
+EP  - 48
+PY  - 2017
+DA  - 2017/08/01/
+SN  - 1574-0137
+DO  - https://doi.org/10.1016/j.cosrev.2017.06.001
+UR  - http://www.sciencedirect.com/science/article/pii/S1574013716301095
+KW  - Mutation testing
+KW  - Higher-order mutation testing
+KW  - First-order mutants
+KW  - Higher-order mutants
+AB  - Mutation testing is the process whereby a fault is deliberately inserted into a software system, in order to assess the quality of test data, in terms of its ability to find this fault. Mutation testing is also used as a way to drive the test data development process. Traditionally, faults were inserted one by one into a software system, but more recently there has been an upsurge of interest by the area of higher-order mutation, in which multiple faults are inserted into the system at once. Originally, this was thought to be too expensive, as there was already a concern that the size of the pool of mutants for traditional mutation was already too large to handle. However, following a seminal publication in 2008, it was realized that the space of higher-order mutants (HOMs) could be searched for useful mutants that drive testing harder, and to reduce the overall test effort, by clever combination of first-order mutants. As a result, many authors examined the way in which HOM testing could find subtle hard to kill faults, capture partial fault masking, reduce equivalent mutants problem, reduce test effort while increasing effectiveness, and capture more realistic faults than those captured by simple insertion of first-order mutants. Because of the upsurge of interest in the previous issues, this paper presents the first Systematic Literature Review research specifically targeted at a higher-order mutation. This Systematic Literature Review analyzes the results of more than one hundred sixty research articles in this area. The current paper presents qualitative results and bibliometric analysis for the surveyed articles. In addition, it augments these results with scientific findings and quantitative results from the primary literature. As a result of this work, this SLR presents an outline for many future work.
+ER  - 
+
+TY  - JOUR
+T1  - Performance mutation testing: Hypothesis and open questions
+AU  - Sánchez, Ana B.
+AU  - Delgado-Pérez, Pedro
+AU  - Segura, Sergio
+AU  - Medina-Bulo, Inmaculada
+JO  - Information and Software Technology
+VL  - 103
+SP  - 159
+EP  - 161
+PY  - 2018
+DA  - 2018/11/01/
+SN  - 0950-5849
+DO  - https://doi.org/10.1016/j.infsof.2018.06.015
+UR  - http://www.sciencedirect.com/science/article/pii/S0950584918301320
+KW  - Performance testing
+KW  - Mutation testing
+KW  - Performance bugs
+AB  - Performance bugs are common, costly, and elusive. Performance tests aim to detect performance bugs by running the program with specific inputs and determining whether the observed behaviour is acceptable. There not exist mechanisms, however, to assess the effectiveness of performance tests. Mutation testing is a technique to evaluate and enhance functional test suites by seeding artificial faults in the program under test. In this new idea paper, we explore the applicability of mutation testing to assess and improve performance tests. This novel approach is motivated with examples and open questions.
+ER  - 
+
+TY  - JOUR
+T1  - Higher Order Mutation Testing
+AU  - Jia, Yue
+AU  - Harman, Mark
+JO  - Information and Software Technology
+VL  - 51
+IS  - 10
+SP  - 1379
+EP  - 1393
+PY  - 2009
+DA  - 2009/10/01/
+T2  - Source Code Analysis and Manipulation, SCAM 2008
+SN  - 0950-5849
+DO  - https://doi.org/10.1016/j.infsof.2009.04.016
+UR  - http://www.sciencedirect.com/science/article/pii/S0950584909000688
+KW  - Mutation Testing
+KW  - Higher order mutant
+KW  - Search techniques
+AB  - This paper introduces a new paradigm for Mutation Testing, which we call Higher Order Mutation Testing (HOM Testing). Traditional Mutation Testing considers only first order mutants, created by the injection of a single fault. Often these first order mutants denote trivial faults that are easily killed. Higher order mutants are created by the insertion of two or more faults. The paper introduces the concept of a subsuming HOM; one that is harder to kill than the first order mutants from which it is constructed. By definition, subsuming HOMs denote subtle fault combinations. The paper reports the results of an empirical study of HOM Testing using 10 programs, including several non-trivial real-world subjects for which test suites are available.
+ER  - 
+
+TY  - JOUR
+T1  - A Method of Software Specification Mutation Testing Based on UML State Diagram for Consistency Checking
+AU  - Mi, Lei
+AU  - Ben, Kerong
+JO  - Procedia Engineering
+VL  - 15
+SP  - 110
+EP  - 114
+PY  - 2011
+DA  - 2011/01/01/
+T2  - CEIS 2011
+SN  - 1877-7058
+DO  - https://doi.org/10.1016/j.proeng.2011.08.023
+UR  - http://www.sciencedirect.com/science/article/pii/S1877705811015244
+KW  - Specification Mutation Testing
+KW  - UML State Diagram
+KW  - Mutation Operator
+KW  - Consistency Checking
+AB  - Specification mutation testing can be used to check the correctness and consistency of the specification and the program. The paper proposed a method of specification mutation testing based on UML state diagram for consistency checking. We define a set of mutation operators based on the mutation location. Each operator is examined whether it would generate unreasonable mutant, in order to reduce the number of mutants. Then, the required condition of generating test case for the mutant is also analyzed. Based on the basis, there is an integration of the operators according to the inclusion relation among them, which can reduce the cost and improve the efficiency of the mutation testing. The experiment shows that our method of specification mutation testing is effective to detect the inconsistency in the specification and the program.
+ER  - 
+
+TY  - JOUR
+T1  - Incomplete uptake of EGFR mutation testing and its impact on estimation of mutation prevalence in patients with non-squamous NSCLC: A population-based study in New Zealand
+AU  - Tin Tin, Sandar
+AU  - McKeage, Mark J.
+AU  - Khwaounjoo, Prashannata
+AU  - Thi, Aye Myat
+AU  - Elwood, J. Mark
+JO  - Cancer Epidemiology
+VL  - 57
+SP  - 24
+EP  - 32
+PY  - 2018
+DA  - 2018/12/01/
+SN  - 1877-7821
+DO  - https://doi.org/10.1016/j.canep.2018.09.004
+UR  - http://www.sciencedirect.com/science/article/pii/S1877782118304016
+KW  - Non-small cell lung carcinoma
+KW  - Epidermal growth factor receptor
+KW  - Genetic testing
+KW  - Mutation
+KW  - Composite metric
+AB  - Background
+Epidermal Growth Factor Receptor (EGFR) mutation testing is recommended for patients with non-squamous non-small cell lung cancer (NSCLC) but not all eligible patients get tested, which may bias the mutation prevalence estimated. This study aims to examine trends in the uptake of EGFR mutation testing in patients with non-squamous NSCLC in New Zealand; to develop a composite metric that quantifies the influences of demographic and clinico-pathological factors on the testing uptake; and to estimate the prevalence of EGFR mutation if all patients were tested.
+Methods
+This population-based study involved all patients who were diagnosed with non-squamous NSCLC in four health regions in New Zealand between January 2010 and December 2015. Eligible patients were identified from the New Zealand Cancer Registry and information on EGFR mutation testing was obtained through linkage to TestSafe, a clinical information sharing service, and laboratory records.
+Results
+Of 2701 eligible patients, 1059 (39.2%) were tested for EGFR mutation. The testing prevalence increased (3.7% in 2010 to 64.6% in 2014) and the influences of demographic and clinic-pathological factors decreased from 2010 to June 2014, and remained stable afterward. Of the tested patients, 229 (21.6%) were mutation positive with a decreasing trend observed from 2010 (43.8%) to June 2014 (16.8%). The best-fit log-linear model estimated the prevalence of EGFR mutation, if all patients were tested, as 15.5% (95% CI: 13.2%–18.0%).
+Conclusion
+The methods described here allowed a more accurate estimation of the prevalence of EGFR mutation.
+ER  - 
+
+TY  - JOUR
+T1  - Clinical utility of a blood-based EGFR mutation test in patients receiving first-line erlotinib therapy in the ENSURE, FASTACT-2, and ASPIRATION studies
+AU  - Wu, Yi-Long
+AU  - Lee, Victor
+AU  - Liam, Chong-Kin
+AU  - Lu, Shun
+AU  - Park, Keunchil
+AU  - Srimuninnimit, Vichien
+AU  - Wang, Jie
+AU  - Zhou, Caicun
+AU  - Appius, Anita
+AU  - Button, Peter
+AU  - Hooper, Gregory
+AU  - Palma, John F.
+AU  - Schulze, Katja
+AU  - Scudder, Sidney
+AU  - Shames, David S.
+AU  - Yin, Anny-Yue
+AU  - Zhang, Guili
+AU  - Mok, Tony
+JO  - Lung Cancer
+VL  - 126
+SP  - 1
+EP  - 8
+PY  - 2018
+DA  - 2018/12/01/
+SN  - 0169-5002
+DO  - https://doi.org/10.1016/j.lungcan.2018.10.004
+UR  - http://www.sciencedirect.com/science/article/pii/S0169500218305889
+KW  - Blood-based testing
+KW  - Cobas assay
+KW  -  mutation
+KW  - Erlotinib
+AB  - Objective
+Patients with advanced non-small-cell lung cancer (NSCLC) with an adenocarcinoma component are recommended to undergo epidermal growth factor receptor (EGFR) mutation testing when being considered for EGFR targeted therapy. We conducted an exploratory analysis to inform the clinical utility of EGFR mutation testing in blood cell-free DNA using the cobas® EGFR Mutation Test v2.
+Materials and methods
+Two EGFR mutation tests, a tissue-based assay (cobas® v1) and a tissue- and blood-based assay (cobas® v2) were used to analyze matched biopsy and blood samples (897 paired samples) from three Asian studies of first-line erlotinib with similar intent-to-treat populations. ENSURE was a phase III comparison of erlotinib and gemcitabine/platinum, FASTACT-2 was a phase III study of gemcitabine/platinum plus erlotinib or placebo, and ASPIRATION was a single-arm phase II study of erlotinib. Agreement statistics were evaluated, based on sensitivity and specificity between the two assays in subgroups of patients with increasing tumor burden.
+Results
+Patients with discordant EGFR (tissue+/plasma-) mutation status achieved longer progression-free and overall survival than those with concordant (tissue+/plasma+) mutation status. Tumor burden was significantly greater in patients with concordant versus discordant mutations. Pooled analyses of data from the three studies showed a sensitivity of 72.1% (95% confidence interval [CI] 67.8–76.1) and a specificity of 97.9% (95% CI 96.0–99.0) for blood-based testing; sensitivity was greatest in patients with larger baseline tumors.
+Conclusions
+Blood-based EGFR mutation testing demonstrated high specificity and good sensitivity, and offers a convenient and easily accessible diagnostic method to complement tissue-based tests. Patients with a discordant mutation status in plasma and tissue, had improved survival outcomes compared with those with a concordant mutation status, which may be due to their lower tumor burden. These data help to inform the clinical utility of this blood-based assay for the detection of EGFR mutations.
+ER  - 

@@ -1,6 +1,7 @@
 import os
 
-from ArticlesDataDownloader.ACM.extract_text_from_pdf import read_pdf_as_json
+from ArticlesDataDownloader.download_pdf_and_prepare_article_data import download_pdf_and_prepare_article_data
+from ArticlesDataDownloader.extract_text_from_pdf import read_pdf_as_json
 
 from ArticlesDataDownloader.IEEE.ieeeHtmlToJson import ieeeHtmlToJson
 
@@ -51,36 +52,21 @@ class IEEEArticlesHandler():
             self.__logger.error("Could not read html for " + url)
             self.__logger.info("Trying to read from pdf")
 
-            # self.driver.get(url)
+            id = re.findall("document/(.*?)/", url+'/')[0]
 
-            # pdf_button = WebDriverWait(self.driver, 10).until(
-            #     lambda x: x.find_element_by_xpath("//a[contains(@class, 'stats-document-lh-action-downloadPdf_2')]/span"))
+            pdf_link = 'http://ieeexplore.ieee.org/stampPDF/getPDF.jsp?arnumber=' + id
 
-            # pdf_button = WebDriverWait(self.driver, 10).until(
-            #     lambda x: x.find_element_by_xpath("//span[contains(text(), 'PDF')]"))
-            #
-            #
-            # pdf_button.click()
+            self.__logger.info('Trying to get pdf from ' + pdf_link)
 
+            output_filename = 'temporary.pdf'
 
-            try:
-                id = re.findall("document/(.*?)/", url+'/')[0]
-
-                pdf_link = 'http://ieeexplore.ieee.org/stampPDF/getPDF.jsp?arnumber=' + id
-
-                self.__logger.info('Trying to get pdf from ' + pdf_link)
-
-                output_filename = 'temporary.pdf'
-
-                download_file_from_link_to_path(self.driver, pdf_link, output_filename)
-                result_reading = ArticleData(text=read_pdf_as_json('temporary.pdf'))
-                os.remove('temporary.pdf')
+            result_reading = download_pdf_and_prepare_article_data(self.driver, pdf_link)
+            if result_reading:
                 result_data.merge(result_reading)
                 return result_data
-            except:
-                self.__logger.error('Failed to read from pdf')
-
-                return None
+            else:
+               self.__logger.error('Failed to read from pdf')
+        return None
 
     def link_part(self):
         return "ieeexplore.ieee.org"

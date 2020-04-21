@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from nltk import tokenize
 from selenium.webdriver.support.wait import WebDriverWait
 import logging
-from .ArticleData import ArticleData
+from ArticlesDataDownloader.ArticleData import ArticleData
 
 def formatTextAndSplitIntoSentences(text):
     return tokenize.sent_tokenize(text.replace("\n", "").replace("\r", ""))

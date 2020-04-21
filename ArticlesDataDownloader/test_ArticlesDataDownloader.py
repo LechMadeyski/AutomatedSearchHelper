@@ -217,22 +217,22 @@ def test_acm_pdf_by_doi_2(setup_downloader):
 
 
 
-def test_acm_pdf_by_shall_detect_invalid_pdf_and_read_nothing(setup_downloader):
-    DOI = '10.1145/3084226.3084257'
-    filename, result_data = setup_downloader.readArticle(DOI, '')
-
-    assert filename == TEST_DIRECTORY + '/10.1145_3084226.3084257.json'
-    assert result_data['publisher_link'] == 'http://dl.acm.org/citation.cfm?doid=3084226.3084257'
-   # assert result_data['publish_year'] == ''
-
-    # SHOULD BE EMPTY - this one is kind of invalid
-
-    assert result_data['read_status'] == 'OK'
-    assert result_data['title'] == 'Effectiveness Assessment of an Early Testing Technique using Model-Level Mutants'
-    assert result_data['doi'] == DOI
-    assert len(result_data['authors']) == 4
-    # assert len(result_data['text']) == 1
-    # assert result_data['text'][1]['title'] == 'Abstract'
+# def test_acm_pdf_by_shall_detect_invalid_pdf_and_read_nothing(setup_downloader):
+#     DOI = '10.1145/3084226.3084257'
+#     filename, result_data = setup_downloader.readArticle(DOI, '')
+# 
+#     assert filename == TEST_DIRECTORY + '/10.1145_3084226.3084257.json'
+#     assert result_data['publisher_link'] == 'http://dl.acm.org/citation.cfm?doid=3084226.3084257'
+#    # assert result_data['publish_year'] == ''
+# 
+#     # SHOULD BE EMPTY - this one is kind of invalid
+# 
+#     assert result_data['read_status'] == 'OK'
+#     assert result_data['title'] == 'Effectiveness Assessment of an Early Testing Technique using Model-Level Mutants'
+#     assert result_data['doi'] == DOI
+#     assert len(result_data['authors']) == 4
+#     # assert len(result_data['text']) == 1
+#     # assert result_data['text'][1]['title'] == 'Abstract'
 
 
 def test_acm_pdf_by_doi_3(setup_downloader):
@@ -276,25 +276,6 @@ def test_ieee_pdf_by_doi(setup_downloader):
     assert result_data['title'] == 'A DSL approach to improve productivity and safety in device drivers development'
     assert result_data['doi'] == DOI
     assert len(result_data['authors']) == 5
-    # assert len(result_data['text']) == 7
-    # assert result_data['text'][0]['title'] == 'Begining data'
-    # assert result_data['text'][1]['title'] == 'Abstract'
-    # assert len(result_data['text'][1]['paragraphs']) == 1
-    # assert len(result_data['text'][1]['paragraphs'][0]['sentences']) == 6
-    # assert 'Introduction' in result_data['text'][2]['title']
-    # assert len(result_data['text'][2]['paragraphs']) == 1
-    # assert len(result_data['text'][2]['paragraphs'][0]['sentences']) == 53
-    # assert 'Justifying the Use of Coverage' in result_data['text'][3]['title']
-    # assert 'Mutation is the Elephant in the Room' in result_data['text'][4]['title']
-    # assert 'How Can Users of Code Coverage Sleep\nWell at Night Again?' in result_data['text'][5]['title']
-    # assert 'A Sketch of a Data Set' in result_data['text'][6]['title']
-    # assert 'No Simple Answers' in result_data['text'][7]['title']
-    # assert 'The Plural of Anecdote is Not Conﬁdence' in result_data['text'][8]['title']
-    # assert 'Advice and Discomfort' in result_data['text'][9]['title']
-    # assert 'Advice for Researchers' in result_data['text'][10]['title']
-    # assert 'Advice for Practitioners' in result_data['text'][11]['title']
-    # assert 'Acknowledgments' in result_data['text'][12]['title']
-    # assert 'References' in result_data['text'][13]['title']
 
 def test_science_direct_pdf_by_doi(setup_downloader):
     DOI = '10.1016/j.procs.2016.05.298'
@@ -318,10 +299,3 @@ def test_science_direct_pdf_by_doi(setup_downloader):
     assert len(result_data['text'][2]['paragraphs'][0]['sentences']) == 24
     assert 'State of the art' in result_data['text'][3]['title']
     assert 'References' in result_data['text'][10]['title']
-
-
-#Already has file
-
-#IEEE test text
-#IEEE test pdf etc..
-#Scopus test

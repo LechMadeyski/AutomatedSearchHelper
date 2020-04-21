@@ -1,7 +1,9 @@
 import os
 import logging
 from selenium.webdriver.support.wait import WebDriverWait
-from .extract_text_from_pdf import read_pdf_as_json
+
+from ArticlesDataDownloader.download_pdf_and_prepare_article_data import download_pdf_and_prepare_article_data
+from ArticlesDataDownloader.extract_text_from_pdf import read_pdf_as_json
 from ArticlesDataDownloader.ArticleData import ArticleData
 from ArticlesDataDownloader.download_utilities import download_file_from_link_to_path
 
@@ -13,12 +15,10 @@ class ACMArticlesHandler:
 
     def get_article(self, url):
         self.__logger.debug("ACM::getArticle start " + url)
-
         result_data = ArticleData(publisher_link=url)
-        if True:
-            self.__logger.debug("Called get for  " + url)
-            self.driver.get(url)
-            self.__logger.info("Get called")
+        self.driver.get(url)
+
+        try:
             WebDriverWait(self.driver, 10).until(
                 lambda x: x.find_elements_by_xpath("//a[@title='PDF']"))
 
@@ -27,18 +27,15 @@ class ACMArticlesHandler:
             python_button = self.driver.find_elements_by_xpath("//a[@title='PDF']")[0]
 
             link = str(python_button.get_property('href'))
-            output_filename = 'temporary.pdf'
-            download_file_from_link_to_path(self.driver, link, output_filename)
-            result_reading = ArticleData(text=read_pdf_as_json('temporary.pdf'))
-            os.remove('temporary.pdf')
-            result_data.merge(result_reading)
-            return result_data
-        # except Exception as error:
-        #     self.__logger.error("ERROR TYPE: " + str(type(error)))
-        #     self.__logger.error(error)
-        #     self.__logger.error("some error occured, moving on")
-        #     os.remove('temporary.pdf')
-        #     return None
+
+            result_reading = download_pdf_and_prepare_article_data(self.driver, link)
+            if result_reading:
+                result_data.merge(result_reading)
+                result_data.read_status = 'OK'
+                return result_data
+        except Exception as error:
+            self.__logger.error('Could not read full text for ' + url)
+        return None
 
     def link_part(self):
         return "acm.org"

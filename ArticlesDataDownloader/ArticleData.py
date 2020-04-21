@@ -15,6 +15,11 @@ class ArticleData:
     publisher_link = attr.ib(default=str())
     read_status = attr.ib(default=str())
     publish_year = attr.ib(default=str())
+    volume = attr.ib(default=str())
+    issue = attr.ib(default=str())
+    start_page = attr.ib(default=str())
+    end_page = attr.ib(default=str())
+
 
     def to_dict(self):
         return attr.asdict(self)
@@ -38,12 +43,18 @@ class ArticleData:
             self.scopus_link = other.scopus_link
         if not self.publish_year:
             self.publish_year = other.publish_year
-
         if not self.publisher_link:
             self.publisher_link = other.publisher_link
-
         if not self.read_status:
             self.read_status = other.read_status
+        if not self.volume:
+            self.volume = other.volume
+        if not self.issue:
+            self.issue = other.issue
+        if not self.start_page:
+            self.start_page = other.start_page
+        if not self.end_page:
+            self.end_page = other.end_page
 
         if not self.text:
             self.text = other.text
