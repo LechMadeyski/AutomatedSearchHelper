@@ -32,10 +32,10 @@ class ACMArticlesHandler:
             if result_reading:
                 result_data.merge(result_reading)
                 result_data.read_status = 'OK'
-                return result_data
         except Exception as error:
             self.__logger.error('Could not read full text for ' + url)
-        return None
+            result_data.read_status = 'Error while reading article or full text not available'
+        return result_data
 
     def link_part(self):
         return "acm.org"

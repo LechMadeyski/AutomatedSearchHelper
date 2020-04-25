@@ -24,7 +24,10 @@ def test_shall_properly_read_scopus_csv():
         start_page='167',
         end_page='186',
         issn='03029743',
+        filename_base='10.1007_978-3-030-41418-4_13',
         text=[dict(title='Abstract', paragraphs=[dict(sentences=['Simple abstract.', 'Two sentences.'])])])
+    article_without_doi = result[0]
+    assert article_without_doi.filename_base == 'scopus_link_2-s2.0-85079538573'
 
 
 def test_shall_properly_read_ieee_csv():
@@ -44,7 +47,11 @@ def test_shall_properly_read_ieee_csv():
         end_page='3',
         issn='SOMEISSSN',
         publisher_link='https://ieeexplore.ieee.org/document/7176242',
+        filename_base='10.1109_SNPD.2015.7176242',
         text=[dict(title='Abstract', paragraphs=[dict(sentences=['Any abstract.', 'Two sentences.'])])])
+
+    missing_doi_article = result[20]
+    assert missing_doi_article.filename_base == 'IEEE_8449437'
 
 
 def test_shall_properly_read_science_direct_ris():
@@ -64,7 +71,10 @@ def test_shall_properly_read_science_direct_ris():
         end_page='48',
         issn='0167-6423',
         publisher_link='http://www.sciencedirect.com/science/article/pii/S0167642316000137',
+        filename_base='10.1016_j.scico.2016.01.003',
         text=[dict(title='Abstract', paragraphs=[dict(sentences=['Some abstract.', 'Two sentences.'])])])
+    article_without_doi = result[0]
+    assert article_without_doi.filename_base == 'science_direct_S0950584916300246'
 
 
 def test_shall_properly_read_willey_ris():
@@ -83,6 +93,7 @@ def test_shall_properly_read_willey_ris():
         start_page='684',
         end_page='711',
         issn='0960-0833',
+        filename_base='10.1002_stvr.1531',
         publisher_link='https://doi.org/10.1002/stvr.1531',
         text=[dict(title='Abstract', paragraphs=[dict(sentences=['Any abstract.', 'Two sentences.'])])])
 
@@ -93,6 +104,7 @@ def test_shall_properly_read_springer_csv():
     assert len(result) == 9
     assert result[3] == ArticleData(
         doi='10.1007/978-3-662-49381-6_23',
+        filename_base='10.1007_978-3-662-49381-6_23',
         title='Higher Order Mutation Testing to Drive Development of New Test Cases: An Empirical Comparison of Three Strategies',
         publish_year='2016',
         journal_name='Intelligent Information and Database Systems',

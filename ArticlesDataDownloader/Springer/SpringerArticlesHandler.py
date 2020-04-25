@@ -36,16 +36,14 @@ class SpringerArticlesHandler():
         try:
             self.driver.get(url)
             self.__logger.debug("Called get for  " + url)
-
-            # element = WebDriverWait(self.driver, 10).until(
-            #     lambda x: x.find_element_by_id("article"))
-
             result_data.merge(springer_html_to_article_data(self.driver.page_source))
-            return result_data
+            result_data.read_status = 'OK'
         except Exception as error:
             self.__logger.error(error)
             self.__logger.error("some error occured, moving on")
-            return None
+            result_data.read_status = 'Error while reading article or full text not available'
+
+        return result_data
 
 
     def link_part(self):

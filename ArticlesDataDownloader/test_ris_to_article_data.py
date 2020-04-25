@@ -35,4 +35,5 @@ def test_properly_read_full_article_data():
         scopus_link='',
         publisher_link=str(),
         read_status='',
+        filename_base='123.123_123',
         publish_year='1002')

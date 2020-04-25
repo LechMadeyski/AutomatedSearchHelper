@@ -51,12 +51,15 @@ class WilleyArticlesHandler:
             WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "article-section__content"))
             )
-            result_data.merge(ArticleData(text = willey_html_to_json(self.driver.page_source)))
-            return result_data
+            result_data.merge(ArticleData(
+                text=willey_html_to_json(self.driver.page_source)))
+            result_data.read_status = 'OK'
         except Exception as error:
             self.__logger.error(error)
-            self.__logger.error("some error occured, moving on")
-            return None
+            self.__logger.error("some error occured, could not read full article text for " + url)
+            result_data.read_status = 'Error while reading article or full text not available'
+
+        return result_data
 
     def link_part(self):
         return "wiley.com"

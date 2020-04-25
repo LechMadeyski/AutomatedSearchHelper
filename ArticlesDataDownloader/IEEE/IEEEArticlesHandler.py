@@ -44,9 +44,8 @@ class IEEEArticlesHandler():
 
         try:
             WebDriverWait(self.driver, 10).until(lambda x: x.find_element_by_id("article"))
-
             result_data.merge(ArticleData(text=ieee_html_to_json(self.driver.page_source)))
-            return result_data
+            result_data.read_status = 'OK'
         except Exception as error:
             self.__logger.error(error)
             self.__logger.error("Could not read html for " + url)
@@ -57,16 +56,15 @@ class IEEEArticlesHandler():
             pdf_link = 'http://ieeexplore.ieee.org/stampPDF/getPDF.jsp?arnumber=' + id
 
             self.__logger.info('Trying to get pdf from ' + pdf_link)
-
-            output_filename = 'temporary.pdf'
-
             result_reading = download_pdf_and_prepare_article_data(self.driver, pdf_link)
             if result_reading:
                 result_data.merge(result_reading)
-                return result_data
+                result_data.read_status = 'OK'
             else:
                self.__logger.error('Failed to read from pdf')
-        return None
+               result_data.read_status = 'Error while reading article or full text not available'
+
+        return result_data
 
     def link_part(self):
         return "ieeexplore.ieee.org"

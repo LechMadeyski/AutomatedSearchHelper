@@ -1,6 +1,8 @@
 import pytest
 import os
 import shutil
+
+from ArticlesDataDownloader.ArticleData import ArticleData
 from .ArticlesDataDownloader import ArticlesDataDownloader
 
 TEST_DIRECTORY = ".test_directory"
@@ -23,11 +25,11 @@ def setup_downloader(should_clear = SHOULD_CLEAR):
 
 def test_science_direct_html_by_doi(setup_downloader):
     DOI = "10.1016/j.ins.2019.08.077"
-    filename, result_data = setup_downloader.readArticle(DOI, '')
+    filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
     # TODO: add other bibliographic data - failing for now basing on ris
 
     assert filename == TEST_DIRECTORY + '/10.1016_j.ins.2019.08.077.json'
-    assert result_data['publisher_link'] == 'https://sciencedirect.com/science/article/pii/S0020025519308242'
+    assert result_data['publisher_link'] == 'https://linkinghub.elsevier.com/retrieve/pii/S0020025519308242'
     assert result_data['publish_year'] == '2020'
 
     assert result_data['read_status'] == 'OK'
@@ -49,7 +51,7 @@ def test_science_direct_html_by_doi(setup_downloader):
 
 def test_springer_html_by_doi(setup_downloader):
     DOI = '10.1007/978-3-030-38364-0_32'
-    filename, result_data = setup_downloader.readArticle(DOI, '')
+    filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1007_978-3-030-38364-0_32.json'
     assert result_data['publisher_link'] == 'http://link.springer.com/10.1007/978-3-030-38364-0_32'
@@ -75,7 +77,7 @@ def test_springer_html_by_doi(setup_downloader):
 
 def test_willey_html_by_doi(setup_downloader):
     DOI = '10.1002/stvr.1728'
-    filename, result_data = setup_downloader.readArticle(DOI, '')
+    filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1002_stvr.1728.json'
     assert result_data['publisher_link'] == 'https://onlinelibrary.wiley.com/doi/abs/10.1002/stvr.1728'
@@ -101,10 +103,9 @@ def test_willey_html_by_doi(setup_downloader):
     assert 'Acknowledgements' in result_data['text'][-1]['title']
 
 
-
 def test_ieee_html_by_doi(setup_downloader):
     DOI = '10.1109/APSEC48747.2019.00022'
-    filename, result_data = setup_downloader.readArticle(DOI, '')
+    filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1109_APSEC48747.2019.00022.json'
     assert result_data['publisher_link'] == 'https://ieeexplore.ieee.org/document/8946088/'
@@ -133,7 +134,7 @@ def test_ieee_html_by_doi(setup_downloader):
 
 def test_acm_pdf_by_doi(setup_downloader):
     DOI = '10.1145/3293882.3330574'
-    filename, result_data = setup_downloader.readArticle(DOI, '')
+    filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1145_3293882.3330574.json'
     assert result_data['publisher_link'] == 'http://dl.acm.org/citation.cfm?doid=3293882.3330574'
@@ -162,16 +163,9 @@ def test_acm_pdf_by_doi(setup_downloader):
 
 def test_article_with_scopus_link_only(setup_downloader):
     SCOPUS_LINK = 'https://www.scopus.com/record/display.uri?eid=2-s2.0-85074719668&origin=inward&txGid=743ab63d74ada4f8f3059ad6e752522e'
-    filename, result_data = setup_downloader.readArticle('anyName', SCOPUS_LINK)
+    filename, result_data = setup_downloader.read_article(ArticleData(filename_base='anyName', scopus_link=SCOPUS_LINK))
 
     assert filename == TEST_DIRECTORY + '/anyName.json'
-
-
-def test_article_with_scopus_link_only_2(setup_downloader):
-    SCOPUS_LINK = 'https://www.scopus.com/inward/record.uri?eid=2-s2.0-85073066081&doi=10.1145%2f3349341.3349475&partnerID=40&md5=b820627f95cc83e46639d72e854f5359'
-    filename, result_data = setup_downloader.readArticle('anyName2', SCOPUS_LINK)
-
-    assert filename == TEST_DIRECTORY + '/anyName2.json'
 
 
 # def test_article_with_scopus_link_that_has_publisher_link(setup_downloader):
@@ -185,7 +179,7 @@ def test_article_with_scopus_link_only_2(setup_downloader):
 
 def test_acm_pdf_by_doi_2(setup_downloader):
     DOI = '10.1145/2661136.2661157'
-    filename, result_data = setup_downloader.readArticle(DOI, '')
+    filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1145_2661136.2661157.json'
     assert result_data['publisher_link'] == 'http://dl.acm.org/citation.cfm?doid=2661136.2661157'
@@ -219,7 +213,7 @@ def test_acm_pdf_by_doi_2(setup_downloader):
 
 # def test_acm_pdf_by_shall_detect_invalid_pdf_and_read_nothing(setup_downloader):
 #     DOI = '10.1145/3084226.3084257'
-#     filename, result_data = setup_downloader.readArticle(DOI, '')
+#     filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 # 
 #     assert filename == TEST_DIRECTORY + '/10.1145_3084226.3084257.json'
 #     assert result_data['publisher_link'] == 'http://dl.acm.org/citation.cfm?doid=3084226.3084257'
@@ -237,7 +231,7 @@ def test_acm_pdf_by_doi_2(setup_downloader):
 
 def test_acm_pdf_by_doi_3(setup_downloader):
     DOI = '10.1145/3358501.3361234'
-    filename, result_data = setup_downloader.readArticle(DOI, '')
+    filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1145_3358501.3361234.json'
     assert result_data['publisher_link'] == 'http://dl.acm.org/citation.cfm?doid=3358501.3361234'
@@ -266,7 +260,7 @@ def test_acm_pdf_by_doi_3(setup_downloader):
 
 def test_ieee_pdf_by_doi(setup_downloader):
     DOI = '10.1109/ASE.2000.873655'
-    filename, result_data = setup_downloader.readArticle(DOI, '')
+    filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1109_ASE.2000.873655.json'
     assert result_data['publisher_link'] == 'https://ieeexplore.ieee.org/document/873655/'
@@ -277,12 +271,13 @@ def test_ieee_pdf_by_doi(setup_downloader):
     assert result_data['doi'] == DOI
     assert len(result_data['authors']) == 5
 
+
 def test_science_direct_pdf_by_doi(setup_downloader):
     DOI = '10.1016/j.procs.2016.05.298'
-    filename, result_data = setup_downloader.readArticle(DOI, '')
+    filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1016_j.procs.2016.05.298.json'
-    assert result_data['publisher_link'] == 'https://sciencedirect.com/science/article/pii/S1877050916306494'
+    assert result_data['publisher_link'] == 'https://linkinghub.elsevier.com/retrieve/pii/S1877050916306494'
     assert result_data['publish_year'] == '2016'
 
     assert result_data['read_status'] == 'OK'

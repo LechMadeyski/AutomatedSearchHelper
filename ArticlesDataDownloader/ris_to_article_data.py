@@ -1,12 +1,13 @@
 
 from ArticlesDataDownloader.ArticleData import ArticleData
 from ArticlesDataDownloader.text_utilities import create_abstract
+from AutomatedSearchHelperUtilities.getDoiFilename import doi_to_filename_base
 
 import rispy
 
 
 def __entry_to_article_data(entry):
-    return ArticleData(
+    result = ArticleData(
         title=entry.get('title', str()) or entry.get('primary_title', str()),
         authors=entry.get('authors', list()),
         issn=entry.get('issn', str()),
@@ -20,12 +21,14 @@ def __entry_to_article_data(entry):
         start_page=entry.get('start_page', str()),
         end_page=entry.get('end_page', str()),
         text=create_abstract(entry.get('abstract', str()) or entry.get('notes_abstract', str())))
+    if result.doi:
+        result.filename_base = doi_to_filename_base(result.doi)
+    return result
 
 
 def ris_text_to_article_data(text):
     entries = rispy.loads(text)
     for entry in entries:
-        print('Analyzing entry ' + str(entry))
         return __entry_to_article_data(entry)
     raise AssertionError('Could not find proper ris entry')
 

@@ -19,7 +19,7 @@ class ArticleData:
     issue = attr.ib(default=str())
     start_page = attr.ib(default=str())
     end_page = attr.ib(default=str())
-    filename = attr.ib(default=str())
+    filename_base = attr.ib(default=str())
 
     def to_dict(self):
         return attr.asdict(self)
@@ -55,8 +55,8 @@ class ArticleData:
             self.start_page = other.start_page
         if not self.end_page:
             self.end_page = other.end_page
-        if not self.filename:
-            self.filename = other.filename
+        if not self.filename_base:
+            self.filename_base = other.filename_base
 
         if not self.text:
             self.text = other.text
