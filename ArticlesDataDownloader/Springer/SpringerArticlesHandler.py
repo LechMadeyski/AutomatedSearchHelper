@@ -25,7 +25,6 @@ class SpringerArticlesHandler():
         filename = url.replace('http://link.springer.com/', '').replace('/', '_') + '.ris'
 
         self.__logger.debug('Trying to ger article data from', filename)
-        wait_until_all_files_downloaded(self.driver)
         if wait_for_file_download(filename):
             self.__logger.debug('File downloaded successfully - reading data')
             result_data.merge(ris_to_article_data(filename))

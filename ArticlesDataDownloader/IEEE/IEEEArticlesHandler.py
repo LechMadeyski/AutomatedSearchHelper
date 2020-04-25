@@ -37,7 +37,7 @@ class IEEEArticlesHandler():
             lambda x:  self.driver.find_element_by_xpath("//div[@class='enable-abstract']/input[@type='checkbox']"))
         enable_abstract_checkbox.click()
 
-        ris_text = WebDriverWait(self.driver, 10).until(
+        ris_text = WebDriverWait(self.driver, 20).until(
             lambda x:  self.driver.find_element_by_xpath("//pre[@class='text ris-text']"))
 
         result_data.merge(ris_text_to_article_data(ris_text.get_attribute('innerHTML')))

@@ -229,7 +229,7 @@ titleHtmlBase = '''
 '''
 
 def getTitlePart(articleData):
-    authors = ', '.join([a.get("given", str())+' '+a.get("family", str()) for a in articleData["authors"]])
+    authors = ', '.join(articleData["authors"])
     doiLink = '<a href="https://doi.org/%s">%s</a>'%(articleData["doi"], articleData["doi"])
     return titleHtmlBase%(articleData["title"], authors, articleData["publisher"], doiLink)
 

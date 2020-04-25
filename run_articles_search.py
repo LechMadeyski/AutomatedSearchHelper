@@ -31,9 +31,9 @@ def run_articles_search(articles, finder, outputDirectory=None):
         logger.info("File reading finished: " + fileFoundStr)
 
         if searchResult is not None:
-            results[articleData["doi"]] = {"article" : articleData, "findings" : searchResult}
+            results[articleData["filename_base"]] = {"article" : articleData, "findings" : searchResult}
             if outputDirectory is not None:
-                with open(getDoiFilename(outputDirectory, articleData["doi"]), 'w') as f:
+                with open(getDoiFilename(outputDirectory, articleData["filename_base"]), 'w') as f:
                     f.write(json.dumps(searchResult))
     return results
 

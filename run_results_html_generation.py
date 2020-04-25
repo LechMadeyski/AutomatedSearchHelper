@@ -25,9 +25,9 @@ def run_results_html_generation(articles, outputFolder):
     copy_tree(staticIncludesPath, outputFolder)
 
     logger = logging.getLogger("run_results_html_generation")
-    for doi, articleData in articles.items():
-        logger.info("Creating html for " + doi)
-        with open(getDoiFilename(outputFolder, doi, "html"), 'w', encoding='utf-8') as f:
+    for filename_base, articleData in articles.items():
+        logger.info("Creating html for " + filename_base)
+        with open(getDoiFilename(outputFolder, filename_base, "html"), 'w', encoding='utf-8') as f:
           f.write(findingsToHtml(articleData["article"], articleData["findings"]))
 
 
@@ -41,7 +41,7 @@ def prepareArticles(finderResultsFolder, articlesJsons):
             with open(foundFullPath, 'r') as foundFile:
                 foundData = json.load(foundFile)
                 foundArticle = json.load(articleFile)
-                result[foundArticle["doi"]] = {"article" : foundArticle, "findings" : foundData}
+                result[foundArticle["filename_base"]] = {"article" : foundArticle, "findings" : foundData}
     return result
 
 def getArgumentsParser():
@@ -56,7 +56,7 @@ def main(args = None):
     configuration.configureLogger()
     logger = logging.getLogger('run_results_html_generation')
 
-    p = getArgumentsParser();
+    p = getArgumentsParser()
     a = p.parse_args(args=args)
 
     logger.info("Starting run_results_html_generation with following arguments")
