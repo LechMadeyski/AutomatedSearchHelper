@@ -1,4 +1,4 @@
-from ArticlesDataDownloader.Willey.willeyHtmlToJson import willeyHtmlToJson
+from ArticlesDataDownloader.Willey.willey_html_to_json import willey_html_to_json
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -51,7 +51,7 @@ class WilleyArticlesHandler:
             WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.CLASS_NAME, "article-section__content"))
             )
-            result_data.merge(ArticleData(text = willeyHtmlToJson(self.driver.page_source)))
+            result_data.merge(ArticleData(text = willey_html_to_json(self.driver.page_source)))
             return result_data
         except Exception as error:
             self.__logger.error(error)

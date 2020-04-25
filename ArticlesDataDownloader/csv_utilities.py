@@ -1,5 +1,5 @@
 import csv
-from ArticlesDataDownloader.format_text_and_split_into_sentences import format_text_and_split_into_sentences
+from ArticlesDataDownloader.text_utilities import format_text_and_split_into_sentences
 
 def read_csv_as_dicts(filepath):
     result = list()
@@ -17,10 +17,3 @@ def read_csv_as_dicts(filepath):
         print(row_names)
 
     return result
-
-
-def create_abstract(text):
-    if text:
-        return [dict(title='Abstract', paragraphs=[dict(sentences=format_text_and_split_into_sentences(text))])]
-    else:
-        return str()

@@ -46,21 +46,54 @@ def test_shall_properly_read_ieee_csv():
         publisher_link='https://ieeexplore.ieee.org/document/7176242',
         text=[dict(title='Abstract', paragraphs=[dict(sentences=['Any abstract.', 'Two sentences.'])])])
 
+
 def test_shall_properly_read_science_direct_ris():
     path_to_file = os.path.dirname(os.path.abspath(__file__)) + '/ScienceDirect/science_direct_test.ris'
     result = read_input_file(path_to_file, InputSourceType.SCIENCE_DIRECT_RIS)
     assert len(result) == 25
     assert result[8] == ArticleData(
         doi='10.1016/j.scico.2016.01.003',
- #       title='Model-based mutation testing—Approach and case studies',
+        title='Model-based mutation testing—Approach and case studies',
         authors=['Belli, Fevzi', 'Budnik, Christof J.'],
         publish_year='2016',
- #       publisher='IEEE',
+        publisher='Science Direct',
         journal_name='Science of Computer Programming',
-        # volume='33',
-        # issue='22',
+        volume='120',
+        issue='22',
         start_page='25',
         end_page='48',
         issn='0167-6423',
         publisher_link='http://www.sciencedirect.com/science/article/pii/S0167642316000137',
         text=[dict(title='Abstract', paragraphs=[dict(sentences=['Some abstract.', 'Two sentences.'])])])
+
+
+def test_shall_properly_read_willey_ris():
+    path_to_file = os.path.dirname(os.path.abspath(__file__)) + '/Willey/willey_test.ris'
+    result = read_input_file(path_to_file, InputSourceType.WILLEY_RIS)
+    assert len(result) == 20
+    assert result[4] == ArticleData(
+        doi='10.1002/stvr.1531',
+        title='Model-based mutation testing from security protocols in HLPSL',
+        authors=['Dadeau, Frédéric', 'Héam, Pierre-Cyrille', 'Kheddam, Rafik', 'Maatoug, Ghazi', 'Rusinowitch, Michael'],
+        publish_year='2015',
+        publisher='John Wiley & Sons, Ltd',
+        journal_name='Software Testing, Verification and Reliability',
+        volume='25',
+        issue='5-7',
+        start_page='684',
+        end_page='711',
+        issn='0960-0833',
+        publisher_link='https://doi.org/10.1002/stvr.1531',
+        text=[dict(title='Abstract', paragraphs=[dict(sentences=['Any abstract.', 'Two sentences.'])])])
+
+
+def test_shall_properly_read_springer_csv():
+    path_to_file = os.path.dirname(os.path.abspath(__file__)) + '/Springer/springer_test.csv'
+    result = read_input_file(path_to_file, InputSourceType.SPRINGER_CSV)
+    assert len(result) == 9
+    assert result[3] == ArticleData(
+        doi='10.1007/978-3-662-49381-6_23',
+        title='Higher Order Mutation Testing to Drive Development of New Test Cases: An Empirical Comparison of Three Strategies',
+        publish_year='2016',
+        journal_name='Intelligent Information and Database Systems',
+        publisher_link='http://link.springer.com/chapter/10.1007/978-3-662-49381-6_23')

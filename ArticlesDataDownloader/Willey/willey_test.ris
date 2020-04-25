@@ -1,0 +1,577 @@
+
+TY  - JOUR
+T1  - Performance mutation testing
+AU  - Delgado-Pérez, Pedro
+AU  - Sánchez, Ana Belén
+AU  - Segura, Sergio
+AU  - Medina-Bulo, Inmaculada
+Y1  - 2020/01/29
+PY  - 2020
+DA  - 2020/01/29
+N1  - doi: 10.1002/stvr.1728
+DO  - 10.1002/stvr.1728
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw. Test. Verif. Reliab.
+SP  - e1728
+VL  - n/a
+IS  - n/a
+KW  - mutation testing
+KW  - performance bugs
+KW  - performance testing
+KW  - software testing
+PB  - John Wiley & Sons, Ltd
+SN  - 0960-0833
+M3  - doi: 10.1002/stvr.1728
+UR  - https://doi.org/10.1002/stvr.1728
+Y2  - 2020/04/25
+N2  - Summary Performance bugs are known to be a major threat to the success of software products. Performance tests aim to detect performance bugs by executing the program through test cases and checking whether it exhibits a noticeable performance degradation. The principles of mutation testing, a well-established testing technique for the assessment of test suites through the injection of artificial faults, could be exploited to evaluate and improve the detection power of performance tests. However, the application of mutation testing to assess performance tests, henceforth called performance mutation testing (PMT), is a novel research topic with numerous open challenges. In previous papers, we identified some key challenges related to PMT. In this work, we go a step further and explore the feasibility of applying PMT at the source-code level in general-purpose languages. To do so, we revisit concepts associated with classical mutation testing and design seven novel mutation operators to model known bug-inducing patterns. As a proof of concept, we applied traditional mutation operators as well as performance mutation operators to open-source C++ programs. The results reveal the potential of the new performance-mutants to help assess and enhance performance tests when compared with traditional mutants. A review of live mutants in these programs suggests that they can induce the design of special test inputs. In addition to these promising results, our work brings a whole new set of challenges related to PMT, which will hopefully serve as a starting point for new contributions in the area.
+ER  - 
+
+TY  - JOUR
+T1  - Parallel mutation testing
+AU  - Mateo, Pedro Reales
+AU  - Usaola, Macario Polo
+Y1  - 2013/06/01
+PY  - 2013
+DA  - 2013/06/01
+N1  - doi: 10.1002/stvr.1471
+DO  - 10.1002/stvr.1471
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw. Test. Verif. Reliab.
+SP  - 315
+EP  - 350
+VL  - 23
+IS  - 4
+KW  - mutation testing
+KW  - parallel execution
+PB  - John Wiley & Sons, Ltd
+SN  - 0960-0833
+M3  - doi: 10.1002/stvr.1471
+UR  - https://doi.org/10.1002/stvr.1471
+Y2  - 2020/04/25
+N2  - SUMMARYDespite the existing techniques to reduce the costs of mutation analysis, the computational cost to apply mutation testing with large applications can be very high. One effective technique to improve the efficiency of mutation without losing effectiveness is parallel execution, where mutants and tests are executed in parallel processors, reducing the total time needed to perform mutation analysis. This paper presents a study of this technique adapted to current technologies. Five algorithms to execute mutants in parallel are analysed with three studies that use different network configurations and different number of processors with diverse characteristics. The experiments are performed with Bacterio P, a tool that is also presented. Unlike previous studies about parallel mutant execution, which date from the mid-1990s, in the studies in this paper, the communication time in parallel systems no longer acts as a bottleneck. Thus, dynamic strategies, which require more communication, combined with other mutant cost reduction techniques, are the best strategies to run mutants in parallel.Copyright ? 2012 John Wiley & Sons, Ltd.
+ER  - 
+
+TY  - JOUR
+T1  - Efficient mutation testing of multithreaded code
+AU  - Gligoric, Milos
+AU  - Jagannath, Vilas
+AU  - Luo, Qingzhou
+AU  - Marinov, Darko
+Y1  - 2013/08/01
+PY  - 2013
+DA  - 2013/08/01
+N1  - doi: 10.1002/stvr.1469
+DO  - 10.1002/stvr.1469
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw. Test. Verif. Reliab.
+SP  - 375
+EP  - 403
+VL  - 23
+IS  - 5
+KW  - mutation testing
+KW  - multithreaded code
+PB  - John Wiley & Sons, Ltd
+SN  - 0960-0833
+M3  - doi: 10.1002/stvr.1469
+UR  - https://doi.org/10.1002/stvr.1469
+Y2  - 2020/04/25
+N2  - SUMMARYMutation testing is a well-established method for measuring and improving the quality of test suites. A major cost of mutation testing is the time required to execute the test suite on all the mutants. This cost is even greater when the system under test is multithreaded: not only are test cases from the test suite executed on many mutants but also each test case is executed?or more precisely, explored?for multiple possible thread schedules. This paper introduces a general framework for efficient exploration that can reduce the time for mutation testing of multithreaded code. The paper presents five techniques (four optimizations and one heuristic) that are implemented in a tool called MuTMuT within the general framework. Evaluation of MuTMuT on mutation testing of 12 multithreaded programs shows that it can substantially reduce the time required for mutation testing of multithreaded code.Copyright ? 2012 John Wiley & Sons, Ltd.
+ER  - 
+
+TY  - JOUR
+T1  - Quality metrics for mutation testing with applications to WS-BPEL compositions
+AU  - Estero-Botaro, Antonia
+AU  - Palomo-Lozano, Francisco
+AU  - Medina-Bulo, Inmaculada
+AU  - Domínguez-Jiménez, Juan José
+AU  - García-Domínguez, Antonio
+Y1  - 2015/08/01
+PY  - 2015
+DA  - 2015/08/01
+N1  - doi: 10.1002/stvr.1528
+DO  - 10.1002/stvr.1528
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw. Test. Verif. Reliab.
+SP  - 536
+EP  - 571
+VL  - 25
+IS  - 5-7
+KW  - mutation testing
+KW  - firm mutation
+KW  - quality metrics
+KW  - quality of mutation operators
+KW  - service compositions
+KW  - WS-BPEL
+PB  - John Wiley & Sons, Ltd
+SN  - 0960-0833
+M3  - doi: 10.1002/stvr.1528
+UR  - https://doi.org/10.1002/stvr.1528
+Y2  - 2020/04/25
+N2  - SummaryMutation testing is a successful testing technique based on fault injection. However, it can be very costly, and several cost-reduction techniques for reducing the number of mutants have been proposed in the literature. Cost reduction can be aided by an analysis of mutation operators, but this requires the definition of specialized metrics. Several metrics have been proposed before, although their effectiveness and relative merits are not easy to assess. A step ahead in the evaluation of mutation-reduction techniques would be a better metric to determine objectively the quality of a set of mutants with respect to a given test suite. This work introduces such a metric, which is naturally extended to mutation operators and may be used to reduce the number of mutants, particularly of equivalent mutants. Finally, a firm mutation analysis tool for WS-BPEL service compositions is presented, and experimental results obtained by comparing different metrics on several compositions are presented. Copyright ? 2014 John Wiley & Sons, Ltd.
+ER  - 
+
+TY  - JOUR
+T1  - Model-based mutation testing from security protocols in HLPSL
+AU  - Dadeau, Frédéric
+AU  - Héam, Pierre-Cyrille
+AU  - Kheddam, Rafik
+AU  - Maatoug, Ghazi
+AU  - Rusinowitch, Michael
+Y1  - 2015/08/01
+PY  - 2015
+DA  - 2015/08/01
+N1  - doi: 10.1002/stvr.1531
+DO  - 10.1002/stvr.1531
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw. Test. Verif. Reliab.
+SP  - 684
+EP  - 711
+VL  - 25
+IS  - 5-7
+KW  - mutation testing
+KW  - security protocols
+KW  - HLPSL
+KW  - AVISPA
+KW  - test generation
+PB  - John Wiley & Sons, Ltd
+SN  - 0960-0833
+M3  - doi: 10.1002/stvr.1531
+UR  - https://doi.org/10.1002/stvr.1531
+Y2  - 2020/04/25
+N2  - Any abstract. Two sentences.
+ER  - 
+
+TY  - JOUR
+T1  - Evolutionary mutation testing for IoT with recorded and generated events
+AU  - Gutiérrez-Madroñal, Lorena
+AU  - García-Domínguez, Antonio
+AU  - Medina-Bulo, Inmaculada
+Y1  - 2019/04/01
+PY  - 2019
+DA  - 2019/04/01
+N1  - doi: 10.1002/spe.2629
+DO  - 10.1002/spe.2629
+T2  - Software: Practice and Experience
+JF  - Software: Practice and Experience
+JO  - Software: Practice and Experience
+JA  - Softw: Pract Exper
+SP  - 640
+EP  - 672
+VL  - 49
+IS  - 4
+KW  - CEP
+KW  - event processing language
+KW  - evolutionary mutation testing
+KW  - genetic algorithm
+KW  - guided evolutionary mutation testing
+KW  - internet of things
+KW  - IoT-TEG
+PB  - John Wiley & Sons, Ltd
+SN  - 0038-0644
+M3  - doi: 10.1002/spe.2629
+UR  - https://doi.org/10.1002/spe.2629
+Y2  - 2020/04/25
+N2  - Summary Mutation testing is a testing technique that has been applied successfully to several programming languages. Despite its benefits for software testing, the high computational cost of mutation testing has kept it from being widely used. Several refinements have been proposed to reduce its cost by reducing the number of generated mutants; one of those is evolutionary mutation testing (EMT). Evolutionary mutation testing aims at generating a reduced set of mutants with an evolutionary algorithm, which searches for potentially equivalent and difficult to kill mutants that help improve the test suite. Evolutionary mutation testing has been evaluated in two contexts so far, ie, web service compositions and object-oriented C++ programmes. This study explores its performance when applied to event processing language queries of various domains. This study also considers the impact of the test data, since a lack of events or the need to have specific values in them can hinder testing. The effectiveness of evolutionary mutation testing with the original test data generators and the new internet of things test event generator tool is compared in multiple case studies.
+ER  - 
+
+TY  - JOUR
+T1  - A systematic literature review of how mutation testing supports quality assurance processes
+AU  - Zhu, Qianqian
+AU  - Panichella, Annibale
+AU  - Zaidman, Andy
+Y1  - 2018/09/01
+PY  - 2018
+DA  - 2018/09/01
+N1  - doi: 10.1002/stvr.1675
+DO  - 10.1002/stvr.1675
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw Test Verif Reliab
+SP  - e1675
+VL  - 28
+IS  - 6
+KW  - application
+KW  - mutation testing
+KW  - systematic literature review
+PB  - John Wiley & Sons, Ltd
+SN  - 0960-0833
+M3  - doi: 10.1002/stvr.1675
+UR  - https://doi.org/10.1002/stvr.1675
+Y2  - 2020/04/25
+N2  - Summary Mutation testing has been very actively investigated by researchers since the 1970s, and remarkable advances have been achieved in its concepts, theory, technology, and empirical evidence. While the most influential realisations have been summarised by existing literature reviews, we lack insight into how mutation testing is actually applied. Our goal is to identify and classify the main applications of mutation testing and analyse the level of replicability of empirical studies related to mutation testing. To this aim, this paper provides a systematic literature review on the application perspective of mutation testing based on a collection of 191 papers published between 1981 and 2015. In particular, we analysed in which quality assurance processes mutation testing is used, which mutation tools and which mutation operators are employed. Additionally, we also investigated how the inherent core problems of mutation testing, ie, the equivalent mutant problem and the high computational cost, are addressed during the actual usage. The results show that most studies use mutation testing as an assessment tool targeting unit tests, and many of the supporting techniques for making mutation testing applicable in practice are still underdeveloped. Based on our observations, we made 9 recommendations for future work, including an important suggestion on how to report mutation testing in testing experiments in an appropriate manner.
+ER  - 
+
+TY  - JOUR
+AU  - Mathur, Aditya P.
+PY  - 2018
+Y1  - 2018/09/01
+DA  - 2018/09/01
+Y2  - 2020/04/25
+DO  - doi:10.1002/0471028959.sof217
+UR  - https://doi.org/10.1002/0471028959.sof217
+N1  - doi:10.1002/0471028959.sof217
+M3  - doi:10.1002/0471028959.sof217
+N2  - Abstract Mutation testing, hereafter referred to as mutation, is a technique for software testing. Specifically, it provides a tester with one or more measures of ?goodness? of a test set. Such goodness measures are also known as test adequacy criteria. A test set may consist of zero or more test cases, where each test case is a set of values input to the program under test. Several other testing techniques also provide one or more adequacy criteria. For example, path-based testing methods provide statement coverage as one adequacy criterion. This criterion is satisfied by a test set if each statement in the program under test is executed at least once by one or more of its elements. Mutation differs significantly from path-oriented testing techniques in terms of the ways in which it examines and manipulates the program syntax. Mutation introduces a simple syntactic change in the program under test. The program thus produced is known as a mutant. More than one mutant is usually generated by making various types of simple syntactic changes at different places in the program. The goal of the tester is to find a test case that causes the mutant to generate an output different from that of the program under test thereby distinguishing the mutant from the program. The adequacy of a test set is measured by how many mutants can be distinguished collectively by the tests that belong to .
+KW  - history
+KW  - mutation operators
+KW  - comparisons
+KW  - tools
+KW  - performance
+KW  - applications
+T1  - Mutation Testing
+T2  - Encyclopedia of Software Engineering
+T3  - Major Reference Works
+SN  - 9780471028956
+ER  - 
+
+TY  - JOUR
+T1  - Introduction to the special issue on Mutation Testing
+AU  - Jia, Yue
+AU  - Merayo, Mercedes
+AU  - Harman, Mark
+Y1  - 2015/08/01
+PY  - 2015
+DA  - 2015/08/01
+N1  - doi: 10.1002/stvr.1582
+DO  - 10.1002/stvr.1582
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw. Test. Verif. Reliab.
+SP  - 461
+EP  - 463
+VL  - 25
+IS  - 5-7
+PB  - John Wiley & Sons, Ltd
+SN  - 9780471028956
+M3  - doi: 10.1002/stvr.1582
+UR  - https://doi.org/10.1002/stvr.1582
+Y2  - 2020/04/25
+ER  - 
+
+TY  - JOUR
+T1  - Special issue on mutation testing and analysis
+AU  - Just, René
+AU  - Krinke, Jens
+AU  - Li, Nan
+AU  - Rojas, José Miguel
+Y1  - 2019/01/01
+PY  - 2019
+DA  - 2019/01/01
+N1  - doi: 10.1002/stvr.1697
+DO  - 10.1002/stvr.1697
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw. Test. Verif. Reliab.
+SP  - e1697
+VL  - 29
+IS  - 1-2
+PB  - John Wiley & Sons, Ltd
+SN  - 9780471028956
+M3  - doi: 10.1002/stvr.1697
+UR  - https://doi.org/10.1002/stvr.1697
+Y2  - 2020/04/25
+ER  - 
+
+TY  - JOUR
+T1  - Extending mutation testing to find environmental bugs
+AU  - Spafford, Eugene H.
+Y1  - 1990/02/01
+PY  - 1990
+DA  - 1990/02/01
+N1  - doi: 10.1002/spe.4380200205
+DO  - 10.1002/spe.4380200205
+T2  - Software: Practice and Experience
+JF  - Software: Practice and Experience
+JO  - Software: Practice and Experience
+JA  - Softw: Pract. Exper.
+SP  - 181
+EP  - 189
+VL  - 20
+IS  - 2
+KW  - Testing
+KW  - Mutation analysis
+KW  - Environmental bugs
+PB  - John Wiley & Sons, Ltd
+SN  - 9780471028956
+M3  - doi: 10.1002/spe.4380200205
+UR  - https://doi.org/10.1002/spe.4380200205
+Y2  - 2020/04/25
+N2  - Abstract Environmental bugs are bugs caused by limitations of precision or capacity in the environment of a piece of software. These bugs may be difficult to activate and even more difficult to find. This paper reports on an extension to traditional mutation testing that enables testing specifically for environmental bugs involving integer arithmetic. This method is both simple and effective, and provides some insight into other possible extensions of the mutation-testing methodology that can be used to expose environmental bugs.
+ER  - 
+
+TY  - JOUR
+T1  - Editorial: Mutation 2000—A Symposium on Mutation Testing
+AU  - Wong, W. Eric
+Y1  - 2001/12/01
+PY  - 2001
+DA  - 2001/12/01
+N1  - doi: 10.1002/stvr.241
+DO  - 10.1002/stvr.241
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw. Test. Verif. Reliab.
+SP  - 205
+EP  - 206
+VL  - 11
+IS  - 4
+PB  - John Wiley & Sons, Ltd
+SN  - 9780471028956
+M3  - doi: 10.1002/stvr.241
+UR  - https://doi.org/10.1002/stvr.241
+Y2  - 2020/04/25
+ER  - 
+
+TY  - JOUR
+T1  - Concerning ordered mutation testing of relational operators
+AU  - Woodward, M R
+Y1  - 1991/10/01
+PY  - 1991
+DA  - 1991/10/01
+N1  - doi: 10.1002/stvr.4370010305
+DO  - 10.1002/stvr.4370010305
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw. Test. Verif. Reliab.
+SP  - 35
+EP  - 40
+VL  - 1
+IS  - 3
+KW  - Mutation analysis
+KW  - Ordered mutation
+KW  - Relational operator mutants
+PB  - John Wiley & Sons, Ltd
+SN  - 9780471028956
+M3  - doi: 10.1002/stvr.4370010305
+UR  - https://doi.org/10.1002/stvr.4370010305
+Y2  - 2020/04/25
+N2  - Abstract The aim of this paper is to correct a misapprehension concerning mutation testing of relational operators in imperative programming languages. An apparently plausible, but fallacious argument is stated concerning the order in which mutants are best considered. Subsequently, a counter-example is presented which disproves the argument.
+ER  - 
+
+TY  - JOUR
+T1  - Killing strategies for model-based mutation testing
+AU  - Aichernig, Bernhard K.
+AU  - Brandl, Harald
+AU  - Jöbstl, Elisabeth
+AU  - Krenn, Willibald
+AU  - Schlick, Rupert
+AU  - Tiran, Stefan
+Y1  - 2015/12/01
+PY  - 2015
+DA  - 2015/12/01
+N1  - doi: 10.1002/stvr.1522
+DO  - 10.1002/stvr.1522
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw. Test. Verif. Reliab.
+SP  - 716
+EP  - 748
+VL  - 25
+IS  - 8
+KW  - test case generation
+KW  - model-based testing
+KW  - mutation testing
+KW  - random testing
+KW  - ioco
+KW  - action systems
+KW  - Unified Modeling Language
+KW  - UML
+PB  - John Wiley & Sons, Ltd
+SN  - 9780471028956
+M3  - doi: 10.1002/stvr.1522
+UR  - https://doi.org/10.1002/stvr.1522
+Y2  - 2020/04/25
+N2  - Summary This article presents the techniques and results of a novel model-based test case generation approach that automatically derives test cases from UML state machines. The main contribution of this article is the fully automated fault-based test case generation technique together with two empirical case studies derived from industrial use cases. Also, an in-depth evaluation of different fault-based test case generation strategies on each of the case studies is given and a comparison with plain random testing is conducted. The test case generation methodology supports a wide range of UML constructs and is grounded on the formal semantics of Back's action systems and the well-known input?output conformance relation. Mutation operators are employed on the level of the specification to insert faults and generate test cases that will reveal the faults inserted. The effectiveness of this approach is shown and it is discussed how to gain a more expressive test suite by combining cheap but undirected random test case generation with the more expensive but directed mutation-based technique. Finally, an extensive and critical discussion of the lessons learnt is given as well as a future outlook on the general usefulness and practicability of mutation-based test case generation. Copyright ? 2014 John Wiley & Sons, Ltd.
+ER  - 
+
+TY  - JOUR
+T1  - Mutation Testing in Charcot-Marie-Tooth Neuropathy
+AU  - NICHOLSON, GARTH A.
+Y1  - 1999/10/01
+PY  - 1999
+DA  - 1999/10/01
+N1  - doi: 10.1111/j.1749-6632.1999.tb08599.x
+DO  - 10.1111/j.1749-6632.1999.tb08599.x
+T2  - Annals of the New York Academy of Sciences
+JF  - Annals of the New York Academy of Sciences
+JO  - Annals of the New York Academy of Sciences
+SP  - 383
+EP  - 388
+VL  - 883
+IS  - 1
+PB  - John Wiley & Sons, Ltd
+SN  - 9780471028956
+M3  - doi: 10.1111/j.1749-6632.1999.tb08599.x
+UR  - https://doi.org/10.1111/j.1749-6632.1999.tb08599.x
+Y2  - 2020/04/25
+N2  - ABSTRACT: In order to determine the optimal approach for mutation testing in the form of Charcot-Marie-Tooth (CMT) neuropathy, consecutive patients with a CMT phenotype, available family history information on at least first-degree relatives, and median motor conduction velocities of less than 50 m/sec were tested for the CMT1A duplication and for connexin32, peripheral myelin protein 22 (PMP22) and myelin protein zero (P0) point mutations. A cutoff value for median motor conduction velocity of less than 50 m/sec was adopted to include all CMTX families. All of the connexin32 mutations, except for one sporadic case, were found by first selecting families with no male-to-male inheritance of CMT and neurophysiological indicators of CMTX. All PMP22 and P0 mutations were found by selecting Dejerine-Sottas cases or dominantly inherited CMT1 with a very severe phenotype. It is concluded that ?blind? testing of CMT1 families for connexin32, P0, and PMP22 mutations is of limited value.
+ER  - 
+
+TY  - JOUR
+T1  - An Experimental Evaluation of Data Flow and Mutation Testing
+AU  - Offutt, A. Jefferson
+AU  - Pan, Jie
+AU  - Tewary, Kanupriya
+AU  - Zhang, Tong
+Y1  - 1996/02/01
+PY  - 1996
+DA  - 1996/02/01
+N1  - doi: 10.1002/(SICI)1097-024X(199602)26:2<165::AID-SPE5>3.0.CO;2-K
+DO  - 10.1002/(SICI)1097-024X(199602)26:2<165::AID-SPE5>3.0.CO;2-K
+T2  - Software: Practice and Experience
+JF  - Software: Practice and Experience
+JO  - Software: Practice and Experience
+JA  - Softw: Pract. Exper.
+SP  - 165
+EP  - 176
+VL  - 26
+IS  - 2
+KW  - software testing
+KW  - data flow
+KW  - mutation
+KW  - experimentation
+PB  - John Wiley & Sons, Ltd
+SN  - 9780471028956
+M3  - doi: 10.1002/(SICI)1097-024X(199602)26:2<165::AID-SPE5>3.0.CO;2-K
+UR  - https://doi.org/10.1002/(SICI)1097-024X(199602)26:2<165::AID-SPE5>3.0.CO;2-K
+Y2  - 2020/04/25
+N2  - Abstract Two experimental comparisons of data flow and mutation testing are presented. These techniques are widely considered to be effective for unit-level software testing, but can only be analytically compared to a limited extent. We compare the techniques by evaluating the effectiveness of test data developed for each. We develop ten independent sets of test data for a number of programs: five to satisfy the mutation criterion and five to satisfy the all-uses data-flow criterion. These test sets are developed using automated tools, in a manner consistent with the way a test engineer might be expected to generate test data in practice. We use these test sets in two separate experiments. First we measure the effectiveness of the test data that was developed for one technique in terms of the other. Second, we investigate the ability of the test sets to find faults. We place a number of faults into each of our subject programs, and measure the number of faults that are detected by the test sets. Our results indicate that while both techniques are effective, mutation-adequate test sets are closer to satisfying the data flow criterion, and detect more faults.
+ER  - 
+
+TY  - JOUR
+T1  - Mutation operators for feature-oriented software product lines
+AU  - Krüger, Jacob
+AU  - Al-Hajjaji, Mustafa
+AU  - Leich, Thomas
+AU  - Saake, Gunter
+Y1  - 2019/01/01
+PY  - 2019
+DA  - 2019/01/01
+N1  - doi: 10.1002/stvr.1676
+DO  - 10.1002/stvr.1676
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw Test Verif Reliab
+SP  - e1676
+VL  - 29
+IS  - 1-2
+KW  - composition
+KW  - feature-oriented programming
+KW  - mutation operator
+KW  - mutation testing
+KW  - software product line
+KW  - unit test
+PB  - John Wiley & Sons, Ltd
+SN  - 9780471028956
+M3  - doi: 10.1002/stvr.1676
+UR  - https://doi.org/10.1002/stvr.1676
+Y2  - 2020/04/25
+N2  - Summary Mutation testing is an approach to assess the quality of test cases. Mutants are modified versions of a system that ideally compose faulty behaviour. Test cases for a system are effective if they kill these mutants. For software product lines, several works have addressed mutation testing to inject variability faults, which may only exist in some variants. These works focus on variability models or specific implementation techniques. In contrast, feature-oriented programming has been rarely investigated, wherefore, we (1) derive corresponding mutation operators, (2) investigate the feasibility of our proposed and conventional operators on 4 software product lines, and (3) discuss open challenges in mutation testing of software product lines. The results show that our proposed operators are suitable to cause variability faults and extend the capabilities of conventional operators. Nonetheless, mutation testing of software product lines is comparably expensive, due to a high number of variants and mutants?resulting in equivalence and redundancy.
+ER  - 
+
+TY  - JOUR
+T1  - Decreasing the cost of mutation testing with second-order mutants
+AU  - Polo, Macario
+AU  - Piattini, Mario
+AU  - García-Rodríguez, Ignacio
+Y1  - 2009/06/01
+PY  - 2009
+DA  - 2009/06/01
+N1  - doi: 10.1002/stvr.392
+DO  - 10.1002/stvr.392
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw. Test. Verif. Reliab.
+SP  - 111
+EP  - 131
+VL  - 19
+IS  - 2
+KW  - mutation
+KW  - cost reduction
+KW  - mutant reduction
+PB  - John Wiley & Sons, Ltd
+SN  - 9780471028956
+M3  - doi: 10.1002/stvr.392
+UR  - https://doi.org/10.1002/stvr.392
+Y2  - 2020/04/25
+N2  - Abstract Although powerful, mutation is a computationally very expensive testing technique. In fact, its three main stages (mutant generation, mutant execution and result analysis) require many resources to be successfully accomplished. Thus, researchers have made important efforts to reduce its costs. This paper represents an additional effort in this sense. It describes the results of two experiments in which, by means of combining the original set of mutants and therefore obtaining a new set of mutants?each one with two faults?the number of mutants used is reduced to half. Results lead to believe that mutant combination does not decrease the quality of the test suite, whereas it supposes important savings in mutant execution and result analysis. Copyright ? 2008 John Wiley & Sons, Ltd.
+ER  - 
+
+TY  - JOUR
+T1  - Reducing mutation costs through uncovered mutants
+AU  - Mateo, Pedro Reales
+AU  - Usaola, Macario Polo
+Y1  - 2015/08/01
+PY  - 2015
+DA  - 2015/08/01
+N1  - doi: 10.1002/stvr.1534
+DO  - 10.1002/stvr.1534
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw. Test. Verif. Reliab.
+SP  - 464
+EP  - 489
+VL  - 25
+IS  - 5-7
+KW  - mutation testing
+KW  - empirical analysis
+KW  - MUSIC
+KW  - execution cost reduction
+KW  - infinite loops
+PB  - John Wiley & Sons, Ltd
+SN  - 9780471028956
+M3  - doi: 10.1002/stvr.1534
+UR  - https://doi.org/10.1002/stvr.1534
+Y2  - 2020/04/25
+N2  - Summary Mutation testing is a very effective testing technique that creates mutants in order to design test cases that will kill the mutants. One problem of mutation testing is high costs: creating mutants, executing mutants and calculating the mutation score. This paper empirically analyzes the effect of covering mutants through the mutant schema improved with extra code (MUSIC) technique. This technique annotates the statements covered by the tests in the original system in order to filter the mutant executions, because tests are only executed against the mutants whose mutated statement is covered by the tests. Therefore, MUSIC is meant to reduce the number of required executions and identify infinite loops at a reduced cost. Besides, an experiment was performed to evaluate the advantages and disadvantages of analyzing the covered mutants. As a result, we conclude that analyzing the covered mutants reduces the execution cost of mutation testing and its application is therefore recommended. Copyright ? 2014 John Wiley & Sons, Ltd.
+ER  - 
+
+TY  - JOUR
+T1  - Employing second-order mutation for isolating first-order equivalent mutants
+AU  - Kintis, Marinos
+AU  - Papadakis, Mike
+AU  - Malevris, Nicos
+Y1  - 2015/08/01
+PY  - 2015
+DA  - 2015/08/01
+N1  - doi: 10.1002/stvr.1529
+DO  - 10.1002/stvr.1529
+T2  - Software Testing, Verification and Reliability
+JF  - Software Testing, Verification and Reliability
+JO  - Software Testing, Verification and Reliability
+JA  - Softw. Test. Verif. Reliab.
+SP  - 508
+EP  - 535
+VL  - 25
+IS  - 5-7
+KW  - mutation testing
+KW  - equivalent mutants
+KW  - higher-order mutation
+KW  - mutants’ impact
+KW  - dynamic analysis
+PB  - John Wiley & Sons, Ltd
+SN  - 9780471028956
+M3  - doi: 10.1002/stvr.1529
+UR  - https://doi.org/10.1002/stvr.1529
+Y2  - 2020/04/25
+N2  - SummaryThe equivalent mutant problem is a major hindrance to mutation testing. Being undecidable in general, it is only susceptible to partial solutions. In this paper, mutant classification is utilised for isolating likely to be first-order equivalent mutants. A new classification technique, Isolating Equivalent Mutants (I-EQM), is introduced and empirically investigated. The proposed approach employs a dynamic execution scheme that integrates the impact on the program execution of first-order mutants with the impact on the output of second-order mutants. An experimental study, conducted using two independently created sets of manually classified mutants selected from real-world programs revalidates previously published results and provides evidence for the effectiveness of the proposed technique. Overall, the study shows that I-EQM substantially improves previous methods by retrieving a considerably higher number of killable mutants, thus, amplifying the quality of the testing process. Copyright ? 2014 John Wiley & Sons, Ltd.
+ER  - 

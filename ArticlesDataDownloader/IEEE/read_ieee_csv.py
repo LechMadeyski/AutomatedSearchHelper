@@ -1,5 +1,7 @@
 from ArticlesDataDownloader.ArticleData import ArticleData
-from ArticlesDataDownloader.csv_utilities import read_csv_as_dicts, create_abstract
+from ArticlesDataDownloader.csv_utilities import read_csv_as_dicts
+from ArticlesDataDownloader.text_utilities import create_abstract
+
 import re
 
 def get_publisher_link_from_pdf_link(pdf_link):

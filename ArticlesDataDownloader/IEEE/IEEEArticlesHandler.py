@@ -3,7 +3,7 @@ import os
 from ArticlesDataDownloader.download_pdf_and_prepare_article_data import download_pdf_and_prepare_article_data
 from ArticlesDataDownloader.extract_text_from_pdf import read_pdf_as_json
 
-from ArticlesDataDownloader.IEEE.ieeeHtmlToJson import ieeeHtmlToJson
+from ArticlesDataDownloader.IEEE.ieee_html_to_json import ieee_html_to_json
 
 import logging
 import re
@@ -45,7 +45,7 @@ class IEEEArticlesHandler():
         try:
             WebDriverWait(self.driver, 10).until(lambda x: x.find_element_by_id("article"))
 
-            result_data.merge(ArticleData(text=ieeeHtmlToJson(self.driver.page_source)))
+            result_data.merge(ArticleData(text=ieee_html_to_json(self.driver.page_source)))
             return result_data
         except Exception as error:
             self.__logger.error(error)

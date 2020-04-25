@@ -1,6 +1,6 @@
 from ArticlesDataDownloader.ArticleData import ArticleData
-from ArticlesDataDownloader.csv_utilities import read_csv_as_dicts, create_abstract
-
+from ArticlesDataDownloader.csv_utilities import read_csv_as_dicts
+from ArticlesDataDownloader.text_utilities import create_abstract
 
 def read_scopus_csv(filepath):
     return [ArticleData(

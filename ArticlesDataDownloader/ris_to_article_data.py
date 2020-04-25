@@ -1,27 +1,25 @@
 
-from .ArticleData import ArticleData
-from .format_text_and_split_into_sentences import format_text_and_split_into_sentences
+from ArticlesDataDownloader.ArticleData import ArticleData
+from ArticlesDataDownloader.text_utilities import create_abstract
 
-import os
-from pprint import pprint
 import rispy
 
 
 def __entry_to_article_data(entry):
-    res = ArticleData()
-    res.title = entry.get('title', str())
-    res.authors = entry.get('authors', list())
-    res.issn = entry.get('issn', str())
-    res.publisher = entry.get('publisher', str())
-    res.doi = entry.get('doi', str()).replace('https://doi.org/', str())
-    res.journal_name = entry.get('journal_name', str())
-    res.publish_year = entry.get('year', str())
-
-    if entry.get('abstract', None):
-        res.text = [dict(
-            title='Abstract',
-            paragraphs=[dict(sentences=format_text_and_split_into_sentences(entry.get('abstract')))])]
-    return res
+    return ArticleData(
+        title=entry.get('title', str()) or entry.get('primary_title', str()),
+        authors=entry.get('authors', list()),
+        issn=entry.get('issn', str()),
+        publisher=entry.get('publisher', str()),
+        doi=entry.get('doi', str()).replace('https://doi.org/', str()),
+        journal_name=entry.get('journal_name', str()),
+        publish_year=entry.get('year', str()),
+        publisher_link=entry.get('url', str()),
+        volume=entry.get('volume', str()),
+        issue=entry.get('number', str()),
+        start_page=entry.get('start_page', str()),
+        end_page=entry.get('end_page', str()),
+        text=create_abstract(entry.get('abstract', str()) or entry.get('notes_abstract', str())))
 
 
 def ris_text_to_article_data(text):

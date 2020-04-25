@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 
 import logging
 
-from ArticlesDataDownloader.format_text_and_split_into_sentences import format_text_and_split_into_sentences
+from ArticlesDataDownloader.text_utilities import format_text_and_split_into_sentences
 from ArticlesDataDownloader.ArticleData import ArticleData
 
 

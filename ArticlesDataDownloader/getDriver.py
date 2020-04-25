@@ -92,7 +92,7 @@ from selenium import webdriver
 
 def getDriver(proxyFile=None):
     chrome_options = webdriver.ChromeOptions()
-    if proxyFile is not None:
+    if proxyFile:
         pluginfile = proxyFile
         chrome_options.add_extension(pluginfile)
 

@@ -4,10 +4,10 @@ import logging
 
 from nltk import tokenize
 
-from ArticlesDataDownloader.format_text_and_split_into_sentences import format_text_and_split_into_sentences
+from ArticlesDataDownloader.text_utilities import format_text_and_split_into_sentences
 
 
-def scienceDirectHtmlToJson(textHTML):
+def science_direct_html_to_json(textHTML):
     logger = logging.getLogger("scienceDirectHtmlToJson")
     logger.info("Start readig ScienceDirect file")
 

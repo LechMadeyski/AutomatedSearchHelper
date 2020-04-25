@@ -1,6 +1,6 @@
 import slate as slate
 
-from ArticlesDataDownloader.format_text_and_split_into_sentences import format_text_and_split_into_sentences
+from ArticlesDataDownloader.text_utilities import format_text_and_split_into_sentences
 
 
 def is_section_title_big_letters(prev, current):

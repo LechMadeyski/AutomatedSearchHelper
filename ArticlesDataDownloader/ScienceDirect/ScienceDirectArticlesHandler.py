@@ -1,6 +1,6 @@
 import os
 
-from ArticlesDataDownloader.ScienceDirect.scienceDirectHtmlToJson import scienceDirectHtmlToJson
+from ArticlesDataDownloader.ScienceDirect.science_direct_html_to_json import science_direct_html_to_json
 
 import re
 import logging
@@ -64,7 +64,7 @@ class ScienceDirectArticlesHandler():
             self.driver.get(url)
             self.__logger.debug("Called get for  " + url)
             WebDriverWait(self.driver, 20).until(article_ready)
-            result_data.merge(ArticleData(text = scienceDirectHtmlToJson(self.driver.page_source)))
+            result_data.merge(ArticleData(text = science_direct_html_to_json(self.driver.page_source)))
             return result_data
         except Exception as error:
             self.__logger.error(str(error))
