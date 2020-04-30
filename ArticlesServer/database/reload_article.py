@@ -6,6 +6,7 @@ import os
 
 PROXY = 'proxy_auth_plugin.zip'
 
+
 def reload_article(article_id):
     print('Reloading article ' + article_id)
     db = DatabaseManager.get_instance()
@@ -18,9 +19,9 @@ def reload_article(article_id):
     with open(FINDER_FILE, 'r') as finder_file:
         finder = parse_finder(finder_file.read())
     downloader = ArticlesDataDownloader(OUTPUT_DIRECTORY, PROXY)
-    articleFilename, data = downloader.readArticle(article_data.doi, article_data.scopus_link)
-    if articleFilename:
-        os.remove(articleFilename)
-        articleFilename, data = downloader.readArticle(article_data.doi, article_data.scopus_link)
-    searchResult = finder(data) or {}
-    db.reload_article(article_id, data, searchResult)
+    article_filename, data = downloader.read_article(article_data.search_base)
+    if article_filename:
+        os.remove(article_filename)
+        article_filename, data = downloader.read_article(article_data.search_base)
+    search_result = finder(data) or {}
+    db.reload_article(article_id, data, search_result)

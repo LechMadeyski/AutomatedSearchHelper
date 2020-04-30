@@ -8,11 +8,11 @@
 
 
 
-<h3>Files list</h3>
+<h4>Files list</h4>
 
     {% for name_and_type, files in files_with_categories.items() %}
       <ul class="collection with-header">
-        <li class="collection-header"><h4>{{ name_and_type[0] }}</h4></li>
+        <li class="collection-header"><h5>{{ name_and_type[0] }}</h5></li>
         {% for file in files %}
             <li class="collection-item">{{ file }}</li>
         {% endfor %}

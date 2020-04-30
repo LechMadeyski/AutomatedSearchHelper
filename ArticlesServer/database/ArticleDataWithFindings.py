@@ -1,9 +1,11 @@
 from .ArticleStatus import ArticleStatus
 
+
 class ArticleDataWithFindings:
     def __init__(self, article_and_finding_json):
         self._article_data = article_and_finding_json.get('article', dict())
         self._findings = article_and_finding_json.get('findings', [])
+        self._search_base = article_and_finding_json.get('base_article_data', None)
         self._is_ignored = False
 
     def toggle_ignored(self):
@@ -90,3 +92,7 @@ class ArticleDataWithFindings:
                 return ArticleStatus.READ_PARTIAL_PUBLISHER_NOT_SUPPORTED_NO_FINDINGS
             else:
                 return ArticleStatus.READ_PARTIAL_ERROR_READING_NO_FINDINGS
+
+    @property
+    def search_base(self):
+        return self._search_base

@@ -169,9 +169,10 @@ class ArticlesDataDownloader:
         if article_data.filename_base:
             old_file_data = self.__try_to_read_old_file(article_data.filename_base)
             if old_file_data:
+                self.__logger.info('Successfully read old file ' + old_file_data[0])
                 return old_file_data
         else:
-            return None, None
+            return None
 
         if not article_data.publisher_link and article_data.doi:
             article_data.publisher_link = getLinkFromDoi(article_data.doi)

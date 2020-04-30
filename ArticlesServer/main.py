@@ -351,5 +351,7 @@ def upload_articles_list(file_type):
         if directories:
             filepath = directories[0] + '/' + form.articles_list_file.data.filename
             form.articles_list_file.data.save(filepath)
+            DatabaseManager.reload_database()
+
     return redirect(url_for('main.view_articles_list'))
 

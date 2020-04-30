@@ -37,7 +37,7 @@ class ArticlesDatabase:
             article_id = str(index)
             self._articles[article_id] = ArticleDataWithFindings(file)
             article_data = self._articles[article_id]
-            print('reading article no: ' + article_id + ' name: '  + article_data.doi)
+            print('adding article no: ' + article_id + ' name: ' + article_data.doi)
 
         self._load_comments_and_statuses()
         self._load_ignore_list()
