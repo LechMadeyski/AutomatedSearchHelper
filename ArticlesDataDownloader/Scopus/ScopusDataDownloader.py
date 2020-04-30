@@ -59,10 +59,10 @@ class ScopusDataDownloader:
 
             issn_idx = ref.text.find(ISSN)
             if issn_idx != -1:
-                result.issn = ref.text[issn_idx + len(ISSN):]
+                result.issn = ref.text[issn_idx + len(ISSN):].strip()
             doi_idx = ref.text.find(DOI)
             if doi_idx != -1:
-                result.doi = ref.text[doi_idx+len(DOI):]
+                result.doi = ref.text[doi_idx+len(DOI):].strip()
 
         self._logger.info("Soap analysis end")
         return result

@@ -6,6 +6,8 @@ import json
 import logging
 import io
 
+from wtforms.validators import InputRequired
+
 from .database.ArticleStatus import ArticleStatus
 from AutomatedSearchHelperUtilities.extract_doi_from_csv import extract_doi_from_csv
 from ArticlesServer.database.DatabaseManager import DatabaseManager
@@ -13,12 +15,12 @@ from .prepare_sections import prepare_sections
 from TextSearchEngine.parse_finder import parse_finder
 from .database.Status import Status
 from .database.UsersDatabase import get_user_database
-from .directories import DOIS_FILE, FINDER_FILE, DOIS_TEMP, FINDER_TEMP
+from .directories import DOIS_FILE, FINDER_FILE, DOIS_TEMP, FINDER_TEMP, PUBLISHER_INPUT_DIRECTORIES_AND_FILE_TYPES
 from .database.reload_article import reload_article
 
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired
-from wtforms import StringField, PasswordField, validators
+from wtforms import StringField, PasswordField, validators, SelectField, RadioField
 from shutil import copyfile
 from flask import make_response
 
@@ -65,24 +67,16 @@ def get_finder_string_from_file(finder_form):
 
 
 class UploadForm(FlaskForm):
-    doi_list = FileField('doi_list', validators=[
-        FileRequired()
-    ])
     finder = FileField('finder')
     finder_text = StringField('finder_text')
 
 
-@main.route('/upload', methods=["GET", "POST"])
-def upload():
+@main.route('/upload_fider', methods=["GET", "POST"])
+def upload_finder():
     form = UploadForm()
 
     if form.validate_on_submit():
         logger = logging.getLogger('upload_post')
-        doiList = get_doi_list(form.doi_list)
-        if doiList is None:
-            logger.error('Wrong doi list provided')
-            flash("Invalid doi list")
-            return render_template('upload_view.html', form=form)
         finder_text = get_finder_string_from_file(form.finder)
         finder = None
         if finder_text is None:
@@ -92,21 +86,20 @@ def upload():
             finder = parse_finder(finder_text)
         except ValueError as e:
             flash("Invalid finder text " + str(e))
-
         if finder is None:
             logger.error('Wrong finder provided')
-            return render_template('upload_view.html', form=form)
-        logger.info('Properly read doiList and finder, doi list size is ' + str(len(doiList)))
-
-        copyfile(DOIS_TEMP, DOIS_FILE)
+            return render_template('upload_finder_view.html', form=form)
+        logger.info('Properly read doiList and finder')
 
         with open(FINDER_FILE, 'w') as finder_file:
             finder_file.write(str(finder))
-
-        DatabaseManager.reload_database(doiList, finder)
+        DatabaseManager.reload_database()
         return redirect(url_for('main.index'))
 
-    return render_template('upload_view.html', form=form)
+    with open(FINDER_FILE, 'r') as finder_file:
+        current_finder = finder_file.read()
+
+    return render_template('upload_finder_view.html', form=form, current_finder=current_finder)
 
 
 def can_remove_comment(login):
@@ -115,6 +108,7 @@ def can_remove_comment(login):
         return user['login'] == login
     else:
         return False
+
 
 def prepare_comments(db, doi_id):
     return [
@@ -325,8 +319,37 @@ def results():
     output.headers["Content-type"] = "text/csv"
     return output
 
+
 @main.route('/reload/<string:doi_id>')
 def reload(doi_id):
     reload_article(doi_id)
     return redirect(url_for('main.view_doi', doi_id=doi_id))
+
+
+class UploadFileForm(FlaskForm):
+    articles_list_file = FileField('File with articles', validators=[
+        FileRequired()
+    ])
+
+
+@main.route('/articles_lists', methods=["GET"])
+def view_articles_list():
+
+    files_with_categories = dict()
+    for name, directory, file_type in PUBLISHER_INPUT_DIRECTORIES_AND_FILE_TYPES:
+        files_with_categories[(name, file_type)] = os.listdir(directory)
+
+    return render_template('upload_articles_view.html', form=UploadFileForm(), files_with_categories=files_with_categories)
+
+
+@main.route('/upload_articles_list/<int:file_type>', methods=['POST'])
+def upload_articles_list(file_type):
+    form = UploadFileForm()
+    if form.validate_on_submit():
+        directories = [dir for _, dir, t in PUBLISHER_INPUT_DIRECTORIES_AND_FILE_TYPES if t == file_type]
+
+        if directories:
+            filepath = directories[0] + '/' + form.articles_list_file.data.filename
+            form.articles_list_file.data.save(filepath)
+    return redirect(url_for('main.view_articles_list'))
 

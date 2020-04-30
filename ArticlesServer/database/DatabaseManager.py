@@ -1,4 +1,4 @@
-from .generate_articles_database import generate_articles_database
+from .generate_articles_database import generate_articles_database_from_files
 
 
 class DatabaseManager:
@@ -9,5 +9,5 @@ class DatabaseManager:
         return DatabaseManager._currentDatabase
 
     @staticmethod
-    def reload_database(doi_list, finder):
-        DatabaseManager._currentDatabase = generate_articles_database(doi_list, finder)
+    def reload_database():
+        DatabaseManager._currentDatabase = generate_articles_database_from_files()

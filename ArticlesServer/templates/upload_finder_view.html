@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<h3>Current finder: </h3>
+<div>
+{{ current_finder }}
+</div>
+
+<h3>Upload finder:</h3>
+
+<form method="POST" enctype="multipart/form-data">
+    {{ form.csrf_token }}
+    <div class="row">
+        <div class="col s2">
+            <div class="file-field input-field">
+              <div class="btn">
+                <span>Finder file</span>
+                {{ form.finder }}
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+              </div>
+            </div>
+        </div>
+        <div class="col">
+            <span>OR</span>
+        </div>
+        <div class="col s5">
+            <label>Finder text</label>
+            {{ form.finder_text }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s2">
+        </div>
+        <div class="col center">
+             <button class="btn waves-effect waves-light" type="submit" name="action" href="{{ url_for('main.upload_finder')}}">
+                  Upload finder
+              </button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+
+
+
+

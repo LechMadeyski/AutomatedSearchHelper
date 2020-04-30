@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+{% if form.errors %}
+    {{ form.errors }}
+{% endif %}
+
+
+
+<h3>Files list</h3>
+
+    {% for name_and_type, files in files_with_categories.items() %}
+      <ul class="collection with-header">
+        <li class="collection-header"><h4>{{ name_and_type[0] }}</h4></li>
+        {% for file in files %}
+            <li class="collection-item">{{ file }}</li>
+        {% endfor %}
+       </ul>
+
+
+    <div class="row">
+        <form method="POST" enctype="multipart/form-data" action="{{ url_for('main.upload_articles_list', file_type=name_and_type[1])}}">
+        {{ form.csrf_token }}
+            <div class="col s3">
+                <div class="file-field input-field">
+                    <div class="btn-small">
+                        <span>Browse</span>
+                        {{ form.articles_list_file }}
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                </div>
+
+                <div class="row">
+                    <button class="btn" type="submit" name="action">
+                        Add file
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    {% endfor %}
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('select');
+            M.FormSelect.init(elems, {});
+        });
+    </script>
+
+
+{% endblock %}
+
+

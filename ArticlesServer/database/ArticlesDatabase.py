@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from .ArticleData import ArticleData
+from .ArticleDataWithFindings import ArticleDataWithFindings
 from .ArticleStatus import ArticleStatus
 
 from .Status import Status
@@ -29,30 +29,18 @@ def try_to_find_prev(article_id, doi_list):
 class ArticlesDatabase:
     def __init__(self, files, output_db):
         self._articles = dict()
-        self._valid_dois_with_findings = list()
-        self._valid_dois_without_findings = list()
-        self._invalid_dois = list()
         self._statuses = defaultdict(dict)
         self._comments = defaultdict(list)
         self._output_db = output_db
         self._ignore_list = list()
         for index, file in enumerate(files):
             article_id = str(index)
-            self._articles[article_id] = ArticleData(file)
+            self._articles[article_id] = ArticleDataWithFindings(file)
             article_data = self._articles[article_id]
             print('reading article no: ' + article_id + ' name: '  + article_data.doi)
-            self._assign_to_category(article_data, article_id)
 
         self._load_comments_and_statuses()
         self._load_ignore_list()
-
-    def _assign_to_category(self, article_data, article_id):
-        if article_data.findings:
-            self._valid_dois_with_findings.append(article_id)
-        elif article_data.read_status == 'OK':
-            self._valid_dois_without_findings.append(article_id)
-        else:
-            self._invalid_dois.append(article_id)
 
     def _load_comments_and_statuses(self):
         for article_id in self._articles.keys():
@@ -204,16 +192,4 @@ class ArticlesDatabase:
             print(file_path + " not found. ")
 
     def reload_article(self, article_id, article, findings):
-        self._articles[article_id] = ArticleData(dict(article=article, findings=findings))
-
-        if article_id in self._valid_dois_with_findings:
-            self._valid_dois_with_findings.remove(article_id)
-
-        if article_id in self._valid_dois_without_findings:
-            self._valid_dois_without_findings.remove(article_id)
-
-        if article_id in self._invalid_dois:
-            self._invalid_dois.remove(article_id)
-
-        self._assign_to_category(self._articles[article_id], article_id)
-
+        self._articles[article_id] = ArticleDataWithFindings(dict(article=article, findings=findings))

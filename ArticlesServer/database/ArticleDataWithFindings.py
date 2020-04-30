@@ -1,6 +1,6 @@
 from .ArticleStatus import ArticleStatus
 
-class ArticleData:
+class ArticleDataWithFindings:
     def __init__(self, article_and_finding_json):
         self._article_data = article_and_finding_json.get('article', dict())
         self._findings = article_and_finding_json.get('findings', [])
@@ -69,7 +69,7 @@ class ArticleData:
         error_status = self._article_data.get('read_status', str())
         if error_status != 'OK':
             if error_status == str():
-                return 'Undefinded error'
+                return 'Undefined error'
             else:
                 return error_status
         return str()

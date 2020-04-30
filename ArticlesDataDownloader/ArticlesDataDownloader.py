@@ -137,13 +137,6 @@ class ArticlesDataDownloader:
             self.__logger.error("Could not find handler for " + publisher_link)
             return self.write_missing_handler_result(doi, scopus_link)
 
-    def getDownloadArticles(self, doiList):
-        result_filenames = list()
-        self.__logger.info("Start downloading articles")
-        for doi in doiList:
-            filename, resultData = self.readArticle(doi['doi'], doi['scopus_link'])
-            result_filenames.append(filename)
-        return result_filenames
 
     def __file_path_from_filename(self, file_name, extension='.json'):
         return self.__outputFolder + '/' + file_name + extension
@@ -174,7 +167,7 @@ class ArticlesDataDownloader:
             article_data.filename_base = doi_to_filename_base(article_data.doi)
 
         if article_data.filename_base:
-            old_file_data =  self.__try_to_read_old_file(article_data.filename_base)
+            old_file_data = self.__try_to_read_old_file(article_data.filename_base)
             if old_file_data:
                 return old_file_data
         else:
@@ -192,8 +185,13 @@ class ArticlesDataDownloader:
                 if handler.link_part() in article_data.publisher_link:
                     self.__logger.info("Link will be handled by " + handler.name())
                     article_data.merge(handler.get_article(article_data.publisher_link))
+                    break
             else:
                 self.__logger.error("Could not find handler for " + article_data.publisher_link)
+                article_data.read_status = 'Publisher not supported'
+        else:
+            self.__logger.error("Did not have publisher link for " + str(article_data))
+            article_data.read_status = 'No publisher link found'
 
         self.__fill_article_data_from_other_sources_if_needed(article_data)
         return self.__write_article_data(article_data)

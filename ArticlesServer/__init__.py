@@ -6,23 +6,27 @@ from TextSearchEngine.parse_finder import parse_finder
 from AutomatedSearchHelperUtilities.configuration import configureLogger
 from AutomatedSearchHelperUtilities.extract_doi_from_csv import extract_doi_from_csv
 from AutomatedSearchHelperUtilities.utilities import createDirectoryIfNotExists
-from .directories import BASE_DIRECTORY, DOIS_FILE, FINDER_FILE
+from .directories import BASE_DIRECTORY, DOIS_FILE, FINDER_FILE, INPUT_FILES_DIRECTORY, PUBLISHER_INPUT_DIRECTORIES_AND_FILE_TYPES
 
 ALLOWED_EXTENSIONS = {'csv'}
 
 
 def create_app(test_config=None):
     createDirectoryIfNotExists(BASE_DIRECTORY)
+    createDirectoryIfNotExists(INPUT_FILES_DIRECTORY)
+    for _, directory, _ in PUBLISHER_INPUT_DIRECTORIES_AND_FILE_TYPES:
+        createDirectoryIfNotExists(directory)
+
+
     configureLogger()
     app = Flask(__name__, instance_relative_config=True)
     jsglue = JSGlue(app)
     try:
-        doi_list = extract_doi_from_csv(DOIS_FILE)
-        with open(FINDER_FILE, 'r') as finder_file:
-            finder = parse_finder(finder_file.read())
         from ArticlesServer.database.DatabaseManager import DatabaseManager
-        DatabaseManager.reload_database(doi_list, finder)
-    except:
+        DatabaseManager.reload_database()
+        print('Successfully reloaded articles')
+    except Exception as e:
+        print(e)
         print("Could not load old configuration")
 
     app.config['SESSION_TYPE'] = 'memcached'

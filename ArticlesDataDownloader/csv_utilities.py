@@ -1,5 +1,5 @@
 import csv
-from ArticlesDataDownloader.text_utilities import format_text_and_split_into_sentences
+
 
 def read_csv_as_dicts(filepath):
     result = list()
@@ -12,8 +12,6 @@ def read_csv_as_dicts(filepath):
             else:
                 entry = dict()
                 for index, value in enumerate(row):
-                    entry[row_names[index]] = value
+                    entry[row_names[index]] = value.strip()
                 result.append(entry)
-        print(row_names)
-
     return result

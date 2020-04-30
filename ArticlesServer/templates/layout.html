@@ -27,7 +27,8 @@
                  <li><a href="{{ url_for("main.login") }}">Login</a></li>
                  <li><a href="{{ url_for("main.register") }}">Register</a></li>
               {% endif %}
-              <li><a href="{{ url_for("main.upload") }}">Upload</a></li>
+              <li><a href="{{ url_for("main.upload_finder") }}">Upload Finder</a></li>
+              <li><a href="{{ url_for("main.view_articles_list") }}">Upload Articles</a></li>
               <li><a href="{{ url_for("main.index") }}">Index</a></li>
               <li><a href="{{ url_for("main.results") }}">Generate results</a></li>
           {% block navbar %}
