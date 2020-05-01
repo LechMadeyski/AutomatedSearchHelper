@@ -2,12 +2,13 @@ import os
 from setuptools import setup, find_packages
 from setuptools.command.install import install
 
+
 def _post_install():
     import nltk
     nltk.download('punkt')
 
 
-class my_install(install):
+class MyInstall(install):
     def run(self):
         install.run(self)
         self.execute(_post_install, [], msg='running _post_install task')
@@ -18,7 +19,7 @@ setup(
     version="0.0.1",
     author="Marek Sośnicki",
     packages=find_packages(),
-    cmdclass={'install': my_install},
+    cmdclass={'install': MyInstall},
     install_requires=[
         'flask',
         'flask_wtf',
@@ -30,7 +31,9 @@ setup(
         'slate',
         'utils',
         'rispy',
-        'nltk', 'selenium'],
+        'cattr',
+        'nltk',
+        'selenium'],
     scripts=[
         'run_articles_download.py',
         'run_articles_search.py',

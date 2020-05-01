@@ -2,6 +2,9 @@ import json
 import logging
 import os
 
+import cattr
+
+from ArticlesDataDownloader.ArticleData import ArticleData
 from ArticlesDataDownloader.IEEE.IEEEArticlesHandler import IEEEArticlesHandler
 from ArticlesDataDownloader.Scopus.ScopusDataDownloader import ScopusDataDownloader
 from ArticlesDataDownloader.Willey.WilleyArticlesHandler import WilleyArticlesHandler
@@ -137,7 +140,6 @@ class ArticlesDataDownloader:
             self.__logger.error("Could not find handler for " + publisher_link)
             return self.write_missing_handler_result(doi, scopus_link)
 
-
     def __file_path_from_filename(self, file_name, extension='.json'):
         return self.__outputFolder + '/' + file_name + extension
 
@@ -145,7 +147,8 @@ class ArticlesDataDownloader:
         file_path = self.__file_path_from_filename(file_name)
         if os.path.isfile(file_path):
             with open(file_path) as json_file:
-                return file_path, json.load(json_file)
+                dict_to_read = json.load(json_file)
+                return file_path, cattr.structure(dict_to_read, ArticleData)
         else:
             return None
 
@@ -156,7 +159,7 @@ class ArticlesDataDownloader:
         with open(file_path, "w") as f:
             f.write(json.dumps(article_data.to_dict()))
 
-        return file_path, article_data.to_dict()
+        return file_path, article_data
 
     def __fill_article_data_from_other_sources_if_needed(self, article_data):
         if article_data.doi and (not article_data.title or not article_data.authors):

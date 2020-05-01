@@ -1,9 +1,10 @@
+from ArticlesDataDownloader.ArticleData import ArticleData
 from .ArticleStatus import ArticleStatus
 
 
 class ArticleDataWithFindings:
     def __init__(self, article_and_finding_json):
-        self._article_data = article_and_finding_json.get('article', dict())
+        self._article_data = article_and_finding_json.get('article_data', ArticleData)
         self._findings = article_and_finding_json.get('findings', [])
         self._search_base = article_and_finding_json.get('base_article_data', None)
         self._is_ignored = False
@@ -13,54 +14,70 @@ class ArticleDataWithFindings:
 
     @property
     def title(self):
-        return self._article_data.get('title', str())
+        return self._article_data.title
 
     @property
     def authors(self):
-        return self._article_data.get('authors', list())
+        return self._article_data.authors
 
     @property
     def read_status(self):
-        return self._article_data.get('read_status', "Cannot read")
+        return self._article_data.read_status
 
     @property
     def journal_name(self):
-        return self._article_data.get('journalName', str()) or self._article_data.get('journal_name', str())
+        return self._article_data.journal_name
 
     @property
     def journal_info(self):
-        return self._article_data.get('journalInfo', str()) or self._article_data.get('journal_info', str())
+        result = str()
+
+        if self._article_data.volume:
+            result += 'Volume: ' + self._article_data.volume + ' '
+
+        if self._article_data.issue:
+            result += 'Issue: ' + self._article_data.issue + ' '
+
+        if self._article_data.start_page and self._article_data.end_page:
+            result += self._article_data.start_page + '-' + self._article_data.end_page + ' '
+
+        if self._article_data.publication_date:
+            result += 'Published : ' + self._article_data.publication_date + ' '
+        elif self._article_data.publish_year:
+            result += 'Published : ' + self._article_data.publish_year + ' '
+
+        return result
 
     @property
     def publisher(self):
-        return self._article_data.get('publisher', str())
+        return self._article_data.publisher
 
     @property
     def issn(self):
-        return self._article_data.get('issn', str())
+        return self._article_data.issn
 
     @property
     def scopus_link(self):
-        return self._article_data.get('scopus_link', str())
+        return self._article_data.scopus_link
 
     @property
     def doi_link(self):
-        if 'scopus' in self.doi or self.doi == str():
-            return str()
+        if self._article_data.doi:
+            return 'http://doi.org/' + self._article_data.doi
         else:
-            return 'http://doi.org/' + self.doi
+            return str()
 
     @property
     def doi(self):
-        return self._article_data.get('doi', str())
+        return self._article_data.doi
 
     @property
     def publisher_link(self):
-        return self._article_data.get('publisher_link', str())
+        return self._article_data.publisher_link
 
     @property
     def text(self):
-        return self._article_data.get('text', list())
+        return self._article_data.text
 
     @property
     def findings(self):
@@ -68,7 +85,7 @@ class ArticleDataWithFindings:
 
     @property
     def read_error(self):
-        error_status = self._article_data.get('read_status', str())
+        error_status = self._article_data.read_status
         if error_status != 'OK':
             if error_status == str():
                 return 'Undefined error'

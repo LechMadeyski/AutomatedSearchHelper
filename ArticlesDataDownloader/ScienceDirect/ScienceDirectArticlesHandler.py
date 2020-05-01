@@ -83,6 +83,7 @@ class ScienceDirectArticlesHandler():
 
     def link_part(self):
         return "linkinghub.elsevier.com"
+        #TODO: add second type sciencedirect.com
 
     def name(self):
         return "ScienceDirect"

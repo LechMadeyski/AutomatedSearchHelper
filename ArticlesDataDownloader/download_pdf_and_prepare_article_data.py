@@ -11,6 +11,8 @@ def download_pdf_and_prepare_article_data(
         output_filename='temporary.pdf',
         should_clear_file=True):
     try:
+        if os.path.isfile(output_filename):
+            os.remove(output_filename)
         download_file_from_link_to_path(driver, pdf_link, output_filename)
         result_reading = ArticleData(text=read_pdf_as_json(output_filename))
     except Exception as error:

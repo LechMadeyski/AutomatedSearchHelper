@@ -44,11 +44,11 @@ def generate_articles_database_from_files():
         for fileName in os.listdir(directory):
             for base_article_data in read_input_file(directory + '/' + fileName, input_type):
                 filename, article_data = downloader.read_article(base_article_data)
-                search_result = finder(article_data) or {}
+                search_result = finder(article_data.to_dict()) or {}
                 if [x for x in article_datas if x.get('base_article_data').filename_base == base_article_data.filename_base]:
                     print('duplicated article found ' + base_article_data.filename_base)
                 else:
-                    article_datas.append(dict(article=article_data,
+                    article_datas.append(dict(article_data=article_data,
                                               findings=search_result,
                                               base_article_data=base_article_data))
 

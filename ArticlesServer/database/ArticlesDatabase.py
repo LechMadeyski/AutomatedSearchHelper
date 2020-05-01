@@ -192,4 +192,4 @@ class ArticlesDatabase:
             print(file_path + " not found. ")
 
     def reload_article(self, article_id, article, findings):
-        self._articles[article_id] = ArticleDataWithFindings(dict(article=article, findings=findings))
+        self._articles[article_id] = ArticleDataWithFindings(dict(article_data=article, findings=findings))

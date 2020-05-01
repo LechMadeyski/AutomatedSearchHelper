@@ -23,5 +23,5 @@ def reload_article(article_id):
     if article_filename:
         os.remove(article_filename)
         article_filename, data = downloader.read_article(article_data.search_base)
-    search_result = finder(data) or {}
+    search_result = finder(data.to_dict()) or {}
     db.reload_article(article_id, data, search_result)

@@ -32,6 +32,7 @@ def test_properly_read_full_article_data():
         authors=['Author One', 'Author Two'],
         publisher='Any Publisher',
         issn='Some issn',
+        publication_date='20 some date 20',
         scopus_link='',
         publisher_link=str(),
         read_status='',

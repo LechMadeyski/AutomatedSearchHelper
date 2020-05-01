@@ -19,6 +19,7 @@ class ArticleData:
     issue = attr.ib(default=str())
     start_page = attr.ib(default=str())
     end_page = attr.ib(default=str())
+    publication_date = attr.ib(default=str())
     filename_base = attr.ib(default=str())
 
     def to_dict(self):
@@ -57,6 +58,8 @@ class ArticleData:
             self.end_page = other.end_page
         if not self.filename_base:
             self.filename_base = other.filename_base
+        if not self.publication_date:
+            self.publication_date = other.publication_date
 
         if not self.text:
             self.text = other.text

@@ -39,5 +39,6 @@ def read_scopus_csv(filepath):
         end_page=x.get('Page end', str()),
         text=create_abstract(x.get('Abstract', str())),
         issn=x.get('ISSN', str()),
+        publication_date=x.get('Conference date', str()),
         filename_base=__get_file_name_base(x),
         doi=x.get('DOI', str())) for x in read_csv_as_dicts(filepath)]

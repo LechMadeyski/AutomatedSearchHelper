@@ -20,6 +20,7 @@ def __entry_to_article_data(entry):
         issue=entry.get('number', str()),
         start_page=entry.get('start_page', str()),
         end_page=entry.get('end_page', str()),
+        publication_date=entry.get('date', str()) or entry.get('publication_year', str()),
         text=create_abstract(entry.get('abstract', str()) or entry.get('notes_abstract', str())))
     if result.doi:
         result.filename_base = doi_to_filename_base(result.doi)

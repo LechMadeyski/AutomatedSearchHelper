@@ -1,21 +1,22 @@
 import pytest
+from ArticlesDataDownloader.ArticleData import ArticleData
 
 from .Status import Status
 from .ArticlesDatabase import ArticlesDatabase
 
 
 def generate_article_data(doi, title='some title', read_status='OK'):
-    return dict(doi=doi, title=title, read_status=read_status)
+    return ArticleData(doi=doi, title=title, read_status=read_status)
 
 
 def test_get_all_articles_shall_return_all_dois():
     articles_input = [
         {
-            "article": generate_article_data('doidoi'),
+            "article_data": generate_article_data('doidoi'),
             "findings": []
         },
         {
-            "article": generate_article_data('doidoi2'),
+            "article_data": generate_article_data('doidoi2'),
             "findings": []
         }
     ]
@@ -26,27 +27,27 @@ def test_get_all_articles_shall_return_all_dois():
 def get_basic_articles():
     return [
         {
-            "article": generate_article_data('d0', read_status='OK'),
+            "article_data": generate_article_data('d0', read_status='OK'),
             "findings": ['some finding', 'other finding']
         },
         {
-            "article": generate_article_data('d1', read_status='OK'),
+            "article_data": generate_article_data('d1', read_status='OK'),
             "findings": []
         },
         {
-            "article": generate_article_data('d2', read_status='Error....'),
+            "article_data": generate_article_data('d2', read_status='Error....'),
             "findings": ['some finding']
         },
         {
-            "article": generate_article_data('d3', read_status='OK'),
+            "article_data": generate_article_data('d3', read_status='OK'),
             "findings": ['some finding']
         },
         {
-            "article": generate_article_data('d4', read_status='Other Error....'),
+            "article_data": generate_article_data('d4', read_status='Other Error....'),
             "findings": ['some finding']
         },
         {
-            "article": generate_article_data('d5', read_status='OK'),
+            "article_data": generate_article_data('d5', read_status='OK'),
             "findings": []
         },
     ]
