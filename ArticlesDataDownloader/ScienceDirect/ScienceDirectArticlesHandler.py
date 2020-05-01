@@ -85,5 +85,13 @@ class ScienceDirectArticlesHandler():
         return "linkinghub.elsevier.com"
         #TODO: add second type sciencedirect.com
 
+
+    def is_applicable(self, url):
+        for link_part in ['linkinghub.elsevier.com', 'sciencedirect.com']:
+            if link_part in url:
+                return True
+        return False
+
+
     def name(self):
         return "ScienceDirect"

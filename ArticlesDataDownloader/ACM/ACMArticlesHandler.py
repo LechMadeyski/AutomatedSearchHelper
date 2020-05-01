@@ -40,5 +40,8 @@ class ACMArticlesHandler:
     def link_part(self):
         return "acm.org"
 
+    def is_applicable(self, url):
+        return self.link_part() in url
+
     def name(self):
         return "ACM"

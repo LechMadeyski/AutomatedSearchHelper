@@ -48,6 +48,8 @@ class SpringerArticlesHandler():
     def link_part(self):
         return "link.springer.com"
 
+    def is_applicable(self, url):
+        return self.link_part() in url
 
     def name(self):
         return "Springer"

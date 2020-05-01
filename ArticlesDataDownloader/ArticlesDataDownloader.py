@@ -183,12 +183,22 @@ class ArticlesDataDownloader:
         if not article_data.publisher_link and article_data.scopus_link:
             article_data.merge(self.get_scopus_downloader().get_data(article_data.scopus_link))
 
+        if not article_data.publisher_link and article_data.doi:
+            article_data.publisher_link = getLinkFromDoi(article_data.doi)
+
         if article_data.publisher_link:
             for handler in self.get_handlers():
                 self.__logger.debug("Checking " + handler.name() + " with link part " + handler.link_part())
-                if handler.link_part() in article_data.publisher_link:
-                    self.__logger.info("Link will be handled by " + handler.name())
-                    article_data.merge(handler.get_article(article_data.publisher_link))
+                if handler.is_applicable(article_data.publisher_link):
+                    for try_count in range(3):
+                        try:
+                            self.__logger.info("Link will be handled by " + handler.name())
+                            article_data.merge(handler.get_article(article_data.publisher_link))
+                            break
+                        except Exception as e:
+                            self.__logger.warning("Failed to read " + article_data.publisher_link
+                                                  + " try " + str(try_count) + '/3')
+                            self.__logger.warning('Error reading  : ' + str(e))
                     break
             else:
                 self.__logger.error("Could not find handler for " + article_data.publisher_link)

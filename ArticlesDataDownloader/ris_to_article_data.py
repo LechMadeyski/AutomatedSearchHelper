@@ -22,6 +22,10 @@ def __entry_to_article_data(entry):
         end_page=entry.get('end_page', str()),
         publication_date=entry.get('date', str()) or entry.get('publication_year', str()),
         text=create_abstract(entry.get('abstract', str()) or entry.get('notes_abstract', str())))
+
+    if 'doi.org' in result.publisher_link:
+        result.publisher_link = str()
+
     if result.doi:
         result.filename_base = doi_to_filename_base(result.doi)
     return result

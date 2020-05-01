@@ -69,5 +69,8 @@ class IEEEArticlesHandler():
     def link_part(self):
         return "ieeexplore.ieee.org"
 
+    def is_applicable(self, url):
+        return self.link_part() in url
+
     def name(self):
         return "IEEE"

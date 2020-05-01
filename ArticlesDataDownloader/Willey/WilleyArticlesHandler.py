@@ -64,5 +64,8 @@ class WilleyArticlesHandler:
     def link_part(self):
         return "wiley.com"
 
+    def is_applicable(self, url):
+        return self.link_part() in url
+
     def name(self):
         return "Willey"
