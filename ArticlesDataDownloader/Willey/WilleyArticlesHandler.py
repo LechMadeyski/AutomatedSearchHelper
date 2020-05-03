@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from ArticlesDataDownloader.ArticleData import ArticleData
+from ArticlesDataDownloader.download_pdf_and_prepare_article_data import download_pdf
 from ArticlesDataDownloader.ris_to_article_data import ris_text_to_article_data
 import logging
 
@@ -61,11 +62,20 @@ class WilleyArticlesHandler:
 
         return result_data
 
-    def link_part(self):
-        return "wiley.com"
+    def download_pdf(self, url):
+        pdf_link = url.replace('doi/abs', 'doi/pdfdirect')\
+                       .replace('doi/full', 'doi/pdfdirect')\
+                       .replace('http:', 'https:')\
+                       .replace('doi.wiley.com', 'onlinelibrary.wiley.com/doi/pdfdirect') + '?download=true'
+        PDF_FILENAME = 'WILLEY_temporary.pdf'
+
+
+        self.__logger.info('Trying to download pdf from ' + pdf_link)
+
+        return download_pdf(self.driver, pdf_link, PDF_FILENAME)
 
     def is_applicable(self, url):
-        return self.link_part() in url
+        return "wiley.com" in url
 
     def name(self):
         return "Willey"

@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import shutil
 
 import cattr
 
@@ -16,7 +17,7 @@ from ArticlesDataDownloader.getLinkFromDoi import getLinkFromDoi
 from ArticlesDataDownloader.getDriver import getDriver
 from AutomatedSearchHelperUtilities.getDoiFilename import getDoiFilename, doi_to_filename_base
 from ArticlesDataDownloader.RefworksDataDownloader import RefworksDataDownloader
-
+from ArticlesDataDownloader.extract_text_from_pdf import read_pdf_as_json
 
 class ArticlesDataDownloader:
     def __init__(self, output_folder, proxy_file=None):
@@ -126,8 +127,8 @@ class ArticlesDataDownloader:
         self.__logger.info("Publisher link is " + str(publisher_link))
 
         for handler in self.get_handlers():
-            self.__logger.debug("Checking " + handler.name() + " with link part " + handler.link_part())
-            if handler.link_part() in publisher_link:
+            self.__logger.debug("Checking " + handler.name())
+            if handler.is_applicable(publisher_link):
                 self.__logger.info("Link will be handled by " + handler.name())
                 article = handler.get_article(publisher_link)
 
@@ -152,18 +153,29 @@ class ArticlesDataDownloader:
         else:
             return None
 
-    def __write_article_data(self, article_data):
+    def __write_article_data(self, article_data, pdf_filename):
         file_path = self.__file_path_from_filename(article_data.filename_base)
 
-        #REFWORKS, SCOPUS
         with open(file_path, "w") as f:
             f.write(json.dumps(article_data.to_dict()))
+
+        if pdf_filename:
+            pdf_location = self.__file_path_from_filename(article_data.filename_base, extension='.pdf')
+            shutil.move(pdf_filename, pdf_location)
 
         return file_path, article_data
 
     def __fill_article_data_from_other_sources_if_needed(self, article_data):
         if article_data.doi and (not article_data.title or not article_data.authors):
             article_data.merge(self.__refworks_downloader.get_data(article_data.doi))
+
+    def __try_to_merge_article_data_from_pdf(self, article_data, pdf_filename):
+        try:
+            article_data.merge(ArticleData(text=read_pdf_as_json(pdf_filename)))
+            article_data.read_status = 'OK'
+        except:
+            self.__logger.warning('Failed to read article data from pdf ' + pdf_filename)
+            return article_data.merge(ArticleData(read_status='Failed reading pdf data'))
 
     def read_article(self, article_data):
         if not article_data.filename_base and article_data.doi:
@@ -186,19 +198,26 @@ class ArticlesDataDownloader:
         if not article_data.publisher_link and article_data.doi:
             article_data.publisher_link = getLinkFromDoi(article_data.doi)
 
+        pdf_filename = str()
+
         if article_data.publisher_link:
             for handler in self.get_handlers():
-                self.__logger.debug("Checking " + handler.name() + " with link part " + handler.link_part())
+                self.__logger.debug("Checking " + handler.name())
                 if handler.is_applicable(article_data.publisher_link):
                     for try_count in range(3):
                         try:
                             self.__logger.info("Link will be handled by " + handler.name())
                             article_data.merge(handler.get_article(article_data.publisher_link))
+                            pdf_filename = handler.download_pdf(article_data.publisher_link)
+                            if pdf_filename and article_data.read_status != 'OK':
+                                self.__try_to_merge_article_data_from_pdf(article_data, pdf_filename)
+                            elif not pdf_filename:
+                                self.__logger.warning("Could not get pdf for " + article_data.publisher_link)
                             break
                         except Exception as e:
                             self.__logger.warning("Failed to read " + article_data.publisher_link
-                                                  + " try " + str(try_count) + '/3')
-                            self.__logger.warning('Error reading  : ' + str(e))
+                                                  + " try " + str(try_count+1) + '/3')
+                            self.__logger.warning('Error  : ' + str(e))
                     break
             else:
                 self.__logger.error("Could not find handler for " + article_data.publisher_link)
@@ -208,7 +227,7 @@ class ArticlesDataDownloader:
             article_data.read_status = 'No publisher link found'
 
         self.__fill_article_data_from_other_sources_if_needed(article_data)
-        return self.__write_article_data(article_data)
+        return self.__write_article_data(article_data, pdf_filename)
 
 
 

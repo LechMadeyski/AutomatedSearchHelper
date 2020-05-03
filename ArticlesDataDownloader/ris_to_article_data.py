@@ -12,7 +12,7 @@ def __entry_to_article_data(entry):
         authors=entry.get('authors', list()),
         issn=entry.get('issn', str()),
         publisher=entry.get('publisher', str()),
-        doi=entry.get('doi', str()).replace('https://doi.org/', str()),
+        doi=entry.get('doi', str()).replace('https://doi.org/', str()).replace('doi:', ''),
         journal_name=entry.get('journal_name', str()),
         publish_year=entry.get('year', str()),
         publisher_link=entry.get('url', str()),

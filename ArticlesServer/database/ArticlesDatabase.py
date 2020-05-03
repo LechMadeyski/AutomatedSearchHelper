@@ -191,5 +191,5 @@ class ArticlesDatabase:
         except FileNotFoundError:
             print(file_path + " not found. ")
 
-    def reload_article(self, article_id, article, findings):
+    def reload_article(self, article_id, search_base, article, findings):
         self._articles[article_id] = ArticleDataWithFindings(dict(article_data=article, findings=findings))

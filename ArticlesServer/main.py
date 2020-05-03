@@ -1,6 +1,6 @@
 from flask import (
-    Blueprint, flash, redirect, render_template, url_for, request, session
-)
+    Blueprint, flash, redirect, render_template, url_for, request, session,
+    send_from_directory, send_file)
 import os
 import json
 import logging
@@ -15,7 +15,8 @@ from .prepare_sections import prepare_sections
 from TextSearchEngine.parse_finder import parse_finder
 from .database.Status import Status
 from .database.UsersDatabase import get_user_database
-from .directories import DOIS_FILE, FINDER_FILE, DOIS_TEMP, FINDER_TEMP, PUBLISHER_INPUT_DIRECTORIES_AND_FILE_TYPES
+from .directories import DOIS_FILE, FINDER_FILE, DOIS_TEMP, FINDER_TEMP, PUBLISHER_INPUT_DIRECTORIES_AND_FILE_TYPES, \
+    OUTPUT_DIRECTORY
 from .database.reload_article import reload_article
 
 from flask_wtf import FlaskForm
@@ -142,6 +143,7 @@ def generate_data_doi_data(db, doi_id):
         'read_error': article_data.read_error,
         'status' : article_data.status,
         'is_ignored': (article_data.status == ArticleStatus.ARTICLE_IGNORED),
+        'has_pdf': article_data.get_pdf_filename() is not None,
         'sections': prepare_sections(article_data)}
 
 
@@ -354,4 +356,23 @@ def upload_articles_list(file_type):
             DatabaseManager.reload_database()
 
     return redirect(url_for('main.view_articles_list'))
+
+
+@main.route('/get_pdf/<string:doi_id>')
+def get_pdf(doi_id):
+    db = DatabaseManager.get_instance()
+    if not db:
+        return redirect(url_for('main.index'))
+
+    article_data = db.get_full_article(doi_id)
+    pdf_filename = article_data.get_pdf_filename()
+    logging.info('Getting pdf for article: ' + doi_id)
+    try:
+        return send_file(pdf_filename)
+    except Exception as error:
+        logging.info('Could not find pdf for ' + doi_id)
+        logging.error('error is ' + str(error))
+        return redirect(url_for('main.view_doi', doi_id=doi_id))
+
+
 

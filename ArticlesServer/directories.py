@@ -1,4 +1,6 @@
-BASE_DIRECTORY = '.server_files'
+import os
+
+BASE_DIRECTORY = os.getcwd() + '/.server_files'
 OUTPUT_DB = BASE_DIRECTORY + '/' +'comments_and_statuses'
 OUTPUT_DIRECTORY = BASE_DIRECTORY + '/' + 'articles'
 USERS_FILE = BASE_DIRECTORY + '/users.json'

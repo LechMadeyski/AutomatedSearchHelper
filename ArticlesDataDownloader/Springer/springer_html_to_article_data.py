@@ -20,7 +20,7 @@ def get_abstract(soap):
 
 
 def get_full_text(soap):
-    logging.info("Reading section : Abstract" )
+    logging.info("Reading section : Abstract")
     full_text = [get_abstract(soap)]
     for sec in soap.findAll('section', {"class": "Section1 RenderAsSection1"}):
         titles = sec.findAll('h2')

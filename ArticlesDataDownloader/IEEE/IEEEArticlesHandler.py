@@ -1,6 +1,7 @@
 import os
 
-from ArticlesDataDownloader.download_pdf_and_prepare_article_data import download_pdf_and_prepare_article_data
+from ArticlesDataDownloader.download_pdf_and_prepare_article_data import download_pdf_and_prepare_article_data, \
+    download_pdf
 from ArticlesDataDownloader.extract_text_from_pdf import read_pdf_as_json
 
 from ArticlesDataDownloader.IEEE.ieee_html_to_json import ieee_html_to_json
@@ -12,7 +13,8 @@ from ArticlesDataDownloader.ArticleData import ArticleData
 from ArticlesDataDownloader.ris_to_article_data import ris_text_to_article_data
 from ArticlesDataDownloader.download_utilities import download_file_from_link_to_path
 
-class IEEEArticlesHandler():
+
+class IEEEArticlesHandler:
     def __init__(self, driver):
         self.driver = driver
         self.__logger = logging.getLogger("IEEEArticlesHandler")
@@ -49,28 +51,20 @@ class IEEEArticlesHandler():
         except Exception as error:
             self.__logger.error(error)
             self.__logger.error("Could not read html for " + url)
-            self.__logger.info("Trying to read from pdf")
-
-            id = re.findall("document/(.*?)/", url+'/')[0]
-
-            pdf_link = 'http://ieeexplore.ieee.org/stampPDF/getPDF.jsp?arnumber=' + id
-
-            self.__logger.info('Trying to get pdf from ' + pdf_link)
-            result_reading = download_pdf_and_prepare_article_data(self.driver, pdf_link)
-            if result_reading:
-                result_data.merge(result_reading)
-                result_data.read_status = 'OK'
-            else:
-               self.__logger.error('Failed to read from pdf')
-               result_data.read_status = 'Error while reading article or full text not available'
-
         return result_data
 
-    def link_part(self):
-        return "ieeexplore.ieee.org"
+
+    def download_pdf(self, url):
+        id = re.findall("document/(.*?)/", url+'/')[0]
+        pdf_link = 'http://ieeexplore.ieee.org/stampPDF/getPDF.jsp?arnumber=' + id
+
+        self.__logger.info('Trying to get pdf from ' + pdf_link)
+        PDF_FILENAME = 'IEEE_temporary.pdf'
+
+        return download_pdf(self.driver, pdf_link, PDF_FILENAME)
 
     def is_applicable(self, url):
-        return self.link_part() in url
+        return "ieeexplore.ieee.org" in url
 
     def name(self):
         return "IEEE"

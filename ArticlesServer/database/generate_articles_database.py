@@ -12,20 +12,6 @@ from ArticlesDataDownloader.read_input_file import read_input_file
 
 PROXY = 'proxy_auth_plugin.zip'
 
-
-def generate_articles_database(doi_list, finder):
-    createDirectoryIfNotExists(OUTPUT_DIRECTORY)
-    downloader = ArticlesDataDownloader(OUTPUT_DIRECTORY, PROXY)
-    articlesData = []
-    for doi in doi_list:
-        articleFilename, data = downloader.readArticle(doi['doi'], doi['scopus_link'])
-        searchResult = finder(data) or {}
-        articlesData.append(dict(article=data, findings=searchResult))
-
-    createDirectoryIfNotExists(OUTPUT_DB)
-    return ArticlesDatabase(articlesData, OUTPUT_DB)
-
-
 def __read_finder():
     if os.path.isfile(FINDER_FILE):
         with open(FINDER_FILE, 'r') as finder_file:
@@ -51,7 +37,7 @@ def generate_articles_database_from_files():
             no_or_articles = len(search_datas)
             logger.info('Analysing file: ' + fileName + ' articles to analyze ' + str(no_or_articles))
             for index, base_article_data in enumerate(search_datas):
-                logger.info('Analyzing article ' + str(index) + '/' + str(no_or_articles))
+                logger.info('Analyzing article ' + str(index+1) + '/' + str(no_or_articles))
                 filename, article_data = downloader.read_article(base_article_data)
                 search_result = finder(article_data.to_dict()) or {}
                 if [x for x in article_datas if x.get('base_article_data').filename_base == base_article_data.filename_base]:

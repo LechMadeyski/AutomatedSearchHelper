@@ -32,6 +32,7 @@
                                Mark ignored
                             </a>
                         {% endif %}
+
                     </div>
 
                     </div>
@@ -75,6 +76,13 @@
                         href="{{url_for("main.reload", doi_id = display_data['doi_id'])}}">
                         Reload
                     </a>
+                    {% if display_data['has_pdf']%}
+                        <a class="waves-effect waves-light btn red lighten-3"
+                           href="{{url_for("main.get_pdf", doi_id = display_data['doi_id'])}}">
+                           PDF
+                        </a>
+                    {% endif %}
+
 
 
                 </div>

@@ -1,4 +1,7 @@
+import os
+
 from ArticlesDataDownloader.ArticleData import ArticleData
+from ArticlesServer.directories import OUTPUT_DIRECTORY
 from .ArticleStatus import ArticleStatus
 
 
@@ -113,3 +116,10 @@ class ArticleDataWithFindings:
     @property
     def search_base(self):
         return self._search_base
+
+    def get_pdf_filename(self):
+        pdf_filename = OUTPUT_DIRECTORY + '/' + self._article_data.filename_base + '.pdf'
+        if os.path.isfile(pdf_filename):
+            return pdf_filename
+        else:
+            return None

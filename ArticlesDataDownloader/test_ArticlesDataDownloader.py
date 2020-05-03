@@ -29,6 +29,8 @@ def test_science_direct_html_by_doi(setup_downloader):
     # TODO: add other bibliographic data - failing for now basing on ris
 
     assert filename == TEST_DIRECTORY + '/10.1016_j.ins.2019.08.077.json'
+    assert os.path.isfile(TEST_DIRECTORY + '/10.1016_j.ins.2019.08.077.pdf')
+
     assert result_data.publisher_link == 'https://linkinghub.elsevier.com/retrieve/pii/S0020025519308242'
     assert result_data.publish_year == '2020'
 
@@ -54,6 +56,8 @@ def test_springer_html_by_doi(setup_downloader):
     filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1007_978-3-030-38364-0_32.json'
+    assert os.path.isfile(TEST_DIRECTORY + '/10.1007_978-3-030-38364-0_32.pdf')
+
     assert result_data.publisher_link == 'http://link.springer.com/10.1007/978-3-030-38364-0_32'
     assert result_data.publish_year == '2020'
 
@@ -80,6 +84,8 @@ def test_willey_html_by_doi(setup_downloader):
     filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1002_stvr.1728.json'
+    assert os.path.isfile(TEST_DIRECTORY + '/10.1002_stvr.1728.pdf')
+
     assert result_data.publisher_link == 'https://onlinelibrary.wiley.com/doi/abs/10.1002/stvr.1728'
     assert result_data.publish_year == '2020'
 
@@ -108,6 +114,8 @@ def test_ieee_html_by_doi(setup_downloader):
     filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1109_APSEC48747.2019.00022.json'
+    assert os.path.isfile(TEST_DIRECTORY + '/10.1109_APSEC48747.2019.00022.pdf')
+
     assert result_data.publisher_link == 'https://ieeexplore.ieee.org/document/8946088/'
 
     assert result_data.publish_year == '2019'
@@ -137,6 +145,8 @@ def test_acm_pdf_by_doi(setup_downloader):
     filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1145_3293882.3330574.json'
+    assert os.path.isfile(TEST_DIRECTORY + '/10.1145_3293882.3330574.pdf')
+
     assert result_data.publisher_link == 'http://dl.acm.org/citation.cfm?doid=3293882.3330574'
    # assert result_data.publish_year == '2019'
 
@@ -182,6 +192,8 @@ def test_acm_pdf_by_doi_2(setup_downloader):
     filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1145_2661136.2661157.json'
+    assert os.path.isfile(TEST_DIRECTORY + '/10.1145_2661136.2661157.pdf')
+
     assert result_data.publisher_link == 'http://dl.acm.org/citation.cfm?doid=2661136.2661157'
    # assert result_data.publish_year == ''
 
@@ -234,6 +246,8 @@ def test_acm_pdf_by_doi_3(setup_downloader):
     filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1145_3358501.3361234.json'
+    assert os.path.isfile(TEST_DIRECTORY + '/10.1145_3358501.3361234.pdf')
+
     assert result_data.publisher_link == 'http://dl.acm.org/citation.cfm?doid=3358501.3361234'
    # assert result_data.publish_year == ''
 
@@ -263,6 +277,8 @@ def test_ieee_pdf_by_doi(setup_downloader):
     filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1109_ASE.2000.873655.json'
+    assert os.path.isfile(TEST_DIRECTORY + '/10.1109_ASE.2000.873655.pdf')
+
     assert result_data.publisher_link == 'https://ieeexplore.ieee.org/document/873655/'
     assert result_data.publish_year == '2000'
 
@@ -277,6 +293,8 @@ def test_science_direct_pdf_by_doi(setup_downloader):
     filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
     assert filename == TEST_DIRECTORY + '/10.1016_j.procs.2016.05.298.json'
+    assert os.path.isfile(TEST_DIRECTORY + '/10.1016_j.procs.2016.05.298.pdf')
+
     assert result_data.publisher_link == 'https://linkinghub.elsevier.com/retrieve/pii/S1877050916306494'
     assert result_data.publish_year == '2016'
 

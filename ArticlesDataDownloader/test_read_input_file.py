@@ -97,7 +97,7 @@ def test_shall_properly_read_willey_ris():
         issn='0960-0833',
         publication_date='2015/08/01',
         filename_base='10.1002_stvr.1531',
-        publisher_link='https://doi.org/10.1002/stvr.1531',
+        publisher_link='',
         text=[dict(title='Abstract', paragraphs=[dict(sentences=['Any abstract.', 'Two sentences.'])])])
 
 
