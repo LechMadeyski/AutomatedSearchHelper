@@ -4,7 +4,6 @@ import logging
 # from selenium.webdriver.support.wait import WebDriverWait
 from ArticlesDataDownloader.ArticleData import ArticleData
 from ArticlesDataDownloader.Springer.springer_html_to_article_data import springer_html_to_article_data
-from ArticlesDataDownloader.download_pdf_and_prepare_article_data import download_pdf
 from ArticlesDataDownloader.ris_to_article_data import ris_to_article_data
 from ArticlesDataDownloader.download_utilities import wait_for_file_download, wait_until_all_files_downloaded, \
     download_file_from_link_that_initiates_download, clear_download_directory

@@ -1,5 +1,7 @@
 import os
 import shutil
+import time
+
 
 def execfile(filepath, globals=None, locals=None):
     if globals is None:
@@ -38,7 +40,13 @@ def createDirectoryIfNotExists(directoryPath):
 def createDirectoryIfNotExistsOrClean(directoryPath):
     if os.path.exists(directoryPath):
         shutil.rmtree(directoryPath)
+        while os.path.exists(directoryPath):
+            time.sleep(0.01)
+            pass
     os.makedirs(directoryPath)
+    while not os.path.exists(directoryPath):
+        time.sleep(0.01)
+        pass
 
 def getDoiFilename(outputFolder, doi, extension = "json"):
     return outputFolder + "/" + doi.replace("/", "_")+"." + extension

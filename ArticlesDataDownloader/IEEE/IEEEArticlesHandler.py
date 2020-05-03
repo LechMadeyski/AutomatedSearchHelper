@@ -1,9 +1,5 @@
 import os
 
-from ArticlesDataDownloader.download_pdf_and_prepare_article_data import download_pdf_and_prepare_article_data, \
-    download_pdf
-from ArticlesDataDownloader.extract_text_from_pdf import read_pdf_as_json
-
 from ArticlesDataDownloader.IEEE.ieee_html_to_json import ieee_html_to_json
 
 import logging
@@ -11,7 +7,7 @@ import re
 from selenium.webdriver.support.wait import WebDriverWait
 from ArticlesDataDownloader.ArticleData import ArticleData
 from ArticlesDataDownloader.ris_to_article_data import ris_text_to_article_data
-from ArticlesDataDownloader.download_utilities import download_file_from_link_to_path
+from ArticlesDataDownloader.download_utilities import download_pdf
 
 
 class IEEEArticlesHandler:

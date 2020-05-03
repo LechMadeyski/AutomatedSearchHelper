@@ -12,6 +12,7 @@ from ArticlesDataDownloader.Willey.WilleyArticlesHandler import WilleyArticlesHa
 from ArticlesDataDownloader.ScienceDirect.ScienceDirectArticlesHandler import ScienceDirectArticlesHandler
 from ArticlesDataDownloader.Springer.SpringerArticlesHandler import SpringerArticlesHandler
 from ArticlesDataDownloader.ACM.ACMArticlesHandler import ACMArticlesHandler
+from ArticlesDataDownloader.download_utilities import clear_download_directory
 
 from ArticlesDataDownloader.getLinkFromDoi import getLinkFromDoi
 from ArticlesDataDownloader.getDriver import getDriver
@@ -199,6 +200,8 @@ class ArticlesDataDownloader:
             article_data.publisher_link = getLinkFromDoi(article_data.doi)
 
         pdf_filename = str()
+
+        clear_download_directory()
 
         if article_data.publisher_link:
             for handler in self.get_handlers():

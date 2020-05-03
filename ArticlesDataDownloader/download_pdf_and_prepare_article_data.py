@@ -24,13 +24,3 @@ def download_pdf_and_prepare_article_data(
         os.remove(output_filename)
     return result_reading
 
-
-def download_pdf(
-        driver,
-        pdf_link,
-        output_filename='temporary.pdf'):
-    try:
-        clear_download_directory()
-        return download_file_from_link_to_path(driver, pdf_link, output_filename)
-    except Exception as error:
-        return None

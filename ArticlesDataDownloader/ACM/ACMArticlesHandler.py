@@ -2,9 +2,8 @@ import os
 import logging
 from selenium.webdriver.support.wait import WebDriverWait
 
-from ArticlesDataDownloader.download_pdf_and_prepare_article_data import download_pdf
-
 from ArticlesDataDownloader.ArticleData import ArticleData
+from ArticlesDataDownloader.download_utilities import download_pdf
 
 
 class ACMArticlesHandler:

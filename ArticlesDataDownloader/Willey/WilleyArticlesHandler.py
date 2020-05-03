@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from ArticlesDataDownloader.ArticleData import ArticleData
-from ArticlesDataDownloader.download_pdf_and_prepare_article_data import download_pdf
+from ArticlesDataDownloader.download_utilities import download_pdf
 from ArticlesDataDownloader.ris_to_article_data import ris_text_to_article_data
 import logging
 

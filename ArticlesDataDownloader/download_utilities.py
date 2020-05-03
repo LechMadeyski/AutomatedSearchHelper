@@ -34,8 +34,16 @@ def __every_downloads_chrome(driver):
 
 
 def wait_until_all_files_downloaded(driver):
-    WebDriverWait(driver, 120, 1).until(__every_downloads_chrome)
-
+    for _ in range(1000):
+        if os.listdir(DOWNLOAD_DIRECTORY):
+            time.sleep(0.01)
+            break
+    for _ in range(4):
+        try:
+            WebDriverWait(driver, 30, 1).until(__every_downloads_chrome)
+            break
+        except:
+            pass
 
 def clear_download_directory():
     createDirectoryIfNotExistsOrClean(DOWNLOAD_DIRECTORY)
@@ -62,8 +70,17 @@ def download_file_from_link_to_path(driver, link, output_name):
                     }});
                     ''' % (link, output_name)
     driver.execute_script(download_script)
+    for _ in range(1000):
+        if os.listdir(DOWNLOAD_DIRECTORY):
+            break
     wait_until_all_files_downloaded(driver)
-    return DOWNLOAD_DIRECTORY + '/' + output_name
+
+    result_filename = DOWNLOAD_DIRECTORY + '/' + output_name
+    if not os.path.isfile(result_filename):
+        time.sleep(1)
+        wait_until_all_files_downloaded(driver)
+    return result_filename
+
 
 
 def download_file_from_link_that_initiates_download(driver, link):
@@ -78,6 +95,18 @@ def download_file_from_link_that_initiates_download(driver, link):
         return DOWNLOAD_DIRECTORY + '/' + files[0]
     else:
         return None
+
+
+def download_pdf(
+        driver,
+        pdf_link,
+        output_filename='temporary.pdf'):
+    try:
+        clear_download_directory()
+        return download_file_from_link_to_path(driver, pdf_link, output_filename)
+    except Exception as error:
+        return None
+
 
 
 def get_files_from_download_directory():

@@ -6,12 +6,11 @@ import re
 import logging
 from selenium.webdriver.support.wait import WebDriverWait
 from ArticlesDataDownloader.ArticleData import ArticleData
-from ArticlesDataDownloader.download_pdf_and_prepare_article_data import download_pdf_and_prepare_article_data, \
-    download_pdf
+from ArticlesDataDownloader.download_pdf_and_prepare_article_data import download_pdf_and_prepare_article_data
 from ArticlesDataDownloader.download_utilities import wait_until_all_files_downloaded, wait_for_file_download, \
-    clear_download_directory, get_files_from_download_directory
+    clear_download_directory, get_files_from_download_directory, download_pdf
 from ArticlesDataDownloader.ris_to_article_data import ris_to_article_data
-
+import time
 
 def article_ready(x):
     found = False
@@ -39,6 +38,8 @@ class ScienceDirectArticlesHandler():
 
         result_data = ArticleData(publisher_link=url)
 
+        clear_download_directory()
+
         self.driver.get(url)
 
         WebDriverWait(self.driver, 10).until(
@@ -51,9 +52,10 @@ class ScienceDirectArticlesHandler():
         ris_download_button = WebDriverWait(self.driver, 10).until(
             lambda x: x.find_element_by_xpath("//button[@aria-label='ris']"))
 
-        clear_download_directory()
-
         ris_download_button.click()
+
+        time.sleep(1) # wait until download initiated
+
         wait_until_all_files_downloaded(self.driver)
         downloaded_files = get_files_from_download_directory()
 
