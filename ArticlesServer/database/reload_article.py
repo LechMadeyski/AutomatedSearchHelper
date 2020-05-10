@@ -23,6 +23,9 @@ def reload_article(article_id):
     article_filename = OUTPUT_DIRECTORY + '/' + search_base.filename_base + '.json'
     if os.path.isfile(article_filename):
         os.remove(article_filename)
+    article_pdf = OUTPUT_DIRECTORY + '/' + search_base.filename_base + '.pdf'
+    if os.path.isfile(article_pdf):
+        os.remove(article_pdf)
     article_filename, data = downloader.read_article(search_base)
     search_result = finder(data.to_dict()) or {}
     db.reload_article(article_id, search_base, data, search_result)

@@ -136,6 +136,7 @@ def generate_data_doi_data(db, doi_id):
         'issn': article_data.issn,
         'published_in' : article_data.journal_name,
         'journal_info': article_data.journal_info,
+        'publisher_link': article_data.publisher_link,
         'publisher': article_data.publisher,
         'authors': article_data.authors,
         'scopus_link': article_data.scopus_link,

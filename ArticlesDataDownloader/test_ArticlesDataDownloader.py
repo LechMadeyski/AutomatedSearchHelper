@@ -51,7 +51,7 @@ def test_science_direct_html_by_doi(setup_downloader):
     assert 'Acknowledgments' in result_data.text[-1]['title']
 
 
-def test_springer_html_by_doi(setup_downloader):
+def test_springer_html_by_doi_chapter(setup_downloader):
     DOI = '10.1007/978-3-030-38364-0_32'
     filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
 
@@ -62,6 +62,8 @@ def test_springer_html_by_doi(setup_downloader):
     assert result_data.publish_year == '2020'
 
     assert result_data.read_status == 'OK'
+    assert result_data.start_page == '361'
+    assert result_data.end_page == '369'
     assert result_data.title == 'An Improvement of Applying Multi-objective Optimization Algorithm into Higher Order Mutation Testing'
     assert result_data.doi == DOI
     assert len(result_data.authors) == 2
@@ -77,6 +79,24 @@ def test_springer_html_by_doi(setup_downloader):
     assert 'Results Analysis' in result_data.text[4]['title']
     assert 'Conclusions' in result_data.text[5]['title']
     assert 'Notes' in result_data.text[6]['title']
+
+
+def test_springer_pdf_by_doi_articles(setup_downloader):
+    DOI = '10.1007/BF03192394'
+    filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
+
+    assert filename == TEST_DIRECTORY + '/10.1007_BF03192394.json'
+    assert os.path.isfile(TEST_DIRECTORY + '/10.1007_BF03192394.pdf')
+
+    assert result_data.publisher_link == 'https://journal-bcs.springeropen.com/articles/10.1007/BF03192394'
+    assert result_data.publish_year == '2006'
+
+    assert result_data.read_status == 'OK - PDF READ'
+    assert result_data.title == 'Muta-Pro: Towards the definition of a mutation testing process'
+    assert result_data.doi == DOI
+    assert len(result_data.authors) == 4
+    assert len(result_data.text) == 3
+    assert result_data.text[0]['title'] == 'Abstract'
 
 
 def test_willey_html_by_doi(setup_downloader):
@@ -150,7 +170,7 @@ def test_acm_pdf_by_doi(setup_downloader):
     assert result_data.publisher_link == 'http://dl.acm.org/citation.cfm?doid=3293882.3330574'
    # assert result_data.publish_year == '2019'
 
-    assert result_data.read_status == 'OK'
+    assert result_data.read_status == 'OK - PDF READ'
     assert result_data.title == 'DeepFL: integrating multiple fault diagnosis dimensions for deep fault localization'
     assert result_data.doi == DOI
     assert len(result_data.authors) == 4
@@ -197,7 +217,7 @@ def test_acm_pdf_by_doi_2(setup_downloader):
     assert result_data.publisher_link == 'http://dl.acm.org/citation.cfm?doid=2661136.2661157'
    # assert result_data.publish_year == ''
 
-    assert result_data.read_status == 'OK'
+    assert result_data.read_status == 'OK - PDF READ'
     assert result_data.title == 'Coverage and Its Discontents'
     assert result_data.doi == DOI
     assert len(result_data.authors) == 3
@@ -251,7 +271,7 @@ def test_acm_pdf_by_doi_3(setup_downloader):
     assert result_data.publisher_link == 'http://dl.acm.org/citation.cfm?doid=3358501.3361234'
    # assert result_data.publish_year == ''
 
-    assert result_data.read_status == 'OK'
+    assert result_data.read_status == 'OK - PDF READ'
     assert result_data.title == 'Mutation testing for DSLs (tool demo)'
     assert result_data.doi == DOI
     assert len(result_data.authors) == 4
@@ -282,7 +302,7 @@ def test_ieee_pdf_by_doi(setup_downloader):
     assert result_data.publisher_link == 'https://ieeexplore.ieee.org/document/873655/'
     assert result_data.publish_year == '2000'
 
-    assert result_data.read_status == 'OK'
+    assert result_data.read_status == 'OK - PDF READ'
     assert result_data.title == 'A DSL approach to improve productivity and safety in device drivers development'
     assert result_data.doi == DOI
     assert len(result_data.authors) == 5
@@ -298,7 +318,7 @@ def test_science_direct_pdf_by_doi(setup_downloader):
     assert result_data.publisher_link == 'https://linkinghub.elsevier.com/retrieve/pii/S1877050916306494'
     assert result_data.publish_year == '2016'
 
-    assert result_data.read_status == 'OK'
+    assert result_data.read_status == 'OK - PDF READ'
     assert result_data.title == 'EMINENT: Embarrassingly Parallel Mutation Testing'
     assert result_data.doi == DOI
     assert len(result_data.authors) == 3

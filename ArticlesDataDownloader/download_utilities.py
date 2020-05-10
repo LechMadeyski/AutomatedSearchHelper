@@ -2,6 +2,7 @@
 import time
 import os
 from os import path
+from pathlib import Path
 from selenium.webdriver.support.wait import WebDriverWait
 
 from AutomatedSearchHelperUtilities.utilities import createDirectoryIfNotExistsOrClean
@@ -34,16 +35,18 @@ def __every_downloads_chrome(driver):
 
 
 def wait_until_all_files_downloaded(driver):
-    for _ in range(1000):
+    for _ in range(100):
         if os.listdir(DOWNLOAD_DIRECTORY):
-            time.sleep(0.01)
             break
-    for _ in range(4):
-        try:
-            WebDriverWait(driver, 30, 1).until(__every_downloads_chrome)
-            break
-        except:
-            pass
+        time.sleep(0.01)
+
+    for _ in range(60):
+        chrome_temp_file = sorted(Path(DOWNLOAD_DIRECTORY).glob('*.crdownload'))
+        downloaded_files = sorted(Path(DOWNLOAD_DIRECTORY).glob('*.*'))
+        if (len(chrome_temp_file) == 0) and (len(downloaded_files) >= 1):
+            return
+        time.sleep(1)
+    print('timeout for download')
 
 def clear_download_directory():
     createDirectoryIfNotExistsOrClean(DOWNLOAD_DIRECTORY)
@@ -107,6 +110,18 @@ def download_pdf(
     except Exception as error:
         return None
 
+
+def download_file_from_click_of_button(driver, button):
+    clear_download_directory()
+    button.click()
+    wait_until_all_files_downloaded(driver)
+    files = os.listdir(DOWNLOAD_DIRECTORY)
+    if files:
+        return DOWNLOAD_DIRECTORY + '/' + files[0]
+    else:
+        return None
+    # except Exception as error:
+    #     return None
 
 
 def get_files_from_download_directory():

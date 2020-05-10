@@ -1,4 +1,5 @@
 import os
+import time
 
 from ArticlesDataDownloader.IEEE.ieee_html_to_json import ieee_html_to_json
 
@@ -7,7 +8,7 @@ import re
 from selenium.webdriver.support.wait import WebDriverWait
 from ArticlesDataDownloader.ArticleData import ArticleData
 from ArticlesDataDownloader.ris_to_article_data import ris_text_to_article_data
-from ArticlesDataDownloader.download_utilities import download_pdf
+from ArticlesDataDownloader.download_utilities import download_pdf, download_file_from_link_that_initiates_download
 
 
 class IEEEArticlesHandler:
@@ -23,16 +24,25 @@ class IEEEArticlesHandler:
 
         result_data = ArticleData(publisher_link=url)
 
+        try:
+            WebDriverWait(self.driver, 10).until(
+                lambda x: x.find_element_by_xpath("//div/strong[contains(text(), 'Abstract')]"))
+            WebDriverWait(self.driver, 10).until(lambda x: x.find_element_by_id("article"))
+        except:
+            pass
+
         cite_button = WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//button[contains(text(), 'Cite This')]"))
+            lambda x: x.find_element_by_xpath("//button[contains(text(), 'Cite This') and contains(@class, 'cite-this-btn')]"))
         cite_button.click()
 
         ris_tab = WebDriverWait(self.driver, 10).until(
             lambda x: x.find_element_by_xpath("//a[contains(text(), 'RIS')]"))
+        time.sleep(0.1)
         ris_tab.click()
 
         enable_abstract_checkbox = WebDriverWait(self.driver, 10).until(
             lambda x:  self.driver.find_element_by_xpath("//div[@class='enable-abstract']/input[@type='checkbox']"))
+        time.sleep(0.1)
         enable_abstract_checkbox.click()
 
         ris_text = WebDriverWait(self.driver, 20).until(
@@ -41,7 +51,7 @@ class IEEEArticlesHandler:
         result_data.merge(ris_text_to_article_data(ris_text.get_attribute('innerHTML')))
 
         try:
-            WebDriverWait(self.driver, 10).until(lambda x: x.find_element_by_id("article"))
+            WebDriverWait(self.driver, 3).until(lambda x: x.find_element_by_id("article"))
             result_data.merge(ArticleData(text=ieee_html_to_json(self.driver.page_source)))
             result_data.read_status = 'OK'
         except Exception as error:
@@ -57,7 +67,7 @@ class IEEEArticlesHandler:
         self.__logger.info('Trying to get pdf from ' + pdf_link)
         PDF_FILENAME = 'IEEE_temporary.pdf'
 
-        return download_pdf(self.driver, pdf_link, PDF_FILENAME)
+        return download_file_from_link_that_initiates_download(self.driver, pdf_link)
 
     def is_applicable(self, url):
         return "ieeexplore.ieee.org" in url

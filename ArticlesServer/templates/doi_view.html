@@ -67,6 +67,9 @@
                     {% if display_data['scopus_link'] %}
                         <h6> <a href="{{ display_data['scopus_link'] }}"> Scopus link </a></h6>
                     {% endif %}
+                    {% if display_data['publisher_link'] %}
+                        <h6> <a href="{{ display_data['publisher_link'] }}"> {{display_data['publisher_link']}} </a></h6>
+                    {% endif %}
 
                     {% if display_data['read_error'] %}
                         <h6> Read error : {{ display_data['read_error'] }} </h6>

@@ -12,6 +12,7 @@ def read_csv_as_dicts(filepath):
             else:
                 entry = dict()
                 for index, value in enumerate(row):
-                    entry[row_names[index]] = value.strip()
+                    if index < len(row_names):
+                        entry[row_names[index]] = value.strip()
                 result.append(entry)
     return result

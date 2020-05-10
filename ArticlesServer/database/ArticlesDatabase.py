@@ -65,13 +65,18 @@ class ArticlesDatabase:
             with open(self._create_ignore_list_filename(), 'r') as file_object:
                 ignore_list = json.load(file_object)
                 for _, article in self._articles.items():
-                    if article.doi in ignore_list:
+                    if article.filename_base in ignore_list:
                         article.toggle_ignored()
         except FileNotFoundError:
             ignore_list = list()
             for _, article in self._articles.items():
-                if "Proceedings" in article.title:
-                    ignore_list.append(article.doi)
+                if "Proceedings" in article.title \
+                        or "Conference on " in article.title \
+                        or "Conference in " in article.title \
+                        or "Forum on " in article.title \
+                        or "Workshop on " in article.title \
+                        or "Symposium on " in article.title:
+                    ignore_list.append(article.filename_base)
                     article.toggle_ignored()
             file_path = self._create_ignore_list_filename()
             try:
@@ -155,9 +160,9 @@ class ArticlesDatabase:
             print(file_path + " not found. ")
 
         if article.status == ArticleStatus.ARTICLE_IGNORED:
-            ignore_list.append(article.doi)
+            ignore_list.append(article.filename_base)
         else:
-            ignore_list.remove(article.doi)
+            ignore_list.remove(article.filename_base)
         try:
             with open(file_path, 'w') as file_object:
                 json.dump(ignore_list, file_object)
@@ -192,4 +197,4 @@ class ArticlesDatabase:
             print(file_path + " not found. ")
 
     def reload_article(self, article_id, search_base, article, findings):
-        self._articles[article_id] = ArticleDataWithFindings(dict(article_data=article, findings=findings))
+        self._articles[article_id] = ArticleDataWithFindings(dict(article_data=article, findings=findings, base_article_data=search_base))

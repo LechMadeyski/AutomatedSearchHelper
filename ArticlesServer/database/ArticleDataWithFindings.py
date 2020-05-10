@@ -123,3 +123,7 @@ class ArticleDataWithFindings:
             return pdf_filename
         else:
             return None
+
+    @property
+    def filename_base(self):
+        return self._article_data.filename_base

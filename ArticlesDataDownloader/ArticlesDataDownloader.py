@@ -173,7 +173,7 @@ class ArticlesDataDownloader:
     def __try_to_merge_article_data_from_pdf(self, article_data, pdf_filename):
         try:
             article_data.merge(ArticleData(text=read_pdf_as_json(pdf_filename)))
-            article_data.read_status = 'OK'
+            article_data.read_status = 'OK - PDF READ'
         except:
             self.__logger.warning('Failed to read article data from pdf ' + pdf_filename)
             return article_data.merge(ArticleData(read_status='Failed reading pdf data'))
@@ -191,18 +191,23 @@ class ArticlesDataDownloader:
             return None
 
         if not article_data.publisher_link and article_data.doi:
+            self.__logger.info('Trying to get publisher link <1> from ' + article_data.doi)
             article_data.publisher_link = getLinkFromDoi(article_data.doi)
+            self.__logger.info('got publisher link ' + article_data.publisher_link)
 
         if not article_data.publisher_link and article_data.scopus_link:
+            self.__logger.info('Trying to get scopus data from ' + article_data.scopus_link)
             article_data.merge(self.get_scopus_downloader().get_data(article_data.scopus_link))
 
         if not article_data.publisher_link and article_data.doi:
+            self.__logger.info('Trying to get publisher link from ' + article_data.doi)
             article_data.publisher_link = getLinkFromDoi(article_data.doi)
 
         pdf_filename = str()
 
         clear_download_directory()
 
+        self.__logger.info('Finding handler for ' + article_data.publisher_link)
         if article_data.publisher_link:
             for handler in self.get_handlers():
                 self.__logger.debug("Checking " + handler.name())
@@ -221,6 +226,9 @@ class ArticlesDataDownloader:
                             self.__logger.warning("Failed to read " + article_data.publisher_link
                                                   + " try " + str(try_count+1) + '/3')
                             self.__logger.warning('Error  : ' + str(e))
+                            pdf_filename = str()
+                    else:
+                        article_data.read_status = 'Failed to read data from publisher'
                     break
             else:
                 self.__logger.error("Could not find handler for " + article_data.publisher_link)
