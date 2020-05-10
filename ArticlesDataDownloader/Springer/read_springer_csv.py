@@ -17,4 +17,4 @@ def read_springer_csv(filepath):
         publish_year=x.get('Publication Year', str()),
         journal_name= x.get('Publication Title', str()),
         filename_base=__get_filename_base(x),
-        doi=x.get('Item DOI', str())) for x in read_csv_as_dicts(filepath)]
+        doi=x.get('Item DOI', str())) for x in read_csv_as_dicts(filepath) if x.get('Content Type', str()).strip() != 'Book']

@@ -104,8 +104,8 @@ def test_shall_properly_read_willey_ris():
 def test_shall_properly_read_springer_csv():
     path_to_file = os.path.dirname(os.path.abspath(__file__)) + '/Springer/springer_test.csv'
     result = read_input_file(path_to_file, InputSourceType.SPRINGER_CSV)
-    assert len(result) == 9
-    assert result[3] == ArticleData(
+    assert len(result) == 8
+    assert result[2] == ArticleData(
         doi='10.1007/978-3-662-49381-6_23',
         filename_base='10.1007_978-3-662-49381-6_23',
         title='Higher Order Mutation Testing to Drive Development of New Test Cases: An Empirical Comparison of Three Strategies',
