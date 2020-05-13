@@ -100,11 +100,13 @@ class ArticleDataWithFindings:
     def status(self):
         if self._is_ignored:
             return ArticleStatus.ARTICLE_IGNORED
-        if self.read_status == 'OK':
+        if 'OK' in self.read_status:
             if self.findings:
                 return ArticleStatus.READ_CORRECT_WITH_FINDINGS
-            else:
+            elif self.read_status == 'OK':
                 return ArticleStatus.READ_CORRECT_NO_FINDINGS
+            elif self.read_status == 'OK - PDF READ':
+                return ArticleStatus.READ_FROM_PDF_NO_FINDINGS
         else:
             if self.findings:
                 return ArticleStatus.READ_PARTIAL_WITH_FINDINGS

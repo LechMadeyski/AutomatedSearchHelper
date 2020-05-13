@@ -120,8 +120,6 @@ def download_file_from_click_of_button(driver, button):
         return DOWNLOAD_DIRECTORY + '/' + files[0]
     else:
         return None
-    # except Exception as error:
-    #     return None
 
 
 def get_files_from_download_directory():

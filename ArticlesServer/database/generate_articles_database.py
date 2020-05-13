@@ -33,6 +33,7 @@ def generate_articles_database_from_files():
     for name, directory, input_type in PUBLISHER_INPUT_DIRECTORIES_AND_FILE_TYPES:
         logger.info('Staring analysis of ' + name)
         for fileName in os.listdir(directory):
+            logger.info('Analysing file: ' + fileName)
             search_datas = read_input_file(directory + '/' + fileName, input_type)
             no_or_articles = len(search_datas)
             logger.info('Analysing file: ' + fileName + ' articles to analyze ' + str(no_or_articles))

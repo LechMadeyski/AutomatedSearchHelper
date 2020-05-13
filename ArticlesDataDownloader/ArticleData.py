@@ -5,7 +5,7 @@ import attr
 class ArticleData:
     doi = attr.ib(default=str())
     title = attr.ib(default=str())
-    text = attr.ib(default=str())
+    text = attr.ib(default=list())
     journal_name = attr.ib(default=str())
     journal_info = attr.ib(default=str())
     authors = attr.ib(default=list())

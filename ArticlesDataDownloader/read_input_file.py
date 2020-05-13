@@ -1,3 +1,4 @@
+from ArticlesDataDownloader.ACM.read_acm_bib import read_acm_bib
 from ArticlesDataDownloader.IEEE.read_ieee_csv import read_ieee_csv
 from ArticlesDataDownloader.InputSourceType import InputSourceType
 from ArticlesDataDownloader.ScienceDirect.read_science_direct_ris import read_science_direct_ris
@@ -17,5 +18,6 @@ def read_input_file(filepath, source_type):
         return read_willey_ris(filepath)
     elif source_type == InputSourceType.SPRINGER_CSV:
         return read_springer_csv(filepath)
-
+    elif source_type == InputSourceType.ACM_BIB:
+        return read_acm_bib(filepath)
     return None

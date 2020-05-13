@@ -31,8 +31,9 @@ setup(
         'slate',
         'utils',
         'rispy',
-        'cattr',
+        'cattrs',
         'nltk',
+        'bibtexparser',
         'selenium'],
     scripts=[
         'run_articles_download.py',

@@ -33,8 +33,8 @@ print('Filenames with mutliple sections : ' + str(len(filenames_with_pdf_read_wi
 
 print('No of springer chapter type ' + str(len(springer_published)))
 
-# for i in range(50):
-#     fname = springer_published[randint(0, len(springer_published))]
+# for i in range(len(springer_published)):
+#     fname = springer_published[i]
 #     if os.path.isfile(fname):
 #         print('Removing springer ' + fname)
 #         os.remove(fname)

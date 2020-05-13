@@ -112,3 +112,38 @@ def test_shall_properly_read_springer_csv():
         publish_year='2016',
         journal_name='Intelligent Information and Database Systems',
         publisher_link='http://link.springer.com/chapter/10.1007/978-3-662-49381-6_23')
+
+def test_shall_properly_read_acm_bib():
+    path_to_file = os.path.dirname(os.path.abspath(__file__)) + '/ACM/acm_test.bib'
+    result = read_input_file(path_to_file, InputSourceType.ACM_BIB)
+    assert len(result) == 10
+
+    assert result[0] == ArticleData(
+        doi='10.1145/2931037.2931038',
+        title='Predictive Mutation Testing',
+        authors=['Zhang, Jie', 'Wang, Ziyi', 'Zhang, Lingming', 'Hao, Dan', 'Zang, Lei', 'Cheng, Shiyang', 'Zhang, Lu'],
+        publish_year='2016',
+        publisher='Association for Computing Machinery',
+        journal_name='Proceedings of the 25th International Symposium on Software Testing and Analysis',
+        start_page='342',
+        end_page='353',
+        filename_base='10.1145_2931037.2931038',
+        publisher_link='',
+        text=list())
+
+    assert result[4] == ArticleData(
+        doi='10.1145/382296.382699',
+        title='Ordered Mutation Testing',
+        authors=['Duncan, I. M. M.', 'Robson, D. J.'],
+        publish_year='1990',
+        publisher='Association for Computing Machinery',
+        journal_name='SIGSOFT Softw. Eng. Notes',
+        volume='15',
+        issue='',
+        start_page='29',
+        end_page='30',
+        issn='0163-5948',
+        publication_date='April 1990',
+        filename_base='10.1145_382296.382699',
+        publisher_link='',
+        text=list())
