@@ -64,9 +64,11 @@ class ArticleData:
         if not self.text:
             self.text = other.text
         elif other.text:
+            result_text = [x for x in self.text]
             for section in other.text:
-                if not [x for x in self.text if x['title'] == section['title']]:
-                    self.text.append(section)
+                if not [x for x in self.text if x['title'].lower() == section['title'].lower()]:
+                    result_text.append(section)
+            self.text = result_text
 
 
 

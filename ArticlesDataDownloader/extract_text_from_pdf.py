@@ -104,8 +104,6 @@ def read_pdf_as_json(filename):
 
     is_start_of_section = detect_start_of_section_method(split_text)
 
-
-
     sections = []
     current_section = dict(title='Begining data', text=str())
     prev = str()

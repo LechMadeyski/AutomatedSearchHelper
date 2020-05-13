@@ -20,6 +20,7 @@ def getDriver(proxyFile=None):
                    "safebrowsing.enabled": True}
 
     chrome_options.add_experimental_option("prefs", preferences)
+    chrome_options.add_argument("--start-maximized")
     driver = webdriver.Chrome(
         options=chrome_options)
     driver.refresh()

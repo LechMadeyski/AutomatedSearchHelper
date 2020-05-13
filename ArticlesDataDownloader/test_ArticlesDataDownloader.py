@@ -168,17 +168,17 @@ def test_acm_pdf_by_doi(setup_downloader):
     assert os.path.isfile(TEST_DIRECTORY + '/10.1145_3293882.3330574.pdf')
 
     assert result_data.publisher_link == 'http://dl.acm.org/citation.cfm?doid=3293882.3330574'
-   # assert result_data.publish_year == '2019'
+    assert result_data.publish_year == '2019'
 
     assert result_data.read_status == 'OK - PDF READ'
-    assert result_data.title == 'DeepFL: integrating multiple fault diagnosis dimensions for deep fault localization'
+    assert result_data.title == "DeepFL: Integrating Multiple Fault Diagnosis Dimensions for Deep Fault Localization"
     assert result_data.doi == DOI
     assert len(result_data.authors) == 4
     assert len(result_data.text) == 11
-    assert result_data.text[0]['title'] == 'Begining data'
-    assert result_data.text[1]['title'] == 'ABSTRACT'
-    assert len(result_data.text[1]['paragraphs']) == 1
-    assert len(result_data.text[1]['paragraphs'][0]['sentences']) == 25
+    assert result_data.text[0]['title'] == 'Abstract'
+    assert len(result_data.text[0]['paragraphs']) == 1
+    assert len(result_data.text[0]['paragraphs'][0]['sentences']) == 9
+    assert result_data.text[1]['title'] == 'Begining data'
     assert 'INTRODUCTION' in result_data.text[2]['title']
     assert len(result_data.text[2]['paragraphs']) == 1
     assert len(result_data.text[2]['paragraphs'][0]['sentences']) == 33
@@ -222,10 +222,10 @@ def test_acm_pdf_by_doi_2(setup_downloader):
     assert result_data.doi == DOI
     assert len(result_data.authors) == 3
     assert len(result_data.text) == 14
-    assert result_data.text[0]['title'] == 'Begining data'
-    assert result_data.text[1]['title'] == 'Abstract'
-    assert len(result_data.text[1]['paragraphs']) == 1
-    assert len(result_data.text[1]['paragraphs'][0]['sentences']) == 6
+    assert result_data.text[0]['title'] == 'Abstract'
+    assert len(result_data.text[0]['paragraphs']) == 1
+    assert len(result_data.text[0]['paragraphs'][0]['sentences']) == 6
+    assert result_data.text[1]['title'] == 'Begining data'
     assert 'Introduction' in result_data.text[2]['title']
     assert len(result_data.text[2]['paragraphs']) == 1
     assert len(result_data.text[2]['paragraphs'][0]['sentences']) == 53
@@ -272,14 +272,14 @@ def test_acm_pdf_by_doi_3(setup_downloader):
    # assert result_data.publish_year == ''
 
     assert result_data.read_status == 'OK - PDF READ'
-    assert result_data.title == 'Mutation testing for DSLs (tool demo)'
+    assert result_data.title == 'Mutation Testing for DSLs (Tool Demo)'
     assert result_data.doi == DOI
     assert len(result_data.authors) == 4
     assert len(result_data.text) == 9
-    assert result_data.text[0]['title'] == 'Begining data'
-    assert result_data.text[1]['title'] == 'Abstract'
-    assert len(result_data.text[1]['paragraphs']) == 1
-    assert len(result_data.text[1]['paragraphs'][0]['sentences']) == 10
+    assert result_data.text[0]['title'] == 'Abstract'
+    assert len(result_data.text[0]['paragraphs']) == 2
+    assert len(result_data.text[0]['paragraphs'][0]['sentences']) == 3
+    assert result_data.text[1]['title'] == 'Begining data'
     assert 'Introduction' in result_data.text[2]['title']
     assert len(result_data.text[2]['paragraphs']) == 1
     assert len(result_data.text[2]['paragraphs'][0]['sentences']) == 17

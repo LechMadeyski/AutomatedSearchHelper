@@ -174,7 +174,7 @@ class ArticlesDataDownloader:
         try:
             article_data.merge(ArticleData(text=read_pdf_as_json(pdf_filename)))
             article_data.read_status = 'OK - PDF READ'
-        except:
+        except Exception as e:
             self.__logger.warning('Failed to read article data from pdf ' + pdf_filename)
             return article_data.merge(ArticleData(read_status='Failed reading pdf data'))
 
@@ -227,6 +227,7 @@ class ArticlesDataDownloader:
                                                   + " try " + str(try_count+1) + '/3')
                             self.__logger.warning('Error  : ' + str(e))
                             pdf_filename = str()
+                            raise e
                     else:
                         article_data.read_status = 'Failed to read data from publisher'
                     break
