@@ -127,8 +127,8 @@ def test_shall_properly_read_acm_bib():
         journal_name='Proceedings of the 25th International Symposium on Software Testing and Analysis',
         start_page='342',
         end_page='353',
+        publisher_link='https://dl.acm.org/doi/10.1145/2931037.2931038',
         filename_base='10.1145_2931037.2931038',
-        publisher_link='',
         text=list())
 
     assert result[4] == ArticleData(
@@ -145,5 +145,5 @@ def test_shall_properly_read_acm_bib():
         issn='0163-5948',
         publication_date='April 1990',
         filename_base='10.1145_382296.382699',
-        publisher_link='',
+        publisher_link='https://dl.acm.org/doi/10.1145/382296.382699',
         text=list())
