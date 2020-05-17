@@ -291,7 +291,6 @@ def test_acm_pdf_by_doi_3(setup_downloader):
     assert 'References' in result_data.text[8]['title']
 
 
-
 def test_ieee_pdf_by_doi(setup_downloader):
     DOI = '10.1109/ASE.2000.873655'
     filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
@@ -322,7 +321,7 @@ def test_science_direct_pdf_by_doi(setup_downloader):
     assert result_data.title == 'EMINENT: Embarrassingly Parallel Mutation Testing'
     assert result_data.doi == DOI
     assert len(result_data.authors) == 3
-    assert len(result_data.text) == 11
+    assert len(result_data.text) == 13
     assert result_data.text[0]['title'] == 'Abstract'
     assert result_data.text[1]['title'] == 'Begining data'
     assert len(result_data.text[1]['paragraphs']) == 1
@@ -331,4 +330,6 @@ def test_science_direct_pdf_by_doi(setup_downloader):
     assert len(result_data.text[2]['paragraphs']) == 1
     assert len(result_data.text[2]['paragraphs'][0]['sentences']) == 24
     assert 'State of the art' in result_data.text[3]['title']
-    assert 'References' in result_data.text[10]['title']
+    assert 'Compression' in result_data.text[10]['title']
+    assert 'Conclusions and future work' in result_data.text[11]['title']
+    assert 'References' in result_data.text[12]['title']

@@ -70,12 +70,15 @@ class ArticlesDatabase:
         except FileNotFoundError:
             ignore_list = list()
             for _, article in self._articles.items():
-                if "Proceedings" in article.title \
-                        or "Conference on " in article.title \
-                        or "Conference in " in article.title \
-                        or "Forum on " in article.title \
-                        or "Workshop on " in article.title \
-                        or "Symposium on " in article.title:
+                title_lower = article.title.lower()
+                if "proceedings" in title_lower \
+                        or "conference on " in title_lower \
+                        or "conference in " in title_lower \
+                        or "forum on " in title_lower \
+                        or "colloquium on " in title_lower \
+                        or "workshop on " in title_lower \
+                        or "workshop summary " in title_lower \
+                        or "symposium on " in title_lower:
                     ignore_list.append(article.filename_base)
                     article.toggle_ignored()
             file_path = self._create_ignore_list_filename()
@@ -131,6 +134,7 @@ class ArticlesDatabase:
                 'doi': article_data.doi,
                 'article_status': article_data.status,
                 'publisher' : article_data.publisher,
+                'read_error': article_data.read_error if article_data.read_error else str(),
                 'statuses': self.get_statuses(article_id, user)} for article_id, article_data in self._articles.items()]
 
     def get_comments(self, article_id):

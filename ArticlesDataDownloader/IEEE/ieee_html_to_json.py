@@ -43,5 +43,8 @@ def ieee_html_to_json(textHTML):
         }
         outputJson.append(secData)
 
+    if len(outputJson) < 3:
+        raise Exception('Could not read pdf')
+
     return outputJson
 

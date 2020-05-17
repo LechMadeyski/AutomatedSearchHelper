@@ -39,10 +39,20 @@ def generate_articles_database_from_files():
             logger.info('Analysing file: ' + fileName + ' articles to analyze ' + str(no_or_articles))
             for index, base_article_data in enumerate(search_datas):
                 logger.info('Analyzing article ' + str(index+1) + '/' + str(no_or_articles))
+                #logger.info('Article data ' + str(base_article_data))
                 filename, article_data = downloader.read_article(base_article_data)
+                if not article_data:
+                    logger.error('Incorrect article data result')
+                    continue
                 search_result = finder(article_data.to_dict()) or {}
-                if [x for x in article_datas if x.get('base_article_data').filename_base == base_article_data.filename_base]:
-                    logger.info('Got duplicated article ' + base_article_data.filename_base)
+
+                duplicate = [x for x in article_datas if
+                    x.get('base_article_data').filename_base and x.get('base_article_data').filename_base == base_article_data.filename_base
+                    or (x.get('base_article_data').title and x.get('base_article_data').title == base_article_data.title
+                        and x.get('base_article_data').authors == base_article_data.authors
+                        and x.get('base_article_data').publisher == base_article_data.publisher)]
+                if duplicate:
+                    logger.info('Got duplicated article ' + str(base_article_data) + 'duplicate: ' + str(duplicate[0].get('base_article_data')))
                 else:
                     article_datas.append(dict(article_data=article_data,
                                               findings=search_result,

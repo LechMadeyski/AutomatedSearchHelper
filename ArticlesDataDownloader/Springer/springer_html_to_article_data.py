@@ -27,10 +27,10 @@ def get_full_text(soap):
         title = titles[0].text if titles else str()
         logging.info("Reading section : <" + title + ">")
         paragraphs = list()
-        for par in sec.findAll('p'):
+        for par in sec.findAll(attrs={'class': 'Para'}):
             paragraphs.append({"sentences": format_text_and_split_into_sentences(par.text)})
         full_text.append(dict(title=title, paragraphs=paragraphs))
-    if len([x for x in full_text if x['title'] not in ['Abstract', 'References', ' Copyright information ']]) < 2:
+    if len([x for x in full_text if x['title'] not in ['Abstract', 'References', 'Copyright information', 'Notes']]) < 2:
         raise Exception('Full text is not avaliable')
     return full_text
 

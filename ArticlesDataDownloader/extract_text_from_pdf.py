@@ -124,4 +124,12 @@ def read_pdf_as_json(filename):
         sections.append(dict(
             title=current_section['title'],
             paragraphs=[dict(sentences=format_text_and_split_into_sentences(current_section['text']))]))
-    return sections
+
+    no_of_sentences = 0
+    for sec in sections:
+        for par in sec['paragraphs']:
+            no_of_sentences = len([x for x in par['sentences'] if len(x) > 30])
+            if no_of_sentences > 30:
+                return sections
+
+    raise Exception('Invalid pdf read - text too short')

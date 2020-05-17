@@ -32,7 +32,7 @@ def willey_html_to_json(textHTML):
         }
         outputJson.append(secData)
 
-    if len(outputJson) < 2:
+    if len(outputJson) < 3:
         raise SyntaxError('Could not read full text')
 
     return outputJson

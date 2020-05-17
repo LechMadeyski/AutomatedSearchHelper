@@ -188,7 +188,8 @@ class ArticlesDataDownloader:
                 self.__logger.info('Successfully read old file ' + old_file_data[0])
                 return old_file_data
         else:
-            return None
+            article_data.read_status ='Cannot handle article withou doi or publisher link'
+            return None, article_data
 
         if not article_data.publisher_link and article_data.doi:
             self.__logger.info('Trying to get publisher link <1> from ' + article_data.doi)
@@ -227,7 +228,6 @@ class ArticlesDataDownloader:
                                                   + " try " + str(try_count+1) + '/3')
                             self.__logger.warning('Error  : ' + str(e))
                             pdf_filename = str()
-                            raise e
                     else:
                         article_data.read_status = 'Failed to read data from publisher'
                     break

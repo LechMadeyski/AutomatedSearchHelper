@@ -21,6 +21,8 @@ def getDriver(proxyFile=None):
 
     chrome_options.add_experimental_option("prefs", preferences)
     chrome_options.add_argument("--start-maximized")
+    chrome_options.add_argument("--kiosk")
+
     driver = webdriver.Chrome(
         options=chrome_options)
     driver.refresh()
