@@ -113,18 +113,27 @@ def test_willey_html_by_doi(setup_downloader):
     assert result_data.title == 'Performance mutation testing'
     assert result_data.doi == DOI
     assert len(result_data.authors) == 4
-    assert len(result_data.text) == 12
+    assert len(result_data.text) == 36
     assert result_data.text[0]['title'] == 'Abstract'
     assert len(result_data.text[0]['paragraphs']) == 1
     assert len(result_data.text[0]['paragraphs'][0]['sentences']) == 11
     assert 'Introduction' in result_data.text[1]['title']
-    assert len(result_data.text[1]['paragraphs']) == 6
-    assert len(result_data.text[1]['paragraphs'][3]['sentences']) == 7
+    assert len(result_data.text[1]['paragraphs']) == 7
+    assert len(result_data.text[1]['paragraphs'][4]['sentences']) == 7
     assert 'Background' in result_data.text[2]['title']
-    assert 'Problem Statement' in result_data.text[3]['title']
-    assert 'Research Questions' in result_data.text[4]['title']
-    assert 'Performance Mutation Operators' in result_data.text[5]['title']
-    assert 'Evaluation' in result_data.text[6]['title']
+    assert '2.1 Performance bugs' in result_data.text[3]['title']
+    assert '2.2 Mutation testing' in result_data.text[4]['title']
+    assert 'Problem Statement' in result_data.text[5]['title']
+    assert len(result_data.text[5]['paragraphs']) == 9
+    assert len(result_data.text[5]['paragraphs'][6]['sentences']) == 5
+    assert 'Research Questions' in result_data.text[6]['title']
+
+    assert 'Unnecessary Recalculation of Values (URV)' in result_data.text[10]['title']
+    assert len(result_data.text[10]['paragraphs']) == 5
+
+    assert '6.1 Subjects under test' in result_data.text[17]['title']
+    assert len(result_data.text[17]['paragraphs']) == 11
+
     assert 'Conclusion and Future Work' in result_data.text[-2]['title']
     assert 'Acknowledgements' in result_data.text[-1]['title']
 

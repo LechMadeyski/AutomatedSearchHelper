@@ -68,7 +68,8 @@ class ScienceDirectArticlesHandler():
         try:
             self.driver.get(url)
             self.__logger.debug("Called get for  " + url)
-            WebDriverWait(self.driver, 20).until(article_ready)
+            WebDriverWait(self.driver, 15).until(
+                lambda x: x.find_element_by_xpath("//section[contains(@id, 'sec')]"))
             result_data.merge(ArticleData(text=science_direct_html_to_json(self.driver.page_source)))
             result_data.read_status = 'OK'
         except Exception as error:

@@ -49,8 +49,6 @@ class SpringerArticlesHandler():
         self.__logger.debug("Springer::getArticle start " + url)
 
         self.driver.get(url)
-
-
         self.__logger.info('got url ' + self.driver.current_url)
         result_data = ArticleData(publisher_link=self.driver.current_url)
 
@@ -72,6 +70,7 @@ class SpringerArticlesHandler():
             self.__logger.error("some error occured, moving on")
             result_data.read_status = 'Error while reading article or full text not available'
 
+        result_data.merge(ArticleData(publisher='Springer'))
         return result_data
 
 

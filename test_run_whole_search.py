@@ -25,6 +25,6 @@ from run_whole_search import main
 
 
 # def test_run_willey():
-#     result = os.system('python run_whole_search.py --file_type=5 --articles_list=ArticlesDataDownloader/Willey/willey_test.ris')
+#     result = os.system('python run_whole_search.py --file_type=6 --articles_list=ArticlesDataDownloader/Willey/willey_test.bib')
 #     assert result == 0
 

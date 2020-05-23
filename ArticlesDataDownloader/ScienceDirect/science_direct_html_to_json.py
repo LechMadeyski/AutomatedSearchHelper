@@ -49,4 +49,6 @@ def science_direct_html_to_json(textHTML):
             'paragraphs': paragraphs
         }
         outputJson.append(sec_data)
+    if len(outputJson) < 2:
+        raise Exception("Only abstract found")
     return outputJson

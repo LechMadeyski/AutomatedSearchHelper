@@ -79,7 +79,7 @@ class WilleyArticlesHandler:
             self.__logger.exception(error)
             result_data.read_status = 'Error while reading article or full text not available'
 
-        result_data.merge(ArticleData(publisher_link='John Wiley & Sons, Ltd'))
+        result_data.merge(ArticleData(publisher='John Wiley & Sons, Ltd'))
         return result_data
 
     def download_pdf(self, url):
