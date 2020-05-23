@@ -20,6 +20,7 @@ from AutomatedSearchHelperUtilities.getDoiFilename import getDoiFilename, doi_to
 from ArticlesDataDownloader.RefworksDataDownloader import RefworksDataDownloader
 from ArticlesDataDownloader.extract_text_from_pdf import read_pdf_as_json
 
+
 class ArticlesDataDownloader:
     def __init__(self, output_folder, proxy_file=None):
         self.__outputFolder = output_folder
@@ -157,6 +158,8 @@ class ArticlesDataDownloader:
     def __write_article_data(self, article_data, pdf_filename):
         file_path = self.__file_path_from_filename(article_data.filename_base)
 
+        self.__logger.info('Saving file to ' + article_data.filename_base)
+
         with open(file_path, "w") as f:
             f.write(json.dumps(article_data.to_dict()))
 
@@ -176,7 +179,8 @@ class ArticlesDataDownloader:
             article_data.read_status = 'OK - PDF READ'
         except Exception as e:
             self.__logger.warning('Failed to read article data from pdf ' + pdf_filename)
-            return article_data.merge(ArticleData(read_status='Failed reading pdf data'))
+            self.__logger.exception(e)
+            article_data.read_status = 'Failed reading pdf data'
 
     def read_article(self, article_data):
         if not article_data.filename_base and article_data.doi:
@@ -218,15 +222,17 @@ class ArticlesDataDownloader:
                             self.__logger.info("Link will be handled by " + handler.name())
                             article_data.merge(handler.get_article(article_data.publisher_link))
                             pdf_filename = handler.download_pdf(article_data.publisher_link)
-                            if pdf_filename and article_data.read_status != 'OK':
-                                self.__try_to_merge_article_data_from_pdf(article_data, pdf_filename)
-                            elif not pdf_filename:
-                                self.__logger.warning("Could not get pdf for " + article_data.publisher_link)
+                            if article_data.read_status != 'OK':
+                                if pdf_filename:
+                                    self.__try_to_merge_article_data_from_pdf(article_data, pdf_filename)
+                                else:
+                                    article_data.read_status = 'No access or PDF not available'
+                                    self.__logger.warning("Could not get pdf for " + article_data.publisher_link)
                             break
                         except Exception as e:
                             self.__logger.warning("Failed to read " + article_data.publisher_link
                                                   + " try " + str(try_count+1) + '/3')
-                            self.__logger.warning('Error  : ' + str(e))
+                            self.__logger.exception(e)
                             pdf_filename = str()
                     else:
                         article_data.read_status = 'Failed to read data from publisher'

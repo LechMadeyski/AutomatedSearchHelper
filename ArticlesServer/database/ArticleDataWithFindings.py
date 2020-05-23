@@ -120,7 +120,7 @@ class ArticleDataWithFindings:
         return self._search_base
 
     def get_pdf_filename(self):
-        pdf_filename = OUTPUT_DIRECTORY + '/' + self._article_data.filename_base + '.pdf'
+        pdf_filename = os.path.join(OUTPUT_DIRECTORY, self._article_data.filename_base + '.pdf')
         if os.path.isfile(pdf_filename):
             return pdf_filename
         else:

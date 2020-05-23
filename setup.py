@@ -32,8 +32,10 @@ setup(
         'utils',
         'rispy',
         'cattrs',
+        'pypdf2'
         'nltk',
         'bibtexparser',
+        'pytest',
         'selenium'],
     scripts=[
         'run_articles_download.py',

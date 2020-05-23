@@ -17,7 +17,7 @@ def __read_finder():
         with open(FINDER_FILE, 'r') as finder_file:
             return parse_finder(finder_file.read())
 
-    def __none_finder():
+    def __none_finder(arg):
         return None
     return __none_finder
 
@@ -34,7 +34,7 @@ def generate_articles_database_from_files():
         logger.info('Staring analysis of ' + name)
         for fileName in os.listdir(directory):
             logger.info('Analysing file: ' + fileName)
-            search_datas = read_input_file(directory + '/' + fileName, input_type)
+            search_datas = read_input_file(os.path.join(directory, fileName), input_type)
             no_or_articles = len(search_datas)
             logger.info('Analysing file: ' + fileName + ' articles to analyze ' + str(no_or_articles))
             for index, base_article_data in enumerate(search_datas):

@@ -20,10 +20,10 @@ def reload_article(article_id):
         finder = parse_finder(finder_file.read())
     downloader = ArticlesDataDownloader(OUTPUT_DIRECTORY, PROXY)
     search_base = article_data.search_base
-    article_filename = OUTPUT_DIRECTORY + '/' + search_base.filename_base + '.json'
+    article_filename = os.path.join(OUTPUT_DIRECTORY, search_base.filename_base + '.json')
     if os.path.isfile(article_filename):
         os.remove(article_filename)
-    article_pdf = OUTPUT_DIRECTORY + '/' + search_base.filename_base + '.pdf'
+    article_pdf = os.path.join(OUTPUT_DIRECTORY, search_base.filename_base + '.pdf')
     if os.path.isfile(article_pdf):
         os.remove(article_pdf)
     article_filename, data = downloader.read_article(search_base)

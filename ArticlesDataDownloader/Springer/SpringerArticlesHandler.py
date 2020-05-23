@@ -6,7 +6,6 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from ArticlesDataDownloader.ArticleData import ArticleData
 from ArticlesDataDownloader.Springer.springer_html_to_article_data import springer_html_to_article_data
-from ArticlesDataDownloader.pdf_utilities import extract_given_pages_from_pdf
 from ArticlesDataDownloader.ris_to_article_data import ris_to_article_data
 from ArticlesDataDownloader.download_utilities import download_file_from_link_that_initiates_download,\
     clear_download_directory, download_file_from_click_of_button

@@ -91,14 +91,15 @@ def upload_finder():
             logger.error('Wrong finder provided')
             return render_template('upload_finder_view.html', form=form)
         logger.info('Properly read doiList and finder')
-
         with open(FINDER_FILE, 'w') as finder_file:
             finder_file.write(str(finder))
         DatabaseManager.reload_database()
         return redirect(url_for('main.index'))
 
-    with open(FINDER_FILE, 'r') as finder_file:
-        current_finder = finder_file.read()
+    current_finder = str()
+    if os.path.isfile(FINDER_FILE):
+        with open(FINDER_FILE, 'r') as finder_file:
+            current_finder = finder_file.read()
 
     return render_template('upload_finder_view.html', form=form, current_finder=current_finder)
 

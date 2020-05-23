@@ -1,6 +1,5 @@
 import csv
 
-
 def read_csv_as_dicts(filepath):
     result = list()
     with open(filepath, mode='r', encoding='utf-8-sig') as csv_file:

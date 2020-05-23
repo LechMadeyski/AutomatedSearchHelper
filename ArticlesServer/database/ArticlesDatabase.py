@@ -1,3 +1,4 @@
+import os
 from collections import defaultdict
 
 from .ArticleDataWithFindings import ArticleDataWithFindings
@@ -174,15 +175,13 @@ class ArticlesDatabase:
             print(file_path + " not found. ")
 
     def _create_comments_filename(self, article_id):
-        return self._output_db + \
-               "/" + self._articles[article_id].doi.replace('/', '_') + "_comments.json"
+        return os.path.join(self._output_db, self._articles[article_id].filename_base + "_comments.json")
 
     def _create_statuses_filename(self, article_id):
-        return self._output_db + \
-               "/" + self._articles[article_id].doi.replace('/', '_') + "_status.json"
+        return os.path.join(self._output_db, self._articles[article_id].filename_base + "_status.json")
 
     def _create_ignore_list_filename(self):
-        return self._output_db + "/ignore_list.json"
+        return os.path.join(self._output_db, "ignore_list.json")
 
     def _update_comments(self, article_id):
         file_path = self._create_comments_filename(article_id)

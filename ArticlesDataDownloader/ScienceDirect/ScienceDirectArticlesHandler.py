@@ -8,7 +8,8 @@ from selenium.webdriver.support.wait import WebDriverWait
 from ArticlesDataDownloader.ArticleData import ArticleData
 from ArticlesDataDownloader.download_pdf_and_prepare_article_data import download_pdf_and_prepare_article_data
 from ArticlesDataDownloader.download_utilities import wait_until_all_files_downloaded, wait_for_file_download, \
-    clear_download_directory, get_files_from_download_directory, download_pdf
+    clear_download_directory, get_files_from_download_directory, download_pdf, \
+    download_file_from_link_that_initiates_download
 from ArticlesDataDownloader.ris_to_article_data import ris_to_article_data
 import time
 
@@ -45,17 +46,17 @@ class ScienceDirectArticlesHandler():
         WebDriverWait(self.driver, 10).until(
             lambda x: x.find_element_by_xpath("//div[@id='popover-trigger-export-citation-popover']/button/span"))
 
-        export_button = WebDriverWait(self.driver, 10).until(
+        export_button = WebDriverWait(self.driver, 15).until(
             lambda x: x.find_element_by_xpath("//div[@id='popover-trigger-export-citation-popover']/button"))
+        time.sleep(1)
         export_button.click()
 
-        ris_download_button = WebDriverWait(self.driver, 10).until(
+
+        ris_download_button = WebDriverWait(self.driver, 15).until(
             lambda x: x.find_element_by_xpath("//button[@aria-label='ris']"))
 
         ris_download_button.click()
-
         time.sleep(1) # wait until download initiated
-
         wait_until_all_files_downloaded(self.driver)
         downloaded_files = get_files_from_download_directory()
 
@@ -81,8 +82,7 @@ class ScienceDirectArticlesHandler():
         id = re.findall("/pii/(.*?)/", url + '/')[0]
         pdf_link = 'https://www.sciencedirect.com/science/article/pii/%s/pdfft?isDTMRedir=true&download=true' % id
         self.__logger.info('Trying to get pdf from ' + pdf_link)
-        PDF_FILENAME = 'ScienceDirect_temporary.pdf'
-        return download_pdf(self.driver, pdf_link, PDF_FILENAME)
+        return download_file_from_link_that_initiates_download(self.driver, pdf_link)
 
     def is_applicable(self, url):
         for link_part in ['linkinghub.elsevier.com', 'sciencedirect.com']:

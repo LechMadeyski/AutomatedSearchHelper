@@ -4,10 +4,11 @@ import os
 from os import path
 from pathlib import Path
 from selenium.webdriver.support.wait import WebDriverWait
-
+import os.path
+import logging
 from AutomatedSearchHelperUtilities.utilities import createDirectoryIfNotExistsOrClean
 
-DOWNLOAD_DIRECTORY = os.getcwd() + '/downloads'
+DOWNLOAD_DIRECTORY = os.path.join(os.getcwd(), 'downloads')
 
 def __download_indictor_is_present():
     for i in os.listdir("."):
@@ -35,14 +36,21 @@ def __every_downloads_chrome(driver):
 
 
 def wait_until_all_files_downloaded(driver):
+
+    logging.debug('Starting wait for download')
+
     for _ in range(100):
-        if os.listdir(DOWNLOAD_DIRECTORY):
+        if sorted(Path(DOWNLOAD_DIRECTORY).glob('*.*')):
             break
-        time.sleep(0.01)
+        time.sleep(0.1)
+    else:
+        return
 
     for _ in range(60):
-        chrome_temp_file = sorted(Path(DOWNLOAD_DIRECTORY).glob('*.crdownload'))
+        chrome_temp_file = sorted(Path(DOWNLOAD_DIRECTORY).glob('*.crdownload')) + sorted(Path(DOWNLOAD_DIRECTORY).glob('*.tmp'))
         downloaded_files = sorted(Path(DOWNLOAD_DIRECTORY).glob('*.*'))
+        logging.debug('Got chrome tems : ' + str(chrome_temp_file) + ' and downloaded ' + str(downloaded_files))
+
         if (len(chrome_temp_file) == 0) and (len(downloaded_files) >= 1):
             return
         time.sleep(1)
@@ -73,12 +81,10 @@ def download_file_from_link_to_path(driver, link, output_name):
                     }});
                     ''' % (link, output_name)
     driver.execute_script(download_script)
-    for _ in range(1000):
-        if os.listdir(DOWNLOAD_DIRECTORY):
-            break
+
     wait_until_all_files_downloaded(driver)
 
-    result_filename = DOWNLOAD_DIRECTORY + '/' + output_name
+    result_filename = os.path.join(DOWNLOAD_DIRECTORY, output_name)
     if not os.path.isfile(result_filename):
         time.sleep(1)
         wait_until_all_files_downloaded(driver)
@@ -95,7 +101,7 @@ def download_file_from_link_that_initiates_download(driver, link):
         return None
     files = os.listdir(DOWNLOAD_DIRECTORY)
     if files:
-        return DOWNLOAD_DIRECTORY + '/' + files[0]
+        return os.path.join(DOWNLOAD_DIRECTORY, files[0])
     else:
         return None
 
@@ -117,13 +123,13 @@ def download_file_from_click_of_button(driver, button):
     wait_until_all_files_downloaded(driver)
     files = os.listdir(DOWNLOAD_DIRECTORY)
     if files:
-        return DOWNLOAD_DIRECTORY + '/' + files[0]
+        return os.path.join(DOWNLOAD_DIRECTORY, files[0])
     else:
         return None
 
 
 def get_files_from_download_directory():
-    return [DOWNLOAD_DIRECTORY + '/' + x for x in os.listdir(DOWNLOAD_DIRECTORY)]
+    return [os.path.join(DOWNLOAD_DIRECTORY, x) for x in os.listdir(DOWNLOAD_DIRECTORY)]
 
 
 

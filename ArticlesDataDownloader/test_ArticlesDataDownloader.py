@@ -333,3 +333,44 @@ def test_science_direct_pdf_by_doi(setup_downloader):
     assert 'Compression' in result_data.text[10]['title']
     assert 'Conclusions and future work' in result_data.text[11]['title']
     assert 'References' in result_data.text[12]['title']
+
+def test_willey_no_access_to_article(setup_downloader):
+    DOI = '10.1002/0471028959.sof217'
+    filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
+
+    assert filename == TEST_DIRECTORY + '/10.1002_0471028959.sof217.json'
+    assert not os.path.isfile(TEST_DIRECTORY + '/10.1002_0471028959.sof217.pdf')
+
+    assert result_data.read_status == 'No access or PDF not available'
+
+    assert result_data.journal_name == 'Encyclopedia of Software Engineering'
+    assert result_data.publisher_link == 'http://doi.wiley.com/10.1002/0471028959.sof217'
+    assert result_data.publish_year == '2002'
+    assert result_data.authors == ["Mathur, Aditya P."]
+
+    assert len(result_data.text) == 1
+    assert result_data.text[0]["title"] == 'Abstract'
+    assert len(result_data.text[0]["paragraphs"]) == 1
+    assert len(result_data.text[0]["paragraphs"][0]["sentences"]) == 13
+
+
+def test_willey_no_access_to_article_and_failed_to_read_ris(setup_downloader):
+    DOI = '10.1002/stvr.4370010305'
+    filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
+
+    assert filename == TEST_DIRECTORY + '/10.1002_stvr.4370010305.json'
+    assert not os.path.isfile(TEST_DIRECTORY + '/10.1002_stvr.4370010305.pdf')
+
+    assert result_data.read_status == 'No access or PDF not available'
+
+    assert result_data.publisher_link == 'http://doi.wiley.com/10.1002/stvr.4370010305'
+    assert result_data.publish_year == '1991'
+    assert result_data.authors == ["Woodward, M R"]
+    assert result_data.publication_date == '1991/10/01'
+    assert result_data.journal_name == 'Software Testing, Verification and Reliability'
+
+    assert len(result_data.text) == 1
+    assert result_data.text[0]["title"] == 'Abstract'
+    assert len(result_data.text[0]["paragraphs"]) == 1
+    assert len(result_data.text[0]["paragraphs"][0]["sentences"]) == 3
+
