@@ -101,6 +101,24 @@ def test_shall_properly_read_willey_ris():
         text=[dict(title='Abstract', paragraphs=[dict(sentences=['Any abstract.', 'Two sentences.'])])])
 
 
+def test_shall_properly_read_willey_bib():
+    path_to_file = os.path.dirname(os.path.abspath(__file__)) + '/Willey/willey_test.bib'
+    result = read_input_file(path_to_file, InputSourceType.WILLEY_BIB)
+    assert len(result) == 20
+    assert result[4] == ArticleData(
+        doi='10.1002/stvr.1531',
+        title='Model-based mutation testing from security protocols in HLPSL',
+        authors=['Dadeau, Frédéric', 'Héam, Pierre-Cyrille', 'Kheddam, Rafik', 'Maatoug, Ghazi', 'Rusinowitch, Michael'],
+        publish_year='2015',
+        journal_name='Software Testing, Verification and Reliability',
+        volume='25',
+        issue='5-7',
+        start_page='684',
+        end_page='711',
+        filename_base='10.1002_stvr.1531',
+        publisher_link='https://onlinelibrary.wiley.com/doi/abs/10.1002/stvr.1531',
+        text=[dict(title='Abstract', paragraphs=[dict(sentences=['Any abstract.', 'Two sentences.'])])])
+
 def test_shall_properly_read_springer_csv():
     path_to_file = os.path.dirname(os.path.abspath(__file__)) + '/Springer/springer_test.csv'
     result = read_input_file(path_to_file, InputSourceType.SPRINGER_CSV)
@@ -127,6 +145,7 @@ def test_shall_properly_read_acm_bib():
         journal_name='Proceedings of the 25th International Symposium on Software Testing and Analysis',
         start_page='342',
         end_page='353',
+        issue='',
         publisher_link='https://dl.acm.org/doi/10.1145/2931037.2931038',
         filename_base='10.1145_2931037.2931038',
         text=list())
@@ -139,7 +158,7 @@ def test_shall_properly_read_acm_bib():
         publisher='Association for Computing Machinery',
         journal_name='SIGSOFT Softw. Eng. Notes',
         volume='15',
-        issue='',
+        issue='2',
         start_page='29',
         end_page='30',
         issn='0163-5948',

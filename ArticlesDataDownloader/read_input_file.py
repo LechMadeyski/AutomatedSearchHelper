@@ -5,6 +5,7 @@ from ArticlesDataDownloader.ScienceDirect.read_science_direct_ris import read_sc
 from ArticlesDataDownloader.Scopus.read_scopus_csv import read_scopus_csv
 from ArticlesDataDownloader.Springer.read_springer_csv import read_springer_csv
 from ArticlesDataDownloader.Willey.read_willey_ris import read_willey_ris
+from ArticlesDataDownloader.Willey.read_willey_bib import read_willey_bib
 
 
 def read_input_file(filepath, source_type):
@@ -16,6 +17,8 @@ def read_input_file(filepath, source_type):
         return read_science_direct_ris(filepath)
     elif source_type == InputSourceType.WILLEY_RIS:
         return read_willey_ris(filepath)
+    elif source_type == InputSourceType.WILLEY_BIB:
+        return read_willey_bib(filepath)
     elif source_type == InputSourceType.SPRINGER_CSV:
         return read_springer_csv(filepath)
     elif source_type == InputSourceType.ACM_BIB:

@@ -26,7 +26,7 @@ def __doi(entry):
 
 def __publisher_link(entry):
     url = entry.get('url', None)
-    if url and 'doi' not in url:
+    if url and 'doi.org' not in url:
         return url
     else:
         return str()
@@ -44,6 +44,7 @@ def bib_text_to_article_datas_with_ids(text):
         publisher=x.get('publisher', str()).replace('\n', ''),
         journal_name=x.get('journal', str()) or x.get('booktitle', str()).replace('\n', ''),
         volume=x.get('volume', str()).replace('\n', ''),
+        issue=x.get('number', str()).replace('\n', ''),
         start_page=__start_page(x),
         end_page=__end_page(x),
         publisher_link=__publisher_link(x),

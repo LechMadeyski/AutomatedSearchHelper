@@ -7,4 +7,5 @@ class InputSourceType(IntEnum):
     SCIENCE_DIRECT_RIS = 3
     SPRINGER_CSV = 4
     WILLEY_RIS = 5
-    ACM_BIB = 6
+    WILLEY_BIB = 6
+    ACM_BIB = 7
