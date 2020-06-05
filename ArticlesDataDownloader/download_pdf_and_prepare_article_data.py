@@ -1,8 +1,8 @@
 import os
 
 from ArticlesDataDownloader.ArticleData import ArticleData
-from ArticlesDataDownloader.download_utilities import download_file_from_link_to_path, clear_download_directory
-from ArticlesDataDownloader.extract_text_from_pdf import read_pdf_as_json
+from ArticlesDataDownloader.download_utilities import download_file_from_link_to_path
+from ArticlesDataDownloader.pdfs.extract_text_from_pdf import read_pdf_as_json
 
 
 def download_pdf_and_prepare_article_data(

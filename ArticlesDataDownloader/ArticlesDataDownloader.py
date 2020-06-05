@@ -18,7 +18,7 @@ from ArticlesDataDownloader.getLinkFromDoi import getLinkFromDoi
 from ArticlesDataDownloader.getDriver import getDriver
 from AutomatedSearchHelperUtilities.getDoiFilename import getDoiFilename, doi_to_filename_base
 from ArticlesDataDownloader.RefworksDataDownloader import RefworksDataDownloader
-from ArticlesDataDownloader.extract_text_from_pdf import read_pdf_as_json
+from ArticlesDataDownloader.pdfs.extract_text_from_pdf import read_pdf_as_json
 
 
 class ArticlesDataDownloader:

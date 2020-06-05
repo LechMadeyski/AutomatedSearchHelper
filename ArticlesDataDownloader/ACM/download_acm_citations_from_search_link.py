@@ -1,3 +1,4 @@
+import os
 import shutil
 import sys
 import time
@@ -30,7 +31,7 @@ def download_acm_citations_from_search_link(driver, link, output_directory):
             lambda x: x.find_element_by_xpath("//a[@title='Download citation']"))
 
         file = download_file_from_click_of_button(driver, download_button)
-        output_filename = output_directory + '/acm_auto_search_' + str(page_no) + '.bib'
+        output_filename = os.path.join(output_directory, 'acm_auto_search_' + str(page_no) + '.bib')
         if file:
             shutil.move(file, output_filename)
 
@@ -49,7 +50,7 @@ def download_acm_citations_from_search_link(driver, link, output_directory):
 
 def __main():
     link = 'https://dl.acm.org/action/doSearch?AllField=%22mutation+testing%22'
-    output_dir = '/home/l/ArticlesInputFiles/ACM'
+    output_dir = 'ACM_auto_search'
     driver = getDriver(proxyFile='proxy_auth_plugin.zip')
     download_acm_citations_from_search_link(driver, link, output_dir)
 
