@@ -66,7 +66,7 @@ class ArticleData:
         elif other.text:
             result_text = [x for x in self.text]
             for section in other.text:
-                if not [x for x in self.text if x['title'].lower() == section['title'].lower()]:
+                if not [x for x in self.text if x['title'].lower() == section['title'].lower()]: # CONSIDER ADDING CHECK IF NO OF PARAGRAPHS IS SAME
                     result_text.append(section)
             self.text = result_text
 

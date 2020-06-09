@@ -3,7 +3,7 @@ import json
 from collections import defaultdict
 from random import randint
 
-BASE_DIR = '.server_files/articles'
+BASE_DIR = os.path.join('.server_files', 'articles')
 filenames_per_status = defaultdict(list)
 filenames_with_pdf_read = list()
 filenames_with_pdf_read_with_multiple_sections = list()
@@ -28,16 +28,12 @@ for filename in [BASE_DIR + '/' + f for f in os.listdir(BASE_DIR) if f[-5:] == '
 i=0
 for status, filenames in filenames_per_status.items():
     print('Status <' + status + '> filenames size: ' + str(len(filenames)))
-    if status == 'No publisher link found':
+    if status == 'OK - PDF READ' or status == 'Failed reading pdf data':
        for fname in filenames:
-            if True:
-                pass
-                # print('Removing acm ' + fname)
-                # i+=1
-                # os.remove(fname)
-                # pdf_filename = fname.replace('.json', '.pdf')
-                # if os.path.isfile(pdf_filename):
-                #     os.remove(pdf_filename)
+            os.remove(fname)
+            pdf_filename = fname.replace('.json', '.pdf')
+            if os.path.isfile(pdf_filename):
+                os.remove(pdf_filename)
 print('No of failed acm' + str(i))
 print('Filenames with reading from : ' + str(len(filenames_with_pdf_read)))
 print('Filenames with mutliple sections : ' + str(len(filenames_with_pdf_read_with_multiple_sections)))

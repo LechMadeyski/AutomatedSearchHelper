@@ -95,7 +95,7 @@ def detect_start_of_section_method(split_text):
 
 
 
-def read_pdf_as_json(filename):
+def read_pdf_as_json_pdf_analysis(filename):
     with open(filename, 'rb') as f:
         extracted_text = slate.PDF(f)
     split_text = []
@@ -135,96 +135,162 @@ def read_pdf_as_json(filename):
 
     raise Exception('Invalid pdf read - text too short')
 
-#
-#
-# from pdfminer import pdfparser
-#
-# if __name__ == '__main__':
-#     print("extraction start")
-#
-#     filename = 'test_pdf.pdf'
-#     # Import libraries
-#     from PIL import Image
-#     import pytesseract
-#     import sys
-#     from pdf2image import convert_from_path
-#     import os
-#
-#     # Path of the pdf
-#     PDF_file = os.path.join(os.getcwd(), filename)
-#
-#     '''
-#     Part #1 : Converting PDF to images
-#     '''
-#     print("FILE PATH IS " + PDF_file)
-#
-#     # Store all the pages of the PDF in a variable
-#     pages = convert_from_path(PDF_file, 500)
-#
-#     print("conversion done")
-#     # Counter to store images of each page of PDF to image
-#     image_counter = 1
-#
-#     # Iterate through all the pages stored above
-#     for page in pages:
-#         # Declaring filename for each page of PDF as JPG
-#         # For each page, filename will be:
-#         # PDF page 1 -> page_1.jpg
-#         # PDF page 2 -> page_2.jpg
-#         # PDF page 3 -> page_3.jpg
-#         # ....
-#         # PDF page n -> page_n.jpg
-#         filename = "page_" + str(image_counter) + ".jpg"
-#
-#         # Save the image of the page in system
-#         page.save(filename, 'JPEG')
-#
-#         # Increment the counter to update filename
-#         image_counter = image_counter + 1
-#
-#     '''
-#     Part #2 - Recognizing text from the images using OCR
-#     '''
-#     # Variable to get count of total number of pages
-#     filelimit = image_counter - 1
-#
-#     # Creating a text file to write the output
-#     outfile = "out_text.txt"
-#
-#     # Open the file in append mode so that
-#     # All contents of all images are added to the same file
-#     f = open(outfile, "a", encoding='utf-8')
-#
-#     # Iterate from 1 to total number of pages
-#     for i in range(1, filelimit + 1):
-#         # Set filename to recognize text from
-#         # Again, these files will be:
-#         # page_1.jpg
-#         # page_2.jpg
-#         # ....
-#         # page_n.jpg
-#         filename = "page_" + str(i) + ".jpg"
-#
-#         # Recognize the text as string in image using pytesserct
-#         text = str(((pytesseract.image_to_string(Image.open(filename)))))
-#
-#         # The recognized text is stored in variable text
-#         # Any string processing may be applied on text
-#         # Here, basic formatting has been done:
-#         # In many PDFs, at line ending, if a word can't
-#         # be written fully, a 'hyphen' is added.
-#         # The rest of the word is written in the next line
-#         # Eg: This is a sample text this word here GeeksF-
-#         # orGeeks is half on first line, remaining on next.
-#         # To remove this, we replace every '-\n' to ''.
-#         text = text.replace('-\n', '')
-#
-#         # Finally, write the processed text to the file.
-#         f.write(text)
-#
-#         # Close the file after writing all the text.
-#     f.close()
-#
-#
-#
-#     print("result")
+
+from PIL import Image
+import pytesseract
+import sys
+from pdf2image import convert_from_path
+import os
+import logging
+
+from ArticlesDataDownloader.download_utilities import DOWNLOAD_DIRECTORY
+
+STANDARD_CHAPTERS = ['introduction', 'conclusions', 'related work']
+
+def is_one_of_standard_parts_ocr(line):
+    split_line = line.lower().split(' ')
+    if len(split_line) > 1 and ' '.join(split_line[1:]).strip() in STANDARD_CHAPTERS:
+        return True
+    else:
+        return line.strip().lower() in STANDARD_CHAPTERS
+
+def is_numeric_index(part):
+    part_replaced = part.replace('.', '')
+    return part_replaced.strip() and part_replaced.isnumeric()
+
+
+def is_numeric_and_big_letters(line):
+    split_line = line.split(' ')
+    return len(split_line) > 1 and is_numeric_index(split_line[0]) and split_line[1].isupper()
+
+def is_upper_camel_case(part):
+    return len(part) > 1 and part[0].isupper() and part[1:].islower()
+
+
+def is_numeric_and_camel_case(line):
+    split_line = line.split(' ')
+    return len(split_line) > 1 and is_numeric_index(split_line[0]) and is_upper_camel_case(split_line[1])
+
+
+def is_one_of_non_chapter_parts(line):
+    return line.lower().strip() in ['references', 'abstract', 'acknowledgments']
+
+def is_roman_index(part):
+    stripped_part = part.replace('.', '').strip()
+    if stripped_part:
+        for l in stripped_part:
+            if l not in ["X", "V", "I"]:
+                return False
+        return True
+    else:
+        return False
+
+def is_roman_and_big_letters(line):
+    split_line = line.split(' ')
+    return len(split_line) > 1 and is_roman_index(split_line[0]) and split_line[1].isupper()
+
+
+def is_roman_and_camel_case(line):
+    split_line = line.split(' ')
+    return len(split_line) > 1 and is_roman_index(split_line[0]) and is_upper_camel_case(split_line[1])
+
+def is_just_big_letters(line):
+    return line.isupper()
+
+
+def detect_chapter_line_format_analyzer(text_lines):
+    logger = logging.getLogger('detect_chapter_line_format_analyzer')
+    for line_prev, line_curent, line_next in zip(text_lines, text_lines[1:], text_lines[2:]):
+        if is_one_of_standard_parts_ocr(line_curent):
+            def wrap_analyzer(analyzer):
+                prev_analyzer = lambda t: True
+                next_analyzer = lambda t: True
+
+                if line_prev == str():
+                    prev_analyzer = lambda t: t == str()
+                # if line_next == str():
+                #     next_analyzer = lambda t: t == str()
+
+                def result_detector(line_prev, line_current, line_next):
+                    return prev_analyzer(line_prev) \
+                           and next_analyzer(line_next)\
+                           and (is_one_of_non_chapter_parts(line_current) or analyzer(line_current))
+                return result_detector
+            logger.info('Got standard part: <' + line_curent + '>')
+            if is_numeric_and_big_letters(line_curent):
+                return wrap_analyzer(is_numeric_and_big_letters)
+            elif is_numeric_and_camel_case(line_curent):
+                return wrap_analyzer(is_numeric_and_camel_case)
+            elif is_roman_and_big_letters(line_curent):
+                return wrap_analyzer(is_roman_and_big_letters)
+            elif is_roman_and_camel_case(line_curent):
+                return wrap_analyzer(is_roman_and_camel_case)
+            elif is_just_big_letters(line_curent):
+                return wrap_analyzer(is_just_big_letters)
+            logger.info('No match with analyzer')
+
+    logger.info('No standard part found, returning default')
+
+    return lambda line_prev, line_current, line_next: False
+
+
+def read_pdf_as_json_ocr(filename):
+    logger = logging.getLogger('read_pdf_as_json_ocr')
+    logger.info('Start ocr reading for ' + filename)
+
+    pixel_density = 300
+
+    pages = convert_from_path(filename, pixel_density)
+    logger.info('Conversion done - got pages : ' + str(len(pages)))
+    logger.info('Pixel density is = ' + str(pixel_density))
+
+    full_text_lines = []
+
+
+    for index, page in enumerate(pages):
+        logger.info('Reading page ' + str(index+1) + '/' + str(len(pages)))
+        page_file = os.path.join(os.path.dirname(filename), 'page' + str(index) + '.jpg')
+        page.save(page_file, 'JPEG')
+        logger.info('Page saved to file start ocr')
+        full_text_lines += str(((pytesseract.image_to_string(Image.open(page_file))))).split('\n')
+        logger.info('Ocr finished')
+    logger.info('Finished ocr starting text analysis')
+
+    if len(full_text_lines) < 3:
+        logger.info('No text could be read or it has less then 3 lines')
+        return None
+
+    # ## Debug option
+    # with open('output_full_lines.json', 'w', encoding='utf-8') as f:
+    #     import json
+    #     f.write(json.dumps(full_text_lines))
+
+
+    is_chapter_name = detect_chapter_line_format_analyzer(full_text_lines)
+
+    sections = []
+    current_section = dict(title='Begining data', text=full_text_lines[0])
+    for line_prev, line_current, line_next in zip(full_text_lines, full_text_lines[1:], full_text_lines[2:]):
+        if is_chapter_name(line_prev, line_current, line_next):
+            logger.info('Adding new section <' + current_section['title'] + '>')
+            sections.append(dict(
+                title=current_section['title'],
+                paragraphs=[dict(sentences=format_text_and_split_into_sentences(current_section['text']))]))
+            current_section = dict(title=line_current.strip(), text=line_current + '\n')
+            logger.info('Start analyzing next section: <' + current_section['title'] + '>')
+        else:
+            if line_current.endswith('-'):
+                current_section['text'] += line_current[:-1]
+            else:
+                current_section['text'] += line_current + ' '
+
+    current_section['text'] += full_text_lines[-1]
+    sections.append(dict(
+        title=current_section['title'],
+        paragraphs=[dict(sentences=format_text_and_split_into_sentences(current_section['text']))]))
+
+    return sections
+
+
+def read_pdf_as_json(filename):
+    return read_pdf_as_json_ocr(filename)
