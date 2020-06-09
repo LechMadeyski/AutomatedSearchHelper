@@ -36,6 +36,9 @@ setup(
         'nltk',
         'bibtexparser',
         'pytest',
+        'pytesseract',
+        'PIL',
+        'pdf2image',
         'selenium'],
     scripts=[
         'run_articles_download.py',

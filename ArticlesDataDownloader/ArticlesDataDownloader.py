@@ -182,6 +182,19 @@ class ArticlesDataDownloader:
             self.__logger.exception(e)
             article_data.read_status = 'Failed reading pdf data'
 
+    def load_archived_article_data(self, article_data):
+        if not article_data.filename_base and article_data.doi:
+            article_data.filename_base = doi_to_filename_base(article_data.doi)
+
+        if article_data.filename_base:
+            old_file_data = self.__try_to_read_old_file(article_data.filename_base)
+            if old_file_data:
+                self.__logger.info('Successfully read old file ' + old_file_data[0])
+                return old_file_data
+
+        return None, None
+
+
     def read_article(self, article_data):
         if not article_data.filename_base and article_data.doi:
             article_data.filename_base = doi_to_filename_base(article_data.doi)

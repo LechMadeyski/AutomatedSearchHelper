@@ -138,12 +138,10 @@ def read_pdf_as_json_pdf_analysis(filename):
 
 from PIL import Image
 import pytesseract
-import sys
 from pdf2image import convert_from_path
 import os
 import logging
 
-from ArticlesDataDownloader.download_utilities import DOWNLOAD_DIRECTORY
 
 STANDARD_CHAPTERS = ['introduction', 'conclusions', 'related work']
 
@@ -253,7 +251,6 @@ def read_pdf_as_json_ocr(filename):
         page.save(page_file, 'JPEG')
         logger.info('Page saved to file start ocr')
         full_text_lines += str(((pytesseract.image_to_string(Image.open(page_file))))).split('\n')
-        logger.info('Ocr finished')
     logger.info('Finished ocr starting text analysis')
 
     if len(full_text_lines) < 3:
@@ -272,7 +269,6 @@ def read_pdf_as_json_ocr(filename):
     current_section = dict(title='Begining data', text=full_text_lines[0])
     for line_prev, line_current, line_next in zip(full_text_lines, full_text_lines[1:], full_text_lines[2:]):
         if is_chapter_name(line_prev, line_current, line_next):
-            logger.info('Adding new section <' + current_section['title'] + '>')
             sections.append(dict(
                 title=current_section['title'],
                 paragraphs=[dict(sentences=format_text_and_split_into_sentences(current_section['text']))]))
