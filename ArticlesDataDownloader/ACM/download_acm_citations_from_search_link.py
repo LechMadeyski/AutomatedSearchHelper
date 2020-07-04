@@ -15,6 +15,15 @@ def download_acm_citations_from_search_link(driver, link, output_directory):
     for page_no in range(1, MAX_PAGES + 1):
         select_all_checkbox = WebDriverWait(driver, 10).until(
             lambda x: x.find_element_by_xpath("//div[@class='item-results__checkbox']"))
+
+
+        desired_y = (select_all_checkbox.size['height'] / 2) + select_all_checkbox.location['y']
+        window_h = driver.execute_script('return window.innerHeight')
+        window_y = driver.execute_script('return window.pageYOffset')
+        current_y = (window_h / 2) + window_y
+        scroll_y_by = desired_y - current_y
+        driver.execute_script("window.scrollBy(0, arguments[0]);", scroll_y_by)
+
         select_all_checkbox.click()
 
         export_popup = WebDriverWait(driver, 10).until(

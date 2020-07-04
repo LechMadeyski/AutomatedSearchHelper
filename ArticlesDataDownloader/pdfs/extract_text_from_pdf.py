@@ -1,5 +1,4 @@
-import slate as slate
-from pdfminer.pdfinterp import PDFResourceManager
+# import slate as slate
 
 from ArticlesDataDownloader.text_utilities import format_text_and_split_into_sentences
 
@@ -95,45 +94,45 @@ def detect_start_of_section_method(split_text):
 
 
 
-def read_pdf_as_json_pdf_analysis(filename):
-    with open(filename, 'rb') as f:
-        extracted_text = slate.PDF(f)
-    split_text = []
+# def read_pdf_as_json_pdf_analysis(filename):
+#     with open(filename, 'rb') as f:
+#         extracted_text = slate.PDF(f)
+#     split_text = []
 
-    for extracted_part in extracted_text:
-        split_text += extracted_part.replace('\\n', '\n').split('\n\n')
+#     for extracted_part in extracted_text:
+#         split_text += extracted_part.replace('\\n', '\n').split('\n\n')
 
-    is_start_of_section = detect_start_of_section_method(split_text)
+#     is_start_of_section = detect_start_of_section_method(split_text)
 
-    sections = []
-    current_section = dict(title='Begining data', text=str())
-    prev = str()
-    for part in split_text:
-        if is_start_of_section(prev, part):
-            sections.append(dict(
-                title=current_section['title'],
-                paragraphs=[dict(sentences=format_text_and_split_into_sentences(current_section['text']))]))
-            current_section = dict(title=part.strip(), text=str())
-        else:
-            if part.endswith('-'):
-                current_section['text'] += part[:-1]
-            else:
-                current_section['text'] += part + ' '
-        prev = part
+#     sections = []
+#     current_section = dict(title='Begining data', text=str())
+#     prev = str()
+#     for part in split_text:
+#         if is_start_of_section(prev, part):
+#             sections.append(dict(
+#                 title=current_section['title'],
+#                 paragraphs=[dict(sentences=format_text_and_split_into_sentences(current_section['text']))]))
+#             current_section = dict(title=part.strip(), text=str())
+#         else:
+#             if part.endswith('-'):
+#                 current_section['text'] += part[:-1]
+#             else:
+#                 current_section['text'] += part + ' '
+#         prev = part
 
-    if current_section['text']:
-        sections.append(dict(
-            title=current_section['title'],
-            paragraphs=[dict(sentences=format_text_and_split_into_sentences(current_section['text']))]))
+#     if current_section['text']:
+#         sections.append(dict(
+#             title=current_section['title'],
+#             paragraphs=[dict(sentences=format_text_and_split_into_sentences(current_section['text']))]))
 
-    no_of_sentences = 0
-    for sec in sections:
-        for par in sec['paragraphs']:
-            no_of_sentences += len([x for x in par['sentences'] if len(x) > 30])
-            if no_of_sentences > 30:
-                return sections
+#     no_of_sentences = 0
+#     for sec in sections:
+#         for par in sec['paragraphs']:
+#             no_of_sentences += len([x for x in par['sentences'] if len(x) > 30])
+#             if no_of_sentences > 30:
+#                 return sections
 
-    raise Exception('Invalid pdf read - text too short')
+#     raise Exception('Invalid pdf read - text too short')
 
 
 from PIL import Image
@@ -245,12 +244,21 @@ def read_pdf_as_json_ocr(filename):
     full_text_lines = []
 
 
+    images_text_file_content = str()
     for index, page in enumerate(pages):
         logger.info('Reading page ' + str(index+1) + '/' + str(len(pages)))
         page_file = os.path.join(os.path.dirname(filename), 'page' + str(index) + '.jpg')
         page.save(page_file, 'JPEG')
-        logger.info('Page saved to file start ocr')
-        full_text_lines += str(((pytesseract.image_to_string(Image.open(page_file))))).split('\n')
+        images_text_file_content += page_file +'\n'
+
+
+    images_text_file = os.path.join(os.path.dirname(filename), 'images.txt')
+
+    with open(images_text_file, 'w') as f:
+        f.write(images_text_file_content)
+
+    logger.info('Pages saved to file start ocr')
+    full_text_lines += str((pytesseract.image_to_string(images_text_file, lang='engfast'))).split('\n')
     logger.info('Finished ocr starting text analysis')
 
     if len(full_text_lines) < 3:

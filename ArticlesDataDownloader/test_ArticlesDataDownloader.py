@@ -17,7 +17,11 @@ def setup_downloader(should_clear = SHOULD_CLEAR):
         os.makedirs(TEST_DIRECTORY)
     elif not os.path.exists(TEST_DIRECTORY):
         os.makedirs(TEST_DIRECTORY)
-    downloader = ArticlesDataDownloader(TEST_DIRECTORY, 'proxy_auth_plugin.zip')
+
+    proxy_file = 'proxy_auth_plugin.zip'
+    if not os.path.exists(proxy_file):
+        proxy_file = None
+    downloader = ArticlesDataDownloader(TEST_DIRECTORY, proxy_file)
     yield downloader
     if should_clear:
         shutil.rmtree(TEST_DIRECTORY)

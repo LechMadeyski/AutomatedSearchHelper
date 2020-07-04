@@ -28,16 +28,14 @@ setup(
         'wtforms',
         'beautifulsoup4',
         'crossrefapi',
-        'slate',
+        #'slate', # problematic install
         'utils',
         'rispy',
         'cattrs',
-        'pypdf2'
         'nltk',
         'bibtexparser',
         'pytest',
         'pytesseract',
-        'PIL',
         'pdf2image',
         'selenium'],
     scripts=[
