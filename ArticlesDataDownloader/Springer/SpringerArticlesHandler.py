@@ -81,20 +81,23 @@ class SpringerArticlesHandler():
 
         self.__logger.info('got url for pdf ' + self.driver.current_url)
 
-        if '/chapter/' in self.driver.current_url:
-            self.__logger.info('Trying to get pdf from chapter')
-            download_pdf_button = WebDriverWait(self.driver, 10).until(
-                lambda x: x.find_element_by_xpath("//a[contains(@data-track-action, 'Pdf download')]"))
-            pdf_link = download_pdf_button.get_attribute('href')
-            return download_file_from_link_that_initiates_download(self.driver, pdf_link)
-        elif '/article' in self.driver.current_url:
-            self.__logger.info('Trying to get pdf from chapter')
-            download_pdf_button = WebDriverWait(self.driver, 10).until(
-                lambda x: x.find_element_by_xpath("//a[contains(@class, 'c-pdf-download__link')]"))
-            pdf_link = download_pdf_button.get_attribute('href')
-            return download_file_from_link_that_initiates_download(self.driver, pdf_link)
-        else:
-            return str()
+        try:
+            if '/chapter/' in self.driver.current_url:
+                self.__logger.info('Trying to get pdf from chapter')
+                download_pdf_button = WebDriverWait(self.driver, 10).until(
+                    lambda x: x.find_element_by_xpath("//a[contains(@data-track-action, 'Pdf download')]"))
+                pdf_link = download_pdf_button.get_attribute('href')
+                return download_file_from_link_that_initiates_download(self.driver, pdf_link)
+            elif '/article' in self.driver.current_url:
+                self.__logger.info('Trying to get pdf from chapter')
+                download_pdf_button = WebDriverWait(self.driver, 10).until(
+                    lambda x: x.find_element_by_xpath("//a[contains(@class, 'c-pdf-download__link')]"))
+                pdf_link = download_pdf_button.get_attribute('href')
+                return download_file_from_link_that_initiates_download(self.driver, pdf_link)
+            else:
+                return None
+        except:
+            return None
 
     def is_applicable(self, url):
         return "link.springer.com" in url or "springeropen.com" in url

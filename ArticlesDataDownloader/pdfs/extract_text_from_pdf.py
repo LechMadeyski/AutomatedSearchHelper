@@ -237,7 +237,7 @@ def read_pdf_as_json_ocr(filename):
 
     pixel_density = 300
 
-    pages = convert_from_path(filename, pixel_density)
+    pages = convert_from_path(filename, pixel_density, thread_count=12, paths_only=True, fmt='jpg', output_folder=os.path.dirname(filename))
     logger.info('Conversion done - got pages : ' + str(len(pages)))
     logger.info('Pixel density is = ' + str(pixel_density))
 
@@ -246,10 +246,10 @@ def read_pdf_as_json_ocr(filename):
 
     images_text_file_content = str()
     for index, page in enumerate(pages):
-        logger.info('Reading page ' + str(index+1) + '/' + str(len(pages)))
-        page_file = os.path.join(os.path.dirname(filename), 'page' + str(index) + '.jpg')
-        page.save(page_file, 'JPEG')
-        images_text_file_content += page_file +'\n'
+        # logger.info('Reading page ' + str(index+1) + '/' + str(len(pages)))
+        # page_file = os.path.join(os.path.dirname(filename), 'page' + str(index) + '.jpg')
+        # page.save(page_file, 'JPEG')
+        images_text_file_content += page +'\n'
 
 
     images_text_file = os.path.join(os.path.dirname(filename), 'images.txt')
@@ -258,7 +258,7 @@ def read_pdf_as_json_ocr(filename):
         f.write(images_text_file_content)
 
     logger.info('Pages saved to file start ocr')
-    full_text_lines += str((pytesseract.image_to_string(images_text_file, lang='engfast'))).split('\n')
+    full_text_lines += str((pytesseract.image_to_string(images_text_file, lang='eng'))).split('\n')
     logger.info('Finished ocr starting text analysis')
 
     if len(full_text_lines) < 3:

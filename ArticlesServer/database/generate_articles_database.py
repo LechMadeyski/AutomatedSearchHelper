@@ -75,7 +75,7 @@ def generate_articles_database_from_files():
     logger.info('Successfully reloaded ' + str(len(article_datas)) + ' articles')
 
     if article_datas_to_be_downloaded:
-        random.shuffle(article_datas_to_be_downloaded) # to prevent ip blocks
+        #random.shuffle(article_datas_to_be_downloaded) # to prevent ip blocks
         article_datas_to_be_downloaded.sort(key=lambda x: 1 if x.scopus_link else 0)
 
         no_of_articles_to_be_reloaded = str(len(article_datas_to_be_downloaded))
