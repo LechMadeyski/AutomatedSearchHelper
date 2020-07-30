@@ -241,6 +241,10 @@ def read_pdf_as_json_ocr(filename):
     logger.info('Conversion done - got pages : ' + str(len(pages)))
     logger.info('Pixel density is = ' + str(pixel_density))
 
+    if len(pages) > 60:
+        logger.warning("There are more then 60 pages in the article, article cannot be read")
+        raise Exception('Invalid pdf read - too many pages')
+
     full_text_lines = []
 
 
@@ -263,7 +267,7 @@ def read_pdf_as_json_ocr(filename):
 
     if len(full_text_lines) < 3:
         logger.info('No text could be read or it has less then 3 lines')
-        return None
+        raise Exception('Invalid pdf read - text too short')
 
     # ## Debug option
     # with open('output_full_lines.json', 'w', encoding='utf-8') as f:

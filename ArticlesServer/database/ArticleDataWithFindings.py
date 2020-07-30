@@ -110,8 +110,10 @@ class ArticleDataWithFindings:
         else:
             if self.findings:
                 return ArticleStatus.READ_PARTIAL_WITH_FINDINGS
-            elif self.read_status == 'Publisher not supported':
+            elif self.read_status == 'Publisher not supported' or self.read_status == 'No publisher link found':
                 return ArticleStatus.READ_PARTIAL_PUBLISHER_NOT_SUPPORTED_NO_FINDINGS
+            elif self.read_status == 'No access or PDF not available':
+                return ArticleStatus.NO_ACCESS_TO_ARTICLE
             else:
                 return ArticleStatus.READ_PARTIAL_ERROR_READING_NO_FINDINGS
 

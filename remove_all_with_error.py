@@ -19,7 +19,7 @@ for filename in [BASE_DIR + '/' + f for f in os.listdir(BASE_DIR) if f[-5:] == '
 
 for status, filenames in filenames_per_status.items():
     print('Status <' + status + '> filenames size: ' + str(len(filenames)))
-    if status == "XXXX":
+    if status == "Failed to read data from publisher":
         for filename in filenames:
             pdf_filename = filename.replace('.json', '.pdf')
             if os.path.isfile(pdf_filename):

@@ -19,14 +19,18 @@ class ACMArticlesHandler:
 
     def get_article(self, url):
         self.driver.get(url)
+        text = str()
+        try:
+            WebDriverWait(self.driver, 10).until(
+                lambda x: x.find_element_by_xpath("//div[contains(@class, 'abstractSection abstractInFull')]"))
+            abstract_paragraphs = WebDriverWait(self.driver, 10).until(
+                lambda x: x.find_elements_by_xpath("//div[contains(@class, 'abstractSection abstractInFull')]/p"))
+            text = [dict(title='Abstract', paragraphs=[
+                dict(sentences=format_text_and_split_into_sentences(
+                    par.get_attribute('innerHTML'))) for par in abstract_paragraphs])]
+        except:
+            self.__logger.warning("Could not read abstract for " + url)
 
-        WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//div[contains(@class, 'abstractSection abstractInFull')]"))
-        abstract_paragraphs = WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_elements_by_xpath("//div[contains(@class, 'abstractSection abstractInFull')]/p"))
-        text = [dict(title='Abstract', paragraphs=[
-            dict(sentences=format_text_and_split_into_sentences(
-                par.get_attribute('innerHTML'))) for par in abstract_paragraphs])]
         result = ArticleData(publisher_link=url, text=text, read_status='Full text not avaliable')
 
         cite_button = WebDriverWait(self.driver, 10).until(

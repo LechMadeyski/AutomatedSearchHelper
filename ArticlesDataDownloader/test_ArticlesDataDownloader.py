@@ -253,7 +253,7 @@ def test_acm_pdf_by_doi_2(setup_downloader):
     # assert 'Advice and Discomfort' in result_data.text[9]['title']
     # assert 'Advice for Researchers' in result_data.text[10]['title']
     # assert 'Advice for Practitioners' in result_data.text[11]['title']
-    # assert 'Acknowledgments' in result_data.text[12]['title']
+    # assert 'Acknowledgments' in result_data.text[12]['title'] 
     # assert 'References' in result_data.text[13]['title']
 
 

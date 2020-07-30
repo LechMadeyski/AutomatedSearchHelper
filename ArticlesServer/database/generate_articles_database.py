@@ -25,10 +25,12 @@ def __read_finder():
 
 def get_duplicates(all_datas, given_data):
     return [x for x in all_datas if
-                 x.get('base_article_data').filename_base and x.get(
-                     'base_article_data').filename_base == given_data.filename_base
+            (x.get('base_article_data').filename_base
+                 and x.get('base_article_data').filename_base == given_data.filename_base)
                  or (x.get('base_article_data').title and x.get('base_article_data').title == given_data.title
+                     and x.get('base_article_data').authors
                      and x.get('base_article_data').authors == given_data.authors
+                     and x.get('base_article_data').publisher
                      and x.get('base_article_data').publisher == given_data.publisher)]
 
 def append_or_inform_about_duplicate(all_datas, base_data, given_data, finder):
@@ -59,11 +61,13 @@ def generate_articles_database_from_files():
 
     for name, directory, input_type in PUBLISHER_INPUT_DIRECTORIES_AND_FILE_TYPES:
         logger.info('Staring analysis of ' + name)
+        no_of_articles_for_publisher = 0
         for fileName in os.listdir(directory):
             logger.info('Analysing file: ' + fileName)
             search_datas = read_input_file(os.path.join(directory, fileName), input_type)
             no_or_articles = len(search_datas)
             logger.info('Analysing file: ' + fileName + ' articles to analyze ' + str(no_or_articles))
+            no_of_articles_for_publisher += len(search_datas)
             for index, base_article_data in enumerate(search_datas):
                 logger.debug('Analyzing article ' + str(index+1) + '/' + str(no_or_articles))
                 filename, article_data = downloader.load_archived_article_data(base_article_data)
@@ -71,6 +75,11 @@ def generate_articles_database_from_files():
                     append_or_inform_about_duplicate(article_datas, base_article_data, article_data, finder)
                 elif not get_duplicates(article_datas, base_article_data):
                     article_datas_to_be_downloaded.append(base_article_data)
+                else:
+                    logger.info('Got duplicated article which will not be downloaded ' + str(base_article_data.filename_base))
+
+        logger.info("Got " + str(no_of_articles_for_publisher) + " for " + name)
+
 
     logger.info('Successfully reloaded ' + str(len(article_datas)) + ' articles')
 

@@ -35,14 +35,17 @@ class IEEEArticlesHandler:
             lambda x: x.find_element_by_xpath("//button[contains(text(), 'Cite This') and contains(@class, 'cite-this-btn')]"))
         cite_button.click()
 
+        time.sleep(0.2)
+
+
         ris_tab = WebDriverWait(self.driver, 10).until(
-            lambda x: x.find_element_by_xpath("//a[contains(text(), 'RIS')]"))
-        time.sleep(0.1)
+            lambda x: x.find_element_by_xpath("//a[contains(text(), 'RIS') and @class='document-tab-link']"))
+        time.sleep(0.2)
         ris_tab.click()
 
         enable_abstract_checkbox = WebDriverWait(self.driver, 10).until(
             lambda x:  self.driver.find_element_by_xpath("//div[@class='enable-abstract']/input[@type='checkbox']"))
-        time.sleep(0.1)
+        time.sleep(0.2)
         enable_abstract_checkbox.click()
 
         ris_text = WebDriverWait(self.driver, 20).until(
@@ -65,8 +68,6 @@ class IEEEArticlesHandler:
         pdf_link = 'http://ieeexplore.ieee.org/stampPDF/getPDF.jsp?arnumber=' + id
 
         self.__logger.info('Trying to get pdf from ' + pdf_link)
-        PDF_FILENAME = 'IEEE_temporary.pdf'
-
         return download_file_from_link_that_initiates_download(self.driver, pdf_link)
 
     def is_applicable(self, url):

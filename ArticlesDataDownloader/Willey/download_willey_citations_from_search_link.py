@@ -12,27 +12,44 @@ def download_citations_from_search_link(driver, link, output_directory):
     driver.get(link)
     MAX_PAGES = 50
     for page_no in range(1, MAX_PAGES + 1):
-        select_all_checkbox = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//span[@aria-label='Select all articles']"))
-        select_all_checkbox.click()
+        time.sleep(2)
+        export_citations_button = WebDriverWait(driver, 10).until(
+            lambda x: x.find_element_by_xpath("//i[@class='icon-quote']"))
+        export_citations_button.click()
 
-        export_options_button = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//span[text()='Export Citation(s)']"))
-        export_options_button.click()
+        time.sleep(1)
+        checkboxes = WebDriverWait(driver, 10).until(
+            lambda x: x.find_elements_by_xpath("//label[@class='checkbox--primary']/span[@class='label-txt']"))
+
+        for checkbox in checkboxes:
+            desired_y = (checkbox.size['height'] / 2) + checkbox.location['y']
+            window_h = driver.execute_script('return window.innerHeight')
+            window_y = driver.execute_script('return window.pageYOffset')
+            current_y = (window_h / 2) + window_y
+            scroll_y_by = desired_y - current_y
+            driver.execute_script("window.scrollBy(0, arguments[0]);", scroll_y_by)
+            checkbox.click()
+
+
+
+        next_button = WebDriverWait(driver, 10).until(
+            lambda x: x.find_element_by_xpath("//button[text()='Next']"))
+        next_button.click()
 
         ris_option = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//span[text()='RIS (ProCite, Reference Manager)']"))
+            lambda x: x.find_element_by_xpath("//span[text()='BibTex']"))
         ris_option.click()
 
         export_button = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//button[@form='export-citations-form']"))
+            lambda x: x.find_element_by_xpath("//button[text()='Export']"))
+
         file = download_file_from_click_of_button(driver, export_button)
-        output_filename = output_directory + '/willey_auto_search_' + str(page_no) + '.ris'
+        output_filename = output_directory + '/willey_auto_search_' + str(page_no) + '.bib'
         if file:
             shutil.move(file, output_filename)
 
         cancel_button = WebDriverWait(driver, 10).until(
-            lambda x: x.find_element_by_xpath("//div[@class='modal__footer-right']/button[@data-dismiss='modal']"))
+            lambda x: x.find_element_by_xpath("//div[@id='exportCitation']/div/div/button/i[@class='icon-close_thin']"))
         cancel_button.click()
 
         try:
@@ -45,7 +62,7 @@ def download_citations_from_search_link(driver, link, output_directory):
 
 def __main():
     link = 'https://onlinelibrary.wiley.com/action/doSearch?AllField=%22mutation+testing%22&content=articlesChapters&target=default&startPage=&ConceptID=68'
-    output_dir = '/home/l/ArticlesInputFiles/Willey'
+    output_dir = '.server_files/InputFiles/Willey'
     driver = getDriver(proxyFile='proxy_auth_plugin.zip')
     download_citations_from_search_link(driver, link, output_dir)
 
