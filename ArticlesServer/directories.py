@@ -15,10 +15,10 @@ FINDER_FILE = os.path.join(BASE_DIRECTORY, 'finder.txt')
 from ArticlesDataDownloader.InputSourceType import InputSourceType
 
 PUBLISHER_INPUT_DIRECTORIES_AND_FILE_TYPES = [
-    # ('IEEE CSV', os.path.join(INPUT_FILES_DIRECTORY, 'IEEE'), InputSourceType.IEEE_CSV),
+    ('IEEE CSV', os.path.join(INPUT_FILES_DIRECTORY, 'IEEE'), InputSourceType.IEEE_CSV),
     # ('Science direct RIS', os.path.join(INPUT_FILES_DIRECTORY, 'Science_direct'), InputSourceType.SCIENCE_DIRECT_RIS),
     # ('Springer CSV', os.path.join(INPUT_FILES_DIRECTORY, 'Springer'), InputSourceType.SPRINGER_CSV),
-    ('Willey BIB', os.path.join(INPUT_FILES_DIRECTORY, 'Willey'), InputSourceType.WILLEY_BIB),
+    # ('Willey BIB', os.path.join(INPUT_FILES_DIRECTORY, 'Willey'), InputSourceType.WILLEY_BIB),
     # ('ACM BIB', os.path.join(INPUT_FILES_DIRECTORY, 'ACM'), InputSourceType.ACM_BIB),
     # ('Scopus CSV', os.path.join(INPUT_FILES_DIRECTORY, 'Scopus'), InputSourceType.SCOPUS_CSV),
 ]

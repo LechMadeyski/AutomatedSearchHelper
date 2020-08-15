@@ -72,7 +72,7 @@ def download_acm_citations_from_search_link(driver, link, output_directory):
 
 
 def __main():
-    link = 'https://dl.acm.org/action/doSearch?AllField=%22mutation+testing%22'
+    link = 'https://dl.acm.org/action/doSearch?AllField=%22mutation+testing%22+or+%22mutation+analysis%22+or+%22mutatnt+analysis%22'
     output_dir = '.server_files/InputFiles/ACM'
     driver = getDriver(proxyFile='proxy_auth_plugin.zip')
     download_acm_citations_from_search_link(driver, link, output_dir)

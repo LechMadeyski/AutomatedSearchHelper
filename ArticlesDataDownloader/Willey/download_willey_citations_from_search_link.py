@@ -8,7 +8,7 @@ from ArticlesDataDownloader.download_utilities import download_file_from_click_o
 from ArticlesDataDownloader.getDriver import getDriver
 
 
-def download_citations_from_search_link(driver, link, output_directory):
+def download_citations_from_search_link(driver, link, output_directory, output_name_base):
     driver.get(link)
     MAX_PAGES = 50
     for page_no in range(1, MAX_PAGES + 1):
@@ -44,7 +44,7 @@ def download_citations_from_search_link(driver, link, output_directory):
             lambda x: x.find_element_by_xpath("//button[text()='Export']"))
 
         file = download_file_from_click_of_button(driver, export_button)
-        output_filename = output_directory + '/willey_auto_search_' + str(page_no) + '.bib'
+        output_filename = output_directory + '/' + output_name_base + '_' + str(page_no) + '.bib'
         if file:
             shutil.move(file, output_filename)
 
@@ -61,10 +61,18 @@ def download_citations_from_search_link(driver, link, output_directory):
 
 
 def __main():
-    link = 'https://onlinelibrary.wiley.com/action/doSearch?AllField=%22mutation+testing%22&content=articlesChapters&target=default&startPage=&ConceptID=68'
     output_dir = '.server_files/InputFiles/Willey'
     driver = getDriver(proxyFile='proxy_auth_plugin.zip')
-    download_citations_from_search_link(driver, link, output_dir)
+
+    link = 'https://onlinelibrary.wiley.com/action/doSearch?AllField=%22mutation+testing%22&content=articlesChapters&target=default&startPage=&ConceptID=68'
+    download_citations_from_search_link(driver, link, output_dir, 'willey_auto_mutation_testing')
+
+    link = 'https://onlinelibrary.wiley.com/action/doSearch?AllField=%22mutant+analysis%22&startPage=&ConceptID=68'
+    download_citations_from_search_link(driver, link, output_dir, 'mutant_analysis')
+
+    link = 'https://onlinelibrary.wiley.com/action/doSearch?AllField=%22mutation+analysis%22&startPage=&ConceptID=68'
+    download_citations_from_search_link(driver, link, output_dir, 'mutation_analysis')
+
 
 
 if __name__ == '__main__':

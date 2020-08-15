@@ -55,34 +55,35 @@ def test_science_direct_html_by_doi(setup_downloader):
     assert 'Acknowledgments' in result_data.text[-1]['title']
 
 
-def test_springer_html_by_doi_chapter(setup_downloader):
-    DOI = '10.1007/978-3-030-38364-0_32'
-    filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
-
-    assert filename == TEST_DIRECTORY + '/10.1007_978-3-030-38364-0_32.json'
-    assert os.path.isfile(TEST_DIRECTORY + '/10.1007_978-3-030-38364-0_32.pdf')
-
-    assert result_data.publisher_link == 'http://link.springer.com/10.1007/978-3-030-38364-0_32'
-    assert result_data.publish_year == '2020'
-
-    assert result_data.read_status == 'OK'
-    assert result_data.start_page == '361'
-    assert result_data.end_page == '369'
-    assert result_data.title == 'An Improvement of Applying Multi-objective Optimization Algorithm into Higher Order Mutation Testing'
-    assert result_data.doi == DOI
-    assert len(result_data.authors) == 2
-    assert len(result_data.text) == 9
-    assert result_data.text[0]['title'] == 'Abstract'
-    assert len(result_data.text[0]['paragraphs']) == 1
-    assert len(result_data.text[0]['paragraphs'][0]['sentences']) == 3
-    assert 'Introduction' in result_data.text[1]['title']
-    assert len(result_data.text[1]['paragraphs']) == 5
-    assert len(result_data.text[1]['paragraphs'][3]['sentences']) == 3
-    assert 'Proposed Approach and Related Works' in result_data.text[2]['title']
-    assert 'Supporting Tool and PUTs' in result_data.text[3]['title']
-    assert 'Results Analysis' in result_data.text[4]['title']
-    assert 'Conclusions' in result_data.text[5]['title']
-    assert 'Notes' in result_data.text[6]['title']
+# No access to article
+# def test_springer_html_by_doi_chapter(setup_downloader):
+#     DOI = '10.1007/978-3-030-38364-0_32'
+#     filename, result_data = setup_downloader.read_article(ArticleData(doi=DOI))
+#
+#     assert filename == TEST_DIRECTORY + '/10.1007_978-3-030-38364-0_32.json'
+#     assert os.path.isfile(TEST_DIRECTORY + '/10.1007_978-3-030-38364-0_32.pdf')
+#
+#     assert result_data.publisher_link == 'http://link.springer.com/10.1007/978-3-030-38364-0_32'
+#     assert result_data.publish_year == '2020'
+#
+#     assert result_data.read_status == 'OK'
+#     assert result_data.start_page == '361'
+#     assert result_data.end_page == '369'
+#     assert result_data.title == 'An Improvement of Applying Multi-objective Optimization Algorithm into Higher Order Mutation Testing'
+#     assert result_data.doi == DOI
+#     assert len(result_data.authors) == 2
+#     assert len(result_data.text) == 9
+#     assert result_data.text[0]['title'] == 'Abstract'
+#     assert len(result_data.text[0]['paragraphs']) == 1
+#     assert len(result_data.text[0]['paragraphs'][0]['sentences']) == 3
+#     assert 'Introduction' in result_data.text[1]['title']
+#     assert len(result_data.text[1]['paragraphs']) == 5
+#     assert len(result_data.text[1]['paragraphs'][3]['sentences']) == 3
+#     assert 'Proposed Approach and Related Works' in result_data.text[2]['title']
+#     assert 'Supporting Tool and PUTs' in result_data.text[3]['title']
+#     assert 'Results Analysis' in result_data.text[4]['title']
+#     assert 'Conclusions' in result_data.text[5]['title']
+#     assert 'Notes' in result_data.text[6]['title']
 
 
 def test_springer_pdf_by_doi_articles(setup_downloader):
@@ -111,7 +112,6 @@ def test_willey_html_by_doi(setup_downloader):
     assert os.path.isfile(TEST_DIRECTORY + '/10.1002_stvr.1728.pdf')
 
     assert result_data.publisher_link == 'https://onlinelibrary.wiley.com/doi/abs/10.1002/stvr.1728'
-    assert result_data.publish_year == '2020'
 
     assert result_data.read_status == 'OK'
     assert result_data.title == 'Performance mutation testing'
@@ -136,7 +136,7 @@ def test_willey_html_by_doi(setup_downloader):
     assert len(result_data.text[10]['paragraphs']) == 5
 
     assert '6.1 Subjects under test' in result_data.text[17]['title']
-    assert len(result_data.text[17]['paragraphs']) == 11
+    assert len(result_data.text[17]['paragraphs']) == 15
 
     assert 'Conclusion and Future Work' in result_data.text[-2]['title']
     assert 'Acknowledgements' in result_data.text[-1]['title']
@@ -187,7 +187,7 @@ def test_acm_pdf_by_doi(setup_downloader):
     assert result_data.title == "DeepFL: Integrating Multiple Fault Diagnosis Dimensions for Deep Fault Localization"
     assert result_data.doi == DOI
     assert len(result_data.authors) == 4
-    assert len(result_data.text) == 10
+    assert len(result_data.text) == 11
     assert result_data.text[0]['title'] == 'Abstract'
     assert len(result_data.text[0]['paragraphs']) == 1
     assert len(result_data.text[0]['paragraphs'][0]['sentences']) == 9
@@ -197,11 +197,11 @@ def test_acm_pdf_by_doi(setup_downloader):
     assert len(result_data.text[2]['paragraphs'][0]['sentences']) == 33
     assert 'BACKGROUND AND RELATED WORK' in result_data.text[3]['title']
     assert 'APPROACH' in result_data.text[4]['title']
-    assert 'EXPERIMENTAL SETUP' in result_data.text[5]['title']
-    assert 'RESULT ANALYSIS' in result_data.text[6]['title']
-    assert 'CONCLUSION' in result_data.text[7]['title']
-    assert 'ACKNOWLEDGMENTS' in result_data.text[8]['title']
-    assert 'REFERENCES' in result_data.text[9]['title']
+    assert 'EXPERIMENTAL SETUP' in result_data.text[6]['title']
+    assert 'RESULT ANALYSIS' in result_data.text[7]['title']
+    assert 'CONCLUSION' in result_data.text[8]['title']
+    assert 'ACKNOWLEDGMENTS' in result_data.text[9]['title']
+    assert 'REFERENCES' in result_data.text[10]['title']
 
 
 def test_article_with_scopus_link_only(setup_downloader):
@@ -290,7 +290,7 @@ def test_acm_pdf_by_doi_3(setup_downloader):
     assert result_data.title == 'Mutation Testing for DSLs (Tool Demo)'
     assert result_data.doi == DOI
     assert len(result_data.authors) == 4
-    assert len(result_data.text) == 8
+    assert len(result_data.text) == 10
     assert result_data.text[0]['title'] == 'Abstract'
     assert len(result_data.text[0]['paragraphs']) == 2
     assert len(result_data.text[0]['paragraphs'][0]['sentences']) == 3
@@ -299,10 +299,10 @@ def test_acm_pdf_by_doi_3(setup_downloader):
     assert len(result_data.text[2]['paragraphs']) == 1
     assert len(result_data.text[2]['paragraphs'][0]['sentences']) == 16
     assert 'Defining MT Tools with Wodel-Test' in result_data.text[3]['title']
-    assert 'Generated MT Tool' in result_data.text[4]['title']
-    assert 'Conclusions and Future Work' in result_data.text[5]['title']
-    assert 'Acknowledgments' in result_data.text[6]['title']
-    assert 'References' in result_data.text[7]['title']
+    assert 'Generated MT Tool' in result_data.text[6]['title']
+    assert 'Conclusions and Future Work' in result_data.text[7]['title']
+    assert 'Acknowledgments' in result_data.text[8]['title']
+    assert 'References' in result_data.text[9]['title']
 
 
 def test_ieee_pdf_by_doi(setup_downloader):
@@ -339,7 +339,7 @@ def test_science_direct_pdf_by_doi(setup_downloader):
     assert result_data.text[0]['title'] == 'Abstract'
     assert result_data.text[1]['title'] == 'Begining data'
     assert len(result_data.text[1]['paragraphs']) == 1
-    assert len(result_data.text[1]['paragraphs'][0]['sentences']) == 4
+    assert len(result_data.text[1]['paragraphs'][0]['sentences']) == 5
     assert 'Introduction' in result_data.text[2]['title']
     assert len(result_data.text[2]['paragraphs']) == 1
     assert len(result_data.text[2]['paragraphs'][0]['sentences']) == 35
